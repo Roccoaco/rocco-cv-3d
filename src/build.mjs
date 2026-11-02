@@ -7,6 +7,8 @@ const here = new URL('.', import.meta.url).pathname;
 const out = here + '../dist/';
 fs.mkdirSync(out, { recursive: true });
 
+// Shrink the trade mark sign in visible text (not in <title>, attributes or scripts).
+const tm = (h) => h.replace(/(<script[\s\S]*?<\/script>|<title>[\s\S]*?<\/title>|<[^>]*>)|™/g, (m, keep) => keep || '<span class="tm">™</span>');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const place = D.place;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
@@ -333,7 +335,7 @@ ${footer('')}
 </body>
 </html>
 `;
-fs.writeFileSync(out + 'index.html', html);
+fs.writeFileSync(out + 'index.html', tm(html));
 
 // --- one page per workshop: its brick model, its facts and its full abstract ---
 const pageData = JSON.stringify({ cities: D.cities, workshops: workshopsData }).replace(/</g, '\\u003c');
@@ -410,7 +412,7 @@ ${footer('index.html')}
 </body>
 </html>
 `;
-  fs.writeFileSync(out + pageOf(w), page);
+  fs.writeFileSync(out + pageOf(w), tm(page));
 });
 
 // --- a page for a talk that has its own picture ---
@@ -451,7 +453,7 @@ ${footer('index.html')}
 </body>
 </html>
 `;
-  fs.writeFileSync(out + t.slug + '.html', page);
+  fs.writeFileSync(out + t.slug + '.html', tm(page));
 }
 
 // Real HTTP headers for hosts that read a _headers file (Netlify, Cloudflare Pages). frame-ancestors only works as a header.

@@ -46,7 +46,7 @@ export const workshops = [
   },
   {
     id: 'w-mita', slug: 'idea-bouncing', model: 'arch', short: 'Idea Bouncing', city: 'milan', count: 14, sortDate: '2026-03-21',
-    title: 'Idea Bouncing: Building the Future through Vibrational LEGOciation',
+    title: 'Idea Bouncing: Building the Future through Vibrational LEGO™ciation',
     venue: 'MITA 2026, American School of Milan', when: '21 March 2026', length: '1 hour', audience: '14 teachers',
     text: 'Language, communication and creative cognition in practice. Linguistic interaction and collaborative problem-solving, with deliberate attention-shifting, turned abstract ideas into built, tangible outcomes, showing how dialogue mediates creativity and learning design.'
   },
@@ -58,8 +58,8 @@ export const workshops = [
     text: 'What happens to a creative community once its annual conference ends? Participants designed local PSN hubs, small events that carry the network into their own places, to keep connection alive and ease everyday tension through shared creative work.'
   },
   {
-    id: 'w-csm26', slug: 'legociation', model: 'arch', short: 'LEGOciation', city: 'milan', count: 25, sortDate: '2026-01-07',
-    title: 'Idea Bouncing: Building the Future through Vibrational LEGOciation',
+    id: 'w-csm26', slug: 'legociation', model: 'arch', short: 'LEGO™ciation', city: 'milan', count: 25, sortDate: '2026-01-07',
+    title: 'Idea Bouncing: Building the Future through Vibrational LEGO™ciation',
     venue: 'Canadian School of Milan', when: '7 January 2026', length: '1 hour', audience: '25 teachers',
     text: 'The in-house edition of Idea Bouncing for colleagues: linguistic interaction, collaborative building and deliberate attention-shifting to move ideas from abstract to tangible.'
   },
@@ -85,7 +85,7 @@ export const workshops = [
     id: 'w-journey', slug: 'thinking-journey', model: 'stations', short: 'The Thinking Journey', city: 'milan', count: 80, sortDate: '2024-10-15',
     title: 'The Thinking Journey',
     venue: 'Canadian School of Milan', when: 'October 2024', length: '2 hours', audience: '80 MYP students',
-    text: 'Students explored how the brain works while building critical thinking. In Shape Your Brain they pictured neural growth as a response to challenge; in LEGOciation at the Station they rotated through nine thematic stations of dialogue and LEGO construction, closing with reflection on high-quality thinking.'
+    text: 'Students explored how the brain works while building critical thinking. In Shape Your Brain they pictured neural growth as a response to challenge; in LEGO™ciation at the Station they rotated through nine thematic stations of dialogue and LEGO™ construction, closing with reflection on high-quality thinking.'
   },
   {
     id: 'w-iceland24', slug: 'creative-mindset', model: 'growth', short: 'Creative Mindset', city: 'reykjavik', count: 14, sortDate: '2024-10-01',
@@ -97,7 +97,7 @@ export const workshops = [
     id: 'w-rights', slug: 'human-rights-and-the-brain', model: 'bridge', short: 'Human Rights & the Brain', city: 'milan', count: 14, sortDate: '2024-02-15',
     title: 'Human Rights, Emotions & the Brain: a Transversal Bridge between Past and Future',
     venue: 'Canadian School of Milan', when: 'February to April 2024', length: '12 sessions', audience: '14 MYP3 students',
-    text: 'A series on creativity, change and perspective within personal and cultural expression and fairness and development. Memory, thinking strategies, emotions and brain function were explored through Memory, LEGO and jigsaw games, and students presented on human rights, memory, emotional intelligence and divergent thinking.'
+    text: 'A series on creativity, change and perspective within personal and cultural expression and fairness and development. Memory, thinking strategies, emotions and brain function were explored through Memory, LEGO™ and jigsaw games, and students presented on human rights, memory, emotional intelligence and divergent thinking.'
   },
   {
     id: 'w-iceland23', slug: 'mindset-journey', model: 'path', short: 'Mindset Journey', city: 'reykjavik', count: 14, sortDate: '2023-03-15',
@@ -138,7 +138,7 @@ export const conferences = [
 export const roles = [
   {
     role: 'Primary School Italian Teacher', school: 'Canadian School of Milan', city: 'milan', when: 'Aug 2025 – present',
-    points: ['Brings AI and LEGO into primary Italian through The EduDesign Alchemist, his own layered system for designing learning.']
+    points: ['Brings AI and LEGO™ into primary Italian through The EduDesign Alchemist, his own layered system for designing learning.']
   },
   {
     role: 'IB MYP Italian Language Acquisition Teacher', school: 'Canadian School of Milan', city: 'milan', when: 'Aug 2024 – Jun 2025',
@@ -164,7 +164,7 @@ export const alchemy = [
 ];
 
 export const projects = [
-  { name: 'LEGOciation', text: 'Negotiating ideas through building. Groups talk, build in LEGO, and rebuild, so thinking becomes something they can hold. Used from MYP classrooms to teacher conferences.' },
+  { name: 'LEGO™ciation', text: 'Negotiating ideas through building. Groups talk, build in LEGO™, and rebuild, so thinking becomes something they can hold. Used from MYP classrooms to teacher conferences.' },
   { name: 'Shape Your Brain', text: 'An activity where students picture neural growth as their answer to a hard task: a working metaphor for how challenge changes the brain.' },
   { name: 'The attention card deck', text: 'A facilitation deck that prompts deliberate switches of attention, built for the alternating-attention workshop at the Italian Summit 2026.' },
   { name: 'PSN hubs', text: 'Small local gatherings that carry the Possibility Studies Network between conferences, developed in Productive Friction and the Mission Possible poster.' }
@@ -208,7 +208,7 @@ export const modelNotes = {
   creation: (n) => `${n} bricks, one per teacher: loose ideas on one side, a purposeful build on the other.`,
   profile: (n) => `${n} bricks, one per teacher: the ten attributes of the IB Learner Profile as ten towers, Thinker in yellow.`,
   stairs: (n) => `${n} bricks, one per teacher: prompt frameworks as steps that raise the work one level at a time.`,
-  stations: (n) => `${n} bricks, one per student: the nine thematic stations of LEGOciation, visited in turn.`,
+  stations: (n) => `${n} bricks, one per student: the nine thematic stations of LEGO™ciation, visited in turn.`,
   growth: (n) => `${n} bricks, one per future teacher: a growth mindset, every layer wider than the one below.`,
   bridge: (n) => `${n} bricks, one per student: a bridge from the past (navy) to the future (yellow).`,
   path: (n) => `${n} bricks, one per future teacher: a winding road that climbs as it goes.`
@@ -226,7 +226,7 @@ export const abstracts = {
     "Participants engaged in a simulation of an alternate scenario that explored the intersection of applied creative cognition, play, sense-making, and collaboration. Teachers immersed themselves in the core essence of the workshop, which was found to be the exchange of energy with teammates. A series of experiential activities was designed to enhance creative process exploration through transdisciplinary socio-materiality, interaction, and systemic thinking. The session emphasized the intentional application of attention-shifting and metacognitive awareness to cultivate cognitive and temporal flexibility, cross-network interactivity, and spatiotemporal diversity through a facilitating card deck."
   ],
   "w-mita": [
-    "Through space observation and collaborative LEGO-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
+    "Through space observation and collaborative LEGO™-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
   ],
   "w-friction": [
     "In times of heightened tension, it is common to seek a sense of community that is open to creative thought and bonds of shared ideology. This community happens once a year at the Possibility Studies Network conference, where this hunger/desire to be together is activated. But what happens when we depart to our own spaces and thoughts? The subsequent bonds with our internal consciousness, one another, our creative pursuits, and our environments become a way to embody the essence of connectedness. By activating PSN hubs that vary by location and context, we can create microdosing events that replicate the larger PSN entity. To foster deeper connections and relationships with and among communities, we require innovative approaches and learning environments; waves of possibilities. Through an experience-based, academic, and experiential journey, we invite you to consider elements that can generate a hub experience that works for you in your environment and locale. Join us on that journey, and share in future visions of how hubs can alleviate tensions in our everyday lives and bring to life our creative potentials that mirror the larger PSN experience."
@@ -242,18 +242,18 @@ export const abstracts = {
     "A 4.5-hour in-person workshop, divided into three sessions, for school staff members to enhance their awareness regarding artificial intelligence (AI), its functionalities, and associated tools. Practical strategies, such as prompt frameworks, were explored and implemented using ChatGPT 5.0 to train teachers in effectively utilizing AI for generating lesson plans, assessments, reports, and creative tasks such as podcasts, learning apps & games, worksheets, infographics. Additionally, other tools like Notebook LM, Napkin AI, Gemini Canvas, Gemini Storybook, Gamma, Revoldiv, and Note GPT were investigated and contextualized for the purpose of designing teaching content."
   ],
   "w-journey": [
-    "A two-hour workshop was designed to actively engage participants in experiential learning activities that explore the functioning of the human brain while fostering the development of critical thinking skills. One key component, “Shape Your Brain,” invited participants to visualize neural growth as a metaphor for cognitive development in response to academic challenges. Another central activity, “LEGOciation at the Station,” employed a collaborative, multi-phase structure combining group dialogue with creative LEGO-based construction across nine thematic stations. The session concluded with reflective feedback and a discussion centered on the importance of cultivating high-quality thinking. Collectively, the workshop materials outlined a practical, research-informed approach to understanding and applying critical thinking processes in educational contexts."
+    "A two-hour workshop was designed to actively engage participants in experiential learning activities that explore the functioning of the human brain while fostering the development of critical thinking skills. One key component, “Shape Your Brain,” invited participants to visualize neural growth as a metaphor for cognitive development in response to academic challenges. Another central activity, “LEGO™ciation at the Station,” employed a collaborative, multi-phase structure combining group dialogue with creative LEGO™-based construction across nine thematic stations. The session concluded with reflective feedback and a discussion centered on the importance of cultivating high-quality thinking. Collectively, the workshop materials outlined a practical, research-informed approach to understanding and applying critical thinking processes in educational contexts."
   ],
   "w-iceland24": [
     "A two-hour online workshop session was conducted, integrating principles of a growth mindset with creative thinking methodologies to foster the mindset of pre-service language teachers. The sessions encompassed theoretical insights into creativity, neuroplasticity, and a diverse range of brainstorming techniques, including Random Word, Random Picture, Reverse Brainstorming, and 6 Thinking Hats. Participants were afforded the opportunity to explore the creative dimension from a practical standpoint. Engaging in hands-on activities, they collaborated on projects that required innovative solutions and out-of-the-box thinking. These exercises not only allowed them to apply the theories discussed but also encouraged them to reflect on their personal teaching philosophies and approaches. By the end of the workshop, participants had developed personalized action plans to incorporate creative thinking in their future classrooms, ensuring that their teaching methods remain dynamic and responsive to the needs of diverse learners. The session concluded with a reflective discussion, where participants shared their insights and experiences, building a supportive community committed to ongoing professional growth and creative exploration in language education."
   ],
   "w-rights": [
-    "A workshop series was conducted where key concepts such as creativity development, change, and perspective have been investigated within the global contexts of personal and cultural expression, as well as fairness and development. The sessions also covered short-term and long-term memory, thinking strategies, the emotional spectrum, and brain functions, encouraging students to consider the interrelation of these elements. Learning activities will involve both individual and group work, utilizing digital, paper-based resources, and games such as Memory, LEGO, and Jigsaw puzzles. Ultimately, students have analyzed, organized, produced, and utilized language to present on topics such as human rights, memory, emotional intelligence, and divergent thinking."
+    "A workshop series was conducted where key concepts such as creativity development, change, and perspective have been investigated within the global contexts of personal and cultural expression, as well as fairness and development. The sessions also covered short-term and long-term memory, thinking strategies, the emotional spectrum, and brain functions, encouraging students to consider the interrelation of these elements. Learning activities will involve both individual and group work, utilizing digital, paper-based resources, and games such as Memory, LEGO™, and Jigsaw puzzles. Ultimately, students have analyzed, organized, produced, and utilized language to present on topics such as human rights, memory, emotional intelligence, and divergent thinking."
   ],
   "w-iceland23": [
     "Conducted a series of eight-hour in-person workshop sessions integrating principles of growth mindset with creative thinking methodologies to cultivate pre-service teachers’ creative dispositions. The sessions engaged participants in a range of interactive and collaborative activities designed to promote reflection, experimentation, and the development of innovative pedagogical approaches. Through these experiences, participants explored how fostering a growth-oriented mindset can enhance creativity and adaptability in educational contexts. Feedback from attendees underscored the transformative nature of the workshops, noting increased confidence, engagement, and enthusiasm in applying creative strategies within their emerging teaching practices."
   ],
   "w-csm26": [
-    "Through space observation and collaborative LEGO-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
+    "Through space observation and collaborative LEGO™-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
   ]
 };
