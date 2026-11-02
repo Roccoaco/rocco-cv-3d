@@ -1,0 +1,62 @@
+[
+  {
+    "tint": "#FFF6E2",
+    "circle": "#E8B23A",
+    "numeralLight": false,
+    "en": {
+      "title": "Alternating Attention as a Catalyst for a Creative-Cerebral Educational Perspective",
+      "text": "Participants play through an alternate scenario where creative cognition, play, sense-making and collaboration meet. Transdisciplinary materials, systemic thinking and a facilitating card deck train deliberate attention-shifting and metacognitive awareness, building the cognitive and temporal flexibility that creative learning depends on.",
+      "tags": ["Attention", "Metacognition", "Card deck"]
+    },
+    "it": {
+      "title": "L'attenzione alternata come catalizzatore per una prospettiva educativa creativo-cerebrale",
+      "text": "I partecipanti attraversano uno scenario alternativo in cui cognizione creativa, gioco, costruzione di senso e collaborazione si incontrano. Materiali transdisciplinari, pensiero sistemico e un mazzo di carte facilitante allenano lo spostamento deliberato dell'attenzione e la consapevolezza metacognitiva, costruendo la flessibilità cognitiva e temporale su cui si fonda l'apprendimento creativo.",
+      "tags": ["Attenzione", "Metacognizione", "Mazzo di carte"]
+    }
+  },
+  {
+    "tint": "#FFEFE9",
+    "circle": "#E0745E",
+    "numeralLight": true,
+    "en": {
+      "title": "Idea Bouncing: Building the Future through Vibrational LEGOciation",
+      "text": "Language, communication and creative cognition in practice. Through linguistic interaction, collaborative problem-solving and deliberate attention-shifting, groups talk, build in LEGO and rebuild, turning abstract ideas into tangible outcomes and seeing first-hand how dialogue mediates creativity and learning design.",
+      "tags": ["LEGOciation", "Collaboration", "Language"]
+    },
+    "it": {
+      "title": "Idea Bouncing: costruire il futuro attraverso la LEGOciazione vibrazionale",
+      "text": "Lingua, comunicazione e cognizione creativa in pratica. Attraverso l'interazione linguistica, la risoluzione collaborativa dei problemi e lo spostamento deliberato dell'attenzione, i gruppi dialogano, costruiscono con i LEGO e ricostruiscono, trasformando idee astratte in risultati tangibili e scoprendo in prima persona come il dialogo medi la creatività e la progettazione didattica.",
+      "tags": ["LEGOciazione", "Collaborazione", "Lingua"]
+    }
+  },
+  {
+    "tint": "#EBF5EE",
+    "circle": "#6FA97C",
+    "numeralLight": true,
+    "en": {
+      "title": "The Thinking Journey",
+      "text": "Students explore how the brain works while building critical thinking. In Shape Your Brain they picture neural growth as a response to challenge; in LEGOciation at the Station they rotate through thematic stations of dialogue and LEGO construction, closing with a shared reflection on what high-quality thinking looks like.",
+      "tags": ["Students", "Neuroplasticity", "Critical thinking"]
+    },
+    "it": {
+      "title": "The Thinking Journey",
+      "text": "Gli studenti esplorano il funzionamento del cervello mentre sviluppano il pensiero critico. In Shape Your Brain immaginano la crescita neurale come risposta a una sfida; in LEGOciation at the Station ruotano tra stazioni tematiche di dialogo e costruzione LEGO, per chiudere con una riflessione condivisa su che cosa significhi pensare bene.",
+      "tags": ["Studenti", "Neuroplasticità", "Pensiero critico"]
+    }
+  },
+  {
+    "tint": "#EDF2FB",
+    "circle": "#6E8FD0",
+    "numeralLight": true,
+    "en": {
+      "title": "The Creative Mindset Journey",
+      "text": "Growth mindset meets creative thinking for future and practising teachers. Creativity and neuroplasticity in theory, then Random Word, Random Picture, Reverse Brainstorming and Six Thinking Hats in practice, so participants leave with more confidence, engagement and enthusiasm for creative strategies in their own teaching.",
+      "tags": ["Growth mindset", "Creative methods", "Teachers"]
+    },
+    "it": {
+      "title": "The Creative Mindset Journey",
+      "text": "La mentalità di crescita incontra il pensiero creativo, per insegnanti in formazione e in servizio. Creatività e neuroplasticità in teoria, poi Random Word, Random Picture, Reverse Brainstorming e Six Thinking Hats in pratica: i partecipanti ripartono con più fiducia, coinvolgimento ed entusiasmo per le strategie creative nella propria didattica.",
+      "tags": ["Growth mindset", "Metodi creativi", "Insegnanti"]
+    }
+  }
+]

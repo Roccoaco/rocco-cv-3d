@@ -1,0 +1,8 @@
+[
+  { "file": "isb.png", "name": "International School Basel", "kind": "school", "wide": false },
+  { "file": "ist.png", "name": "International School of Turin", "kind": "school", "wide": false },
+  { "file": "marymount.png", "name": "Marymount International School Rome", "kind": "school", "wide": true },
+  { "file": "csm.png", "name": "Canadian School of Milan", "kind": "school", "wide": false },
+  { "file": "asm.png", "name": "American School of Milan", "kind": "school", "wide": true },
+  { "file": "hi.png", "name": "University of Iceland", "kind": "university", "wide": false }
+]

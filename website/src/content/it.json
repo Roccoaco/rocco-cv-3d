@@ -1,0 +1,98 @@
+{
+  "lang": "it",
+  "langName": "Italiano",
+  "brand": "Rocco Acocella",
+  "skip": "Vai al contenuto",
+  "menu": "Menu",
+  "close": "Chiudi",
+  "nav": {
+    "about": "Chi sono",
+    "vision": "Visione",
+    "workshops": "Workshop",
+    "gpts": "ChatGPT",
+    "contact": "Contattami",
+    "home": "Home",
+    "langLabel": "Lingua"
+  },
+  "footer": {
+    "headline": "Facciamo [[gold|giocare]] l'apprendimento.",
+    "linkedin": "LinkedIn",
+    "instagram": "Instagram",
+    "copyright": "© {year} Rocco Acocella"
+  },
+  "meta": {
+    "home": { "title": "Rocco Acocella — Un apprendimento che gioca, un pensiero che cresce", "description": "Rocco Acocella è un educatore internazionale che unisce collaborazione umana, psicologia dello sviluppo e cognitiva, principi quantistici e processi creativi per favorire un apprendimento personalizzato." },
+    "about": { "title": "Chi sono — Rocco Acocella", "description": "Insegnante, mentore, ricercatore, progettista educativo, conduttore di workshop e relatore internazionale che vive l'apprendimento come un atto creativo." },
+    "vision": { "title": "Visione — Rocco Acocella", "description": "Siamo mutaforma non lineari. Quattro principi alla base di come Rocco Acocella pensa l'apprendimento." },
+    "workshops": { "title": "Workshop — Rocco Acocella", "description": "Quattro percorsi esperienziali per menti curiose, ospitati da scuole internazionali e università." },
+    "gpts": { "title": "ChatGPT — Rocco Acocella", "description": "GPT personalizzati creati da Rocco Acocella: compagni di pensiero pronti da provare." }
+  },
+  "home": {
+    "eyebrow": "Visionario quantico-mistico",
+    "h1": "Un apprendimento che [[coral|gioca]], un pensiero che [[blue|cresce]].",
+    "lead": "Sono Rocco, un educatore internazionale. Progetto esperienze di apprendimento in cui attenzione, gioco e collaborazione si incontrano, per scuole, team e menti curiose che vogliono pensare in forme nuove.",
+    "ctaBook": "Prenota un workshop",
+    "ctaVision": "Leggi la mia visione",
+    "portraitAlt": "Ritratto di Rocco Acocella",
+    "index": [
+      { "page": "about", "num": "01", "title": "Chi sono", "desc": "la persona dietro la pratica" },
+      { "page": "workshops", "num": "02", "title": "Workshop", "desc": "quattro percorsi esperienziali" },
+      { "page": "vision", "num": "03", "title": "Visione", "desc": "come penso l'apprendimento" },
+      { "page": "gpts", "num": "04", "title": "ChatGPT", "desc": "GPT personalizzati, pronti da provare" }
+    ]
+  },
+  "about": {
+    "eyebrow": "Chi sono",
+    "roles": [
+      ["Un", "insegnante"],
+      ["Un", "mentore"],
+      ["Un", "ricercatore"],
+      ["Un", "progettista educativo"],
+      ["Un", "conduttore di workshop"],
+      ["Un", "relatore internazionale"]
+    ],
+    "staticRole": 1,
+    "rolesSr": "Un insegnante, mentore, ricercatore, progettista educativo, conduttore di workshop e relatore internazionale",
+    "line2": "che vive l'apprendimento come un [[gold|atto creativo]].",
+    "chips": ["Collaborazione umana", "Psicologia dello sviluppo", "Psicologia cognitiva", "Principi quantistici", "Processi creativi"],
+    "lead": "Sono un educatore internazionale con esperienza, che unisce collaborazione umana, psicologia dello sviluppo e cognitiva, principi quantistici e processi creativi per favorire un apprendimento personalizzato.",
+    "body": "Insegno italiano alla Canadian School of Milan e conduco workshop per insegnanti e studenti in tutta Europa, da Basilea e Torino fino a Roma e Reykjavík. Il mio lavoro si muove tra attenzione divergente e convergente, tra parlare e costruire, perché le idee diventino qualcosa che si può tenere in mano.",
+    "bio": "",
+    "bioPlaceholder": "Paragrafo biografico — in attesa del testo di Rocco.",
+    "ctaWorkshops": "Scopri i miei workshop →",
+    "ctaContact": "Scrivimi",
+    "portraitAlt": "Ritratto di Rocco Acocella"
+  },
+  "vision": {
+    "eyebrow": "Visione",
+    "h1a": "Siamo mutaforma non lineari.",
+    "h1b": "Non è più una questione di [[coral|se]], ma di [[green|come]].",
+    "lead": "Imparare non è una linea retta dal non sapere al sapere. Si avvolge, si ramifica e cambia forma insieme alle persone nella stanza. Questi quattro principi guidano il modo in cui progetto ogni incontro.",
+    "cards": [
+      { "title": "L'attenzione è un catalizzatore", "text": "Dove va l'attenzione, segue l'apprendimento. Muoversi deliberatamente tra attenzione divergente e convergente trasforma idee sparse in intuizioni, e le intuizioni in azione." },
+      { "title": "Imparare è uno scambio di energia", "text": "Ogni classe è un campo di energia umana. Quando le persone si ascoltano, rispondono e costruiscono l'una sull'altra, quell'energia si moltiplica in qualcosa che nessuno raggiungerebbe da solo." },
+      { "title": "Il linguaggio costruisce mondi", "text": "Le parole che scegliamo plasmano ciò che possiamo immaginare. Il dialogo, tra lingue, gesti e culture, è il modo in cui le idee astratte diventano mondi condivisi e tangibili." },
+      { "title": "Le menti crescono quando giocano", "text": "Il gioco abbassa la posta e alza la curiosità. È la sfida, affrontata giocando, a rimodellare il cervello: per questo progetto un apprendimento che somiglia a un gioco da prendere sul serio." }
+    ]
+  },
+  "workshops": {
+    "eyebrow": "Workshop",
+    "h1": "Quattro [[coral|percorsi esperienziali]] per menti curiose.",
+    "lead": "Incontri pratici per insegnanti, studenti e team, fondati su attenzione, cognizione creativa e collaborazione. Ognuno può essere adattato al vostro contesto, all'età dei partecipanti e ai tempi disponibili.",
+    "hostedPrefix": "Ospitati da ",
+    "hostedSchool": "scuole internazionali",
+    "hostedUniversity": "università",
+    "hostedSr": "Ospitati da scuole internazionali e università",
+    "hostedNote": "Istituzioni in cui si sono svolti questi workshop",
+    "ctaTitle": "Porta un workshop nella tua scuola o nel tuo team.",
+    "ctaButton": "Prenota un workshop",
+    "mailSubject": "Prenotazione workshop"
+  },
+  "gpts": {
+    "eyebrow": "ChatGPT",
+    "h1": "GPT personalizzati — [[blue|compagni di pensiero]] che ho creato.",
+    "lead": "Piccoli strumenti che portano i miei metodi oltre l'aula del workshop. Aprine uno, porta un problema reale e lascia che pensi insieme a te.",
+    "open": "Apri in ChatGPT ↗"
+  },
+  "newTab": "(si apre in una nuova scheda)"
+}

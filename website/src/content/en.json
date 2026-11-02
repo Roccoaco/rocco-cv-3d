@@ -1,0 +1,98 @@
+{
+  "lang": "en",
+  "langName": "English",
+  "brand": "Rocco Acocella",
+  "skip": "Skip to content",
+  "menu": "Menu",
+  "close": "Close",
+  "nav": {
+    "about": "About me",
+    "vision": "Vision",
+    "workshops": "Workshops",
+    "gpts": "ChatGPTs",
+    "contact": "Contact me",
+    "home": "Home",
+    "langLabel": "Language"
+  },
+  "footer": {
+    "headline": "Let's make learning [[gold|play]].",
+    "linkedin": "LinkedIn",
+    "instagram": "Instagram",
+    "copyright": "© {year} Rocco Acocella"
+  },
+  "meta": {
+    "home": { "title": "Rocco Acocella — Learning that plays, thinking that grows", "description": "Rocco Acocella is an international educator who combines human collaboration, developmental and cognitive psychology, quantum principles and creative processes to foster personalized learning." },
+    "about": { "title": "About me — Rocco Acocella", "description": "Teacher, mentor, researcher, educational designer, workshop leader and international speaker who treats learning as a creative act." },
+    "vision": { "title": "Vision — Rocco Acocella", "description": "We are non-linear shapeshifters. Four principles behind how Rocco Acocella thinks about learning." },
+    "workshops": { "title": "Workshops — Rocco Acocella", "description": "Four experiential journeys for curious minds, hosted at international schools and universities." },
+    "gpts": { "title": "ChatGPTs — Rocco Acocella", "description": "Custom GPTs built by Rocco Acocella: thinking partners ready to try." }
+  },
+  "home": {
+    "eyebrow": "Quantum Mystic Visionary",
+    "h1": "Learning that [[coral|plays]], thinking that [[blue|grows]].",
+    "lead": "I'm Rocco, an international educator. I design learning experiences where attention, play and collaboration meet, for schools, teams and curious minds who want to think in new shapes.",
+    "ctaBook": "Book a workshop",
+    "ctaVision": "Read my vision",
+    "portraitAlt": "Portrait of Rocco Acocella",
+    "index": [
+      { "page": "about", "num": "01", "title": "About me", "desc": "the person behind the practice" },
+      { "page": "workshops", "num": "02", "title": "Workshops", "desc": "four experiential journeys" },
+      { "page": "vision", "num": "03", "title": "Vision", "desc": "how I think about learning" },
+      { "page": "gpts", "num": "04", "title": "ChatGPTs", "desc": "custom GPTs, ready to try" }
+    ]
+  },
+  "about": {
+    "eyebrow": "About me",
+    "roles": [
+      ["A", "teacher"],
+      ["A", "mentor"],
+      ["A", "researcher"],
+      ["An", "educational designer"],
+      ["A", "workshop leader"],
+      ["An", "international speaker"]
+    ],
+    "staticRole": 1,
+    "rolesSr": "A teacher, mentor, researcher, educational designer, workshop leader and international speaker",
+    "line2": "who treats learning as a [[gold|creative act]].",
+    "chips": ["Human collaboration", "Developmental psychology", "Cognitive psychology", "Quantum principles", "Creative processes"],
+    "lead": "I am an experienced international educator who combines human collaboration, developmental and cognitive psychology, quantum principles and creative processes to foster personalized learning.",
+    "body": "I teach Italian at the Canadian School of Milan and lead workshops for teachers and students across Europe, from Basel and Turin to Rome and Reykjavík. My work moves between divergent and convergent attention, between talking and building, so that ideas become something people can hold.",
+    "bio": "",
+    "bioPlaceholder": "Bio paragraph — awaiting text from Rocco.",
+    "ctaWorkshops": "See my workshops →",
+    "ctaContact": "Get in touch",
+    "portraitAlt": "Portrait of Rocco Acocella"
+  },
+  "vision": {
+    "eyebrow": "Vision",
+    "h1a": "We are non-linear shapeshifters.",
+    "h1b": "It's no longer [[coral|if]], but rather [[green|how]].",
+    "lead": "Learning is not a straight line from not-knowing to knowing. It loops, branches and changes shape with the people in the room. These four principles guide how I design every session.",
+    "cards": [
+      { "title": "Attention is a catalyst", "text": "Where attention goes, learning follows. Moving deliberately between divergent and convergent attention turns scattered ideas into insight, and insight into action." },
+      { "title": "Learning is energy exchange", "text": "Every classroom is a field of human energy. When people listen, respond and build on each other, that energy compounds into something no one could reach alone." },
+      { "title": "Language builds worlds", "text": "The words we choose shape what we can imagine. Dialogue, across languages, gestures and cultures, is how abstract ideas become shared, tangible worlds." },
+      { "title": "Minds grow when they play", "text": "Play lowers the stakes and raises curiosity. Challenge, met playfully, is what reshapes the brain, so I design learning that feels like a game worth taking seriously." }
+    ]
+  },
+  "workshops": {
+    "eyebrow": "Workshops",
+    "h1": "Four [[coral|experiential journeys]] for curious minds.",
+    "lead": "Hands-on sessions for teachers, students and teams, built on attention, creative cognition and collaboration. Each one can be adapted to your context, age group and time.",
+    "hostedPrefix": "Hosted at ",
+    "hostedSchool": "international schools",
+    "hostedUniversity": "universities",
+    "hostedSr": "Hosted at international schools and universities",
+    "hostedNote": "Institutions where these workshops have taken place",
+    "ctaTitle": "Bring a workshop to your school or team.",
+    "ctaButton": "Book a workshop",
+    "mailSubject": "Workshop booking"
+  },
+  "gpts": {
+    "eyebrow": "ChatGPTs",
+    "h1": "Custom GPTs — [[blue|thinking partners]] I've built.",
+    "lead": "Small tools that carry my methods beyond the workshop room. Open one, bring a real problem, and let it think alongside you.",
+    "open": "Open in ChatGPT ↗"
+  },
+  "newTab": "(opens in a new tab)"
+}
