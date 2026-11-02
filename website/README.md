@@ -17,7 +17,7 @@ python3 -m http.server -d website/dist 8000
 | `src/data/workshops.json` | Workshop cards (colours plus EN/IT title, text and tags). |
 | `src/data/gpts.json` | Custom GPT cards. Add an entry to show a new card. Entries with no title or URL are skipped. |
 | `src/data/logos.json` | "Hosted at" slider tiles (`kind`: `school` or `university`, `wide` for 320px tiles). |
-| `src/data/site.json` | Email, LinkedIn, Instagram, year, optional `siteUrl` for absolute hreflang and canonical URLs. |
+| `src/data/site.json` | Email, LinkedIn, year, optional `siteUrl` for absolute hreflang and canonical URLs. |
 | `src/styles.css`, `src/main.js` | Styles and behaviour (mobile menu, language memory, role rotator, logo slider). |
 | `assets/` | `portrait.jpg`, `logos/*.png`, `favicon.svg`. |
 
@@ -26,6 +26,5 @@ Routes: English at `/`, `/about/`, `/vision/`, `/workshops/`, `/chatgpts/`; Ital
 ## Still to provide
 - **Design-reference copy.** The `design/*.dc.html` files were not in the handoff bundle. Copy quoted in the handoff README is used word for word. The rest is drafted from Rocco's CV: hero paragraphs and subtitles, About second paragraph, Vision card texts, workshop descriptions and tags, GPT descriptions, and all Italian strings except the Home eyebrow, Vision H1 and footer headline. Replace it with the text from each file's `T` object.
 - **Assets.** Put the portrait at `assets/portrait.jpg` and the logos at `assets/logos/{isb,ist,marymount,csm,asm,hi}.png`, then rebuild. Until then the build uses a styled "RA" placeholder and text wordmark tiles, and it lists any missing files. Also produce responsive or WebP versions of the portrait. `csm.png` needs a higher-resolution source.
-- **Contact details** in `src/data/site.json`: real email, LinkedIn URL and Instagram URL. All are currently placeholders.
 - **About bio.** Fill `about.bio` in both content files. While it's empty, a dashed "awaiting text" slot is shown.
 - **ChatGPT #3.** Add it to `gpts.json` when ready.

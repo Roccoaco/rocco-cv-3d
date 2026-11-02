@@ -97,7 +97,6 @@ function footer(lang) {
     <div class="footer-buttons">
       <a class="pill pill--light" href="${mailto()}">${esc(site.email)}</a>
       ${social(site.linkedin, t.footer.linkedin)}
-      ${social(site.instagram, t.footer.instagram)}
     </div>
     <div class="footer-bottom">
       <span>${esc(t.footer.copyright.replace('{year}', site.year))}</span>
