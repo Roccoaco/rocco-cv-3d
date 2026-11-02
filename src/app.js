@@ -172,14 +172,14 @@
     window.addEventListener('resize', this.resize);
     // drag to rotate
     var drag = null;
-    canvas.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: self.yaw, pitch: self.pitch }; canvas.setPointerCapture(e.pointerId); self.userTouched = true; });
+    canvas.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: self.yaw, pitch: self.pitch }; canvas.setPointerCapture(e.pointerId); self.dragging = true; });
     canvas.addEventListener('pointermove', function (e) {
       if (!drag) return;
       self.yaw = drag.yaw + (e.clientX - drag.x) * 0.008;
       self.pitch = Math.max(0.2, Math.min(1.1, drag.pitch + (e.clientY - drag.y) * 0.004));
       self.dirty = true;
     });
-    function end() { drag = null; }
+    function end() { drag = null; self.dragging = false; }
     canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
     canvas.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft') { self.yaw -= 0.15; self.dirty = true; e.preventDefault(); }
@@ -224,7 +224,10 @@
       this.anim = Math.min(1, this.anim + dt / this.animDur);
       this.t = this.from + (this.to - this.from) * this.anim; this.dirty = true;
     }
-    if (this.spin && !this.userTouched) { this.yaw += dt * 0.00012; this.dirty = true; }
+    // keeps turning after a click or a drag (it only holds still while being dragged), and scattered bricks float
+    this.clock = (this.clock || 0) + dt;
+    if (this.spin && !this.dragging) { this.yaw += dt * 0.00012; this.dirty = true; }
+    else if (this.spin) this.dirty = true;
     if (this.dirty) { this.draw(); this.dirty = false; }
   };
   BrickField.prototype.draw = function () {
@@ -250,8 +253,9 @@
       // staggered interpolation
       var k = Math.max(0, Math.min(1, (T * 1.35) - b.delay));
       k = ease(k);
-      var x = b.dx + (b.cx - b.dx) * k, y = b.dy + (b.cy - b.dy) * k, z = b.dz + (b.cz - b.dz) * k;
-      var r = b.tr + b.dr * (1 - k);
+      var fl = this.spin ? (1 - k) * Math.sin((this.clock || 0) * 0.0011 + b.dr * 3) : 0;
+      var x = b.dx + (b.cx - b.dx) * k, y = b.dy + (b.cy - b.dy) * k + fl * 0.45, z = b.dz + (b.cz - b.dz) * k;
+      var r = b.tr + b.dr * (1 - k) + fl * 0.2;
       var pc = proj(x, y, z);
       list.push({ b: b, x: x, y: y, z: z, r: r, d: pc[2] - y * 0.02 });
     }

@@ -71,6 +71,16 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - **Talks filter**: All / In person / Online buttons, and "Choose the colours" (four swatches each plus a colour picker, and a reset). The choice is kept in the visitor's own browser (localStorage). Online = `city: 'online'` or a kind containing "Online".
 - **Appearances** section (after Talks, also in the top bar): two YouTube videos, embedded from youtube-nocookie.com (CSP `frame-src https://www.youtube-nocookie.com`; the iframes send a referrer because YouTube's player needs one). The first video's title could not be read from this environment (YouTube is blocked here): it is captioned "Rocco Acocella on YouTube" in `appearances` in `data.mjs`; put the real title there. The second is titled "Possibility Studies Conference 2026" with the full highlights line under it (a shorter title keeps it to two lines on phones).
 
+## Done in session 8
+- Who took part now cycles four words: Teachers, Pre-service teachers, Students, Educators (attendees and participants of the open PSN events count as educators; a lavender ring).
+- Brick scenes keep turning after a click or drag (they hold still only while dragged), and scattered bricks float gently. This is in `BrickField`, so it applies to the hero, the workshop frame and every workshop page.
+- Publications: Acocella (2023), Creative self-beliefs (Master's dissertation), with its full abstract behind "Read the abstract".
+- Contact: heading "Connect. Collaborate. Cross-pollinate."; the sentence under it is now five phrases (Book a workshop, Have a conversation, Curious?, Pose a question, Ask for information) in extruded white 3D letters that turn in, sway and turn out in one place (`startSay` in `src/figures.src.js`; letters from Libre Franklin ExtraBold via `node src/make-glyphs.mjs`). Reduced motion or no WebGL: the phrases show as text (fading without WebGL).
+- "Milan, Italy" in the contact footer is now "Physically in Milan, mentally everywhere."
+- The LinkedIn link there is replaced by a thin 3D unalome (spiral, loops, line, three dots) that draws itself and sways, with a light travelling up it. Clicking it opens a small bubble with a hue slider and seven colours; the choice is kept in the visitor's browser. LinkedIn is still linked in the footer.
+- Item 5 of that request was left blank by the user; item 8 replaced that sentence, so nothing else changed.
+- The unalome was drawn from the classic form: the reference image mentioned in the request did not arrive.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
 2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.

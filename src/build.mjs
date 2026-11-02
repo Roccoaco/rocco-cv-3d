@@ -44,8 +44,9 @@ const countries = [...new Set(places.map((p) => D.cities[p.city].country))];
 const tally = (e) => [e.workshops && `${e.workshops} workshop${e.workshops > 1 ? 's' : ''}`, e.talks && `${e.talks} talk${e.talks > 1 ? 's' : ''}`].filter(Boolean).join(', ');
 
 // who took part: teachers, pre-service teachers, students (attendees and participants of open events stay uncounted)
-const whoOf = (a) => (/pre-service/i.test(a) ? 1 : /student/i.test(a) ? 2 : /teacher/i.test(a) ? 0 : -1);
-const who = ['Teachers', 'Pre-service teachers', 'Students'].map((label, i) => ({ label, n: D.workshops.filter((w) => whoOf(w.audience) === i).reduce((a, w) => a + w.count, 0) }));
+// attendees and participants of open events (PSN conferences) are counted as educators
+const whoOf = (a) => (/pre-service/i.test(a) ? 1 : /student/i.test(a) ? 2 : /teacher/i.test(a) ? 0 : 3);
+const who = ['Teachers', 'Pre-service teachers', 'Students', 'Educators'].map((label, i) => ({ label, n: D.workshops.filter((w) => whoOf(w.audience) === i).reduce((a, w) => a + w.count, 0) }));
 const workshopsData = D.workshops.map((w) => ({ id: w.id, slug: w.slug, model: w.model, count: w.count, when: w.when, audience: w.audience, place: place(w.city) }));
 const land = JSON.parse(fs.readFileSync(here + 'land.json', 'utf8'));
 const landCa = JSON.parse(fs.readFileSync(here + 'land-ca.json', 'utf8'));
@@ -178,7 +179,7 @@ const footer = (prefix) => `<footer class="foot">
   <nav aria-label="Footer"><a href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a href="${prefix}#contact">Contact</a></nav>
 </footer>`;
 
-const pubs = D.publications.map((p) => `<li><p>${esc(p.cite)}</p>${p.href ? `<p>${ext(p.href, p.link)}</p>` : ''}</li>`).join('');
+const pubs = D.publications.map((p) => `<li><p>${esc(p.cite)}</p>${p.href ? `<p>${ext(p.href, p.link)}</p>` : ''}${p.abstract ? `<details class="pub-abs"><summary>Read the abstract</summary><p>${esc(p.abstract)}</p></details>` : ''}</li>`).join('');
 const edu = D.education.map((e) => `<li><p class="strong">${esc(e.title)}</p><p class="muted">${esc(e.place)}, ${esc(place(e.city))}</p></li>`).join('');
 const langs = D.languages.map(([l, v]) => `<li><span class="strong">${l}</span> ${v}</li>`).join('');
 const certs = D.certificates.map((c) => `<li>${esc(c)}</li>`).join('');
@@ -307,7 +308,7 @@ ${nav('')}
       <p class="lede">Each workshop has its own page, with its model and the full abstract.</p>
     </div>
     <div class="figures" id="figures">
-      <p class="sr-only">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, pre-service teachers and students.</p>
+      <p class="sr-only">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, pre-service teachers, students and educators.</p>
       <canvas id="fig-canvas" aria-hidden="true"></canvas>
       <div class="fig-row" aria-hidden="true">
         <div class="fig"><span class="fig-n">+${D.workshops.length}</span><span class="fig-l">Workshops</span></div>
@@ -366,16 +367,27 @@ ${nav('')}
 
   <section id="contact" class="contact" aria-labelledby="contact-h">
     <div class="contact-top">
-      <h2 id="contact-h">Write to Rocco</h2>
-      <p>For a workshop at your school or conference, a paper, or a conversation about attention and language.</p>
+      <h2 id="contact-h">Connect. Collaborate.<br> <span class="nowrap">Cross-pollinate.</span></h2>
+      <div class="say" id="say">
+        <p class="sr-only">Book a workshop, have a conversation, pose a question or ask for information. Curious?</p>
+        <canvas id="say-canvas" aria-hidden="true"></canvas>
+        <p class="say-ws" aria-hidden="true"><span class="say-w">Book a workshop</span><span class="say-w">Have a conversation</span><span class="say-w">Curious?</span><span class="say-w">Pose a question</span><span class="say-w">Ask for information</span></p>
+      </div>
     </div>
     <div id="email" class="email">
       <button type="button" id="reveal" class="reveal">Show email address</button>
       <noscript><p class="nos">Turn on JavaScript to show the address, or find Rocco Acocella on LinkedIn.</p></noscript>
     </div>
     <div class="contact-foot">
-      <p>Milan, Italy</p>
-      <p>${D.linkedin ? ext(esc(D.linkedin), 'Rocco Acocella on LinkedIn') : 'On LinkedIn as Rocco Acocella'}</p>
+      <p class="where">Physically in Milan, mentally everywhere.</p>
+      <div class="unalome-wrap">
+        <button type="button" class="unalome" id="unalome" aria-expanded="false" aria-controls="hue-bubble" aria-label="Unalome, a path from confusion to clarity. Choose its colour"><canvas id="unalome-canvas" aria-hidden="true"></canvas></button>
+        <div class="hue-bubble" id="hue-bubble" hidden>
+          <p class="hue-h">Colour of the unalome</p>
+          <input type="range" class="hue-range" id="hue-range" min="0" max="359" step="1" value="50" aria-label="Hue">
+          <div class="hue-dots">${[['White', 'w'], ['Sun', '48'], ['Coral', '12'], ['Rose', '330'], ['Violet', '265'], ['Sky', '200'], ['Mint', '150']].map(([n, h]) => `<button type="button" class="hue-dot hue-${h}" data-hue="${h}" aria-label="${n}" aria-pressed="false"></button>`).join('')}</div>
+        </div>
+      </div>
     </div>${photos('contact')}
   </section>
 </main>
