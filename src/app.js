@@ -1,11 +1,27 @@
-/* Rocco Acocella CV: brick field, workshop frame, travel map, email reveal.
-   No third-party code, no network calls, no cookies or storage. */
+/* Rocco Acocella CV: brick field, workshop frame, travel map, email reveal, talk filter.
+   No third-party code, no network calls, no cookies. The talk colours a visitor picks stay in their own browser. */
 (function () {
   'use strict';
   var doc = document.documentElement;
   doc.classList.add('js');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DATA = JSON.parse(document.getElementById('cv-data').textContent);
+
+  /* ---------- older Safari (before 15) has no CSS aspect-ratio: give those boxes a height from their width.
+     Runs before the canvases measure themselves, and its resize listener runs before theirs. ---------- */
+  if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) {
+    var narrow = window.matchMedia('(max-width: 700px)');
+    var fitRatios = function () {
+      [['#frame-field', 1], ['.places-map', narrow.matches ? 1 : 1.25], ['.map-wrap', narrow.matches ? 0 : 0.8], ['.app-frame', 16 / 9],
+        ['.al-open canvas', 1048 / 1424], ['.al-dialog canvas', 1048 / 1424], ['.bodymap img', 0.5], ['.photo img', 1.5]].forEach(function (r) {
+        Array.prototype.forEach.call(document.querySelectorAll(r[0]), function (el) {
+          var w = el.getBoundingClientRect().width;
+          if (r[1] && w) el.style.height = (w / r[1]) + 'px';
+        });
+      });
+    };
+    fitRatios(); window.addEventListener('resize', fitRatios);
+  }
 
   /* ---------- seeded random ---------- */
   function rng(seed) {
@@ -582,7 +598,7 @@
         a.appendChild(document.createTextNode(addr.slice(0, at + 1)));
         a.appendChild(document.createElement('wbr'));
         a.appendChild(document.createTextNode(addr.slice(at + 1)));
-        box.replaceChildren(a); a.focus();
+        if (box.replaceChildren) box.replaceChildren(a); else { while (box.firstChild) box.removeChild(box.firstChild); box.appendChild(a); } a.focus();
       }
       var k = DATA.lock;
       if (window.crypto && crypto.subtle) {

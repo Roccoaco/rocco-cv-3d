@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-wBDyisS/pzDpxu7Pi8k/Z4HzoMgacR4BskIJGK6li2k='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-tPMOi8WatwIqyyM0DZNx7LVkwcevDXiUax+u2beECJw='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>LEGO™ciation, a workshop by Rocco Acocella</title>
@@ -136,12 +136,12 @@ h3{font-weight:700;font-size:var(--s-lead);line-height:1.15;letter-spacing:-.015
 
 /* ---------- lead: pinned name across hero and approach ---------- */
 .lead{position:relative}
-.corners{position:absolute;inset:0;z-index:5;pointer-events:none}
+.corners{position:absolute;top:0;right:0;bottom:0;left:0;z-index:5;pointer-events:none}
 .c1,.c2{pointer-events:auto}
-.name{position:sticky;top:0;height:100svh;font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em}
+.name{position:sticky;top:0;height:100vh;height:100svh;font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em} /* taste-skill-ignore: vh is the fallback for Safari before 15.4; svh follows */
 .c1{position:absolute;left:var(--m);top:28px;color:var(--ink)}
 .c2{position:absolute;right:var(--m);bottom:28px;color:var(--on-field)}
-.hero,.approach{display:grid;grid-template-columns:7fr 5fr;min-height:100svh}
+.hero,.approach{display:grid;grid-template-columns:7fr 5fr;min-height:100vh;min-height:100svh} /* taste-skill-ignore: vh is the fallback for Safari before 15.4; svh follows */
 .hero-paper{position:relative;padding:0 var(--m)}
 .hero-copy{position:absolute;left:calc(var(--m) + 6%);top:40%;max-width:42ch}
 .hero-line{font-size:var(--s-lead);line-height:1.35}
@@ -223,7 +223,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .places-head h2{grid-column:1/8}
 .places-head .lede{grid-column:8/13}
 .places-map{grid-column:1/9;position:relative;aspect-ratio:5/4;background:#102FB0}
-#places-map{position:absolute;inset:0;width:100%;height:100%}
+#places-map{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%}
 .places-list{grid-column:9/13;display:grid;gap:22px;align-content:start}
 .country h3{font-size:var(--s-body);color:var(--accent);margin-bottom:6px}
 .country ul{display:grid;gap:2px}
@@ -238,12 +238,12 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .ws-top .lede{grid-column:8/13}
 .ws-stage{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
 .held{grid-column:8/13;grid-row:1}
-.held-inner{position:sticky;top:calc(var(--bar-h) + 10svh);width:min(100%,60svh)}
+.held-inner{position:sticky;top:calc(var(--bar-h) + 10vh);top:calc(var(--bar-h) + 10svh);width:min(100%,60vh);width:min(100%,60svh)}
 #frame-field{width:100%;aspect-ratio:1;display:block;background:var(--field)}
 .facts{display:flex;justify-content:space-between;gap:24px;padding-top:14px;min-height:4.2em}
 .fact{font-size:var(--s-small);font-weight:600;line-height:1.35}
 .fact-r{text-align:right}
-.ws-names{grid-column:1/8;grid-row:1;display:grid;gap:18svh;padding:34svh 0 40svh}
+.ws-names{grid-column:1/8;grid-row:1;display:grid;gap:18vh;gap:18svh;padding:34vh 0 40vh;padding:34svh 0 40svh}
 .ws-name{display:inline-block;font-weight:800;font-size:var(--s-display);line-height:.92;letter-spacing:-.04em;text-decoration:none;color:var(--soft);transition:color .25s,transform .3s var(--ease)}
 .ws-name:hover,.ws-name:focus-visible{color:var(--ink)}
 .ws-name.is-current{color:var(--field);transform:translateX(12px)}
@@ -264,7 +264,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .talks{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:start}
 .map-col{grid-column:1/6;position:sticky;top:calc(var(--bar-h) + 6vh)}
 .map-wrap{position:relative;aspect-ratio:4/5;background:var(--field)}
-#map{position:absolute;inset:0;width:100%;height:100%}
+#map{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%}
 #map-label{position:absolute;left:24px;top:20px;font-family:var(--f-display);font-weight:800;font-size:var(--s-head);color:var(--accent);letter-spacing:-.02em}
 .lists{grid-column:7/13}
 .lists h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
@@ -303,7 +303,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .nos{font-size:var(--s-lead)}
 
 /* ---------- a workshop's own page ---------- */
-.w-hero{display:grid;grid-template-columns:7fr 5fr;min-height:calc(100svh - var(--bar-h))}
+.w-hero{display:grid;grid-template-columns:7fr 5fr;min-height:calc(100vh - var(--bar-h));min-height:calc(100svh - var(--bar-h))}
 .w-paper{padding:clamp(40px,6vw,96px) var(--m) clamp(48px,6vw,96px);display:flex;flex-direction:column;justify-content:center;gap:32px}
 .w-name{font-weight:800;font-size:var(--s-display);line-height:.9;letter-spacing:-.04em;max-width:12ch}
 .w-title{font-size:var(--s-lead);line-height:1.35;max-width:36ch}
@@ -421,7 +421,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .w-hero{display:block}
   .w-paper{padding:40px var(--m) 48px}
   .w-facts{grid-template-columns:1fr}
-  .w-stage{height:80svh;min-height:0}
+  .w-stage{height:80vh;height:80svh;min-height:0}
   .w-stage canvas{top:84px;bottom:110px;height:calc(100% - 194px)}
   .w-stage figcaption{bottom:20px}
   .w-abstract,.w-next{display:block}
@@ -438,7 +438,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .hero,.approach{display:block;min-height:0}
   .hero-paper{padding:32px var(--m) 40px}
   .hero-copy{position:static;max-width:none}
-  .stage{height:78svh}
+  .stage{height:78vh;height:78svh}
   .stage canvas{top:110px;bottom:24px;height:calc(100% - 134px)}
   .stage figcaption{top:auto;bottom:16px;max-width:none;right:var(--m)}
   .stage canvas{bottom:64px;height:calc(100% - 174px)}
@@ -461,16 +461,16 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .held-inner{position:static;width:auto;display:grid;grid-template-columns:38vw 1fr;gap:16px;align-items:center}
   .facts{display:grid;gap:8px;padding:0;min-height:0}
   .fact-r{text-align:left}
-  .ws-names{gap:14svh;padding:22svh 0 34svh}
+  .ws-names{gap:14vh;gap:14svh;padding:22vh 0 34vh;padding:22svh 0 34svh}
   .ws-name{font-size:var(--s-display);opacity:.45}
   .ws-name.is-current{transform:none}
   .ws-meta{margin-bottom:8px}
   .map-col{position:sticky;top:var(--bar-h);z-index:2;margin:0 calc(-1 * var(--m)) 32px}
-  .map-wrap{aspect-ratio:auto;height:38svh}
+  .map-wrap{aspect-ratio:auto;height:38vh;height:38svh}
   .row-top{flex-direction:column;gap:2px}
   .train-b{margin-top:72px}
   .train-pair{grid-template-columns:1fr}
-  .contact{min-height:86svh}
+  .contact{min-height:86vh;min-height:86svh}
   .contact-top p{margin-top:24px}
   .reveal,.email-link{font-size:10.5vw}
   .statement{font-size:var(--s-lead)}
@@ -539,7 +539,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .app-1{grid-column:1/9}
 .app-2{grid-column:5/13}
 .app-frame{position:relative;aspect-ratio:16/9;background:#060F2E}
-.app-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.app-frame iframe{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;border:0}
 .app figcaption{display:grid;justify-items:start;gap:6px;margin-top:18px}
 .app-note{font-size:var(--s-body);line-height:1.5;color:var(--on-field-soft);max-width:52ch}
 .app-title{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;max-width:28ch}
@@ -671,6 +671,6 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 </footer>
 
 <script type="application/json" id="cv-data">{"cities":{"milan":{"name":"Milan","country":"Italy","lat":45.46,"lon":9.19,"lab":"r"},"chieri":{"name":"Chieri (Turin)","country":"Italy","lat":45.01,"lon":7.82,"lab":"l"},"rome":{"name":"Rome","country":"Italy","lat":41.9,"lon":12.5,"lab":"r"},"basel":{"name":"Basel","country":"Switzerland","lat":47.56,"lon":7.59,"lab":"l"},"vienna":{"name":"Vienna","country":"Austria","lat":48.21,"lon":16.37,"lab":"r"},"brighton":{"name":"Brighton","country":"United Kingdom","lat":50.82,"lon":-0.14,"lab":"b"},"cambridge":{"name":"Cambridge","country":"United Kingdom","lat":52.21,"lon":0.12,"lab":"r"},"maynooth":{"name":"Maynooth","country":"Ireland","lat":53.38,"lon":-6.59,"lab":"l"},"dublin":{"name":"Dublin","country":"Ireland","lat":53.35,"lon":-6.26,"lab":"r"},"brussels":{"name":"Brussels","country":"Belgium","lat":50.85,"lon":4.35,"lab":"r"},"reykjavik":{"name":"Reykjavík","country":"Iceland","lat":64.15,"lon":-21.94,"lab":"r"},"athens":{"name":"Athens","country":"Greece","lat":37.98,"lon":23.73,"lab":"r"},"sharm":{"name":"Sharm El-Sheikh","country":"Egypt","lat":27.92,"lon":34.33,"lab":"l"},"malta":{"name":"Msida","country":"Malta","lat":35.9,"lon":14.48,"lab":"r"},"venice":{"name":"Venice","country":"Italy","lat":45.44,"lon":12.33,"lab":"r"},"como":{"name":"Como","country":"Italy","lat":45.81,"lon":9.09,"lab":"l"},"pasadena":{"name":"Pasadena","country":"United States","region":"California","lat":34.15,"lon":-118.14,"lab":"r","inset":true},"online":{"name":"Online","country":"","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","slug":"multilingualism","model":"ring","count":8,"when":"23 October 2026","audience":"8 language teachers","place":"Vienna, Austria"},{"id":"w-chromasoma","slug":"chromasoma","model":"spiral","count":25,"when":"19 June 2026","audience":"25 attendees","place":"Online"},{"id":"w-turin","slug":"alternating-attention","model":"deck","count":48,"when":"8 May 2026","audience":"48 IB teachers","place":"Chieri (Turin), Italy"},{"id":"w-mita","slug":"idea-bouncing","model":"arch","count":14,"when":"21 March 2026","audience":"14 teachers","place":"Milan, Italy"},{"id":"w-friction","slug":"productive-friction","model":"hubs","count":30,"when":"19 January 2026","audience":"30 participants","place":"Online"},{"id":"w-csm26","slug":"legociation","model":"arch","count":25,"when":"7 January 2026","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-basel","slug":"idea-to-creation","model":"creation","count":15,"when":"24 October 2025","audience":"15 teachers","place":"Basel, Switzerland"},{"id":"w-rome","slug":"thinker","model":"profile","count":70,"when":"6 June 2025","audience":"70 IB teachers","place":"Rome, Italy"},{"id":"w-ai","slug":"raising-awareness","model":"stairs","count":25,"when":"January to February 2025","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-journey","slug":"thinking-journey","model":"stations","count":80,"when":"October 2024","audience":"80 MYP students","place":"Milan, Italy"},{"id":"w-iceland24","slug":"creative-mindset","model":"growth","count":14,"when":"October 2024","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"},{"id":"w-rights","slug":"human-rights-and-the-brain","model":"bridge","count":14,"when":"February to April 2024","audience":"14 MYP3 students","place":"Milan, Italy"},{"id":"w-iceland23","slug":"mindset-journey","model":"path","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"}]}</script>
-<script src="app.js" integrity="sha384-3DCwvrkioo/zuNZDQg++q9sXt/Ya2mppIP/QhMLrVN/cTd+0fcpNtY2u73IrPn6e" defer></script>
+<script src="app.js" integrity="sha384-FmaqXZ3RAStpMXUOX+3fueJc2QneQGfy1vaIsQ3ftCnguq9gZThuTGjOJ+ShJkWv" defer></script>
 </body>
 </html>

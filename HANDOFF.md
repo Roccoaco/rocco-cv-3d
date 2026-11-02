@@ -81,6 +81,10 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Item 5 of that request was left blank by the user; item 8 replaced that sentence, so nothing else changed.
 - The unalome was drawn from the classic form: the reference image mentioned in the request did not arrive.
 
+## Done in session 9
+- Workshop models: navy bricks get a fine light edge on the blue field; the bridge and path models are larger (checked through a full turn on a phone); audiences keep acronyms (MYP3, IB).
+- Older Safari (before 15.4, e.g. on an older Mac): `svh` heights were ignored there, so the hero, the talks map and the phone workshop models collapsed to zero height. Every `svh` now has a `vh` fallback before it, `inset:0` is spelled out, and `app.js` gives boxes with `aspect-ratio` a height from their width when the browser lacks it. Checked with a simulated old-Safari copy (svh and aspect-ratio disabled): before, the canvases were 0px tall; after, all have their size. The three.js parts need WebGL 2 (Safari 15+); without it they fold away and the text stays.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
 2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.
