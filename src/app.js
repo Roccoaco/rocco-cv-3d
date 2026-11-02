@@ -184,7 +184,7 @@
   var heroCanvas = document.getElementById('field');
   if (heroCanvas && heroCanvas.getContext) {
     var counted = DATA.workshops.filter(function (w) { return w.count; }).slice().reverse(); // oldest at the bottom
-    var hero = new BrickField(heroCanvas, { yaw: 0.65, pitch: 0.5, zoom: 1.05, lift: -0.02 });
+    var hero = new BrickField(heroCanvas, { yaw: 0.65, pitch: 0.5, zoom: 0.82, lift: 0 });
     hero.set(counted.map(function (w, i) { return { n: w.count, color: BRICK_COLORS[i % 3] }; }), 1965);
     fields.push(hero);
     var btns = document.querySelectorAll('[data-mode]');
@@ -309,20 +309,6 @@
           .catch(function () { box.textContent = 'The address could not be decrypted in this browser. Find Rocco on LinkedIn as Rocco Acocella.'; });
       }
     });
-  }
-
-  /* ---------- entrances, once per section, content visible without script ---------- */
-  if (!reduce && 'IntersectionObserver' in window) {
-    var parts = document.querySelectorAll('[data-rise]');
-    var io3 = new IntersectionObserver(function (en) {
-      en.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var kids = e.target.querySelectorAll(':scope > *');
-        kids.forEach(function (k, i) { k.style.transitionDelay = (i * 75) + 'ms'; k.classList.add('in'); });
-        io3.unobserve(e.target);
-      });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    parts.forEach(function (p) { p.classList.add('rise'); io3.observe(p); });
   }
 
   requestAnimationFrame(loop);

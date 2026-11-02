@@ -25,7 +25,10 @@ const data = {
   workshops: D.workshops.map((w) => ({ id: w.id, count: w.count, when: w.when, audience: w.audience, venueShort: venueShort(w.venue) }))
 };
 
-const css = fs.readFileSync(here + 'style.css', 'utf8');
+// self-hosted fonts (src/fetch-fonts.mjs): no request leaves the site
+fs.mkdirSync(out + 'fonts', { recursive: true });
+for (const f of fs.readdirSync(here + 'fonts')) if (f.endsWith('.woff2')) fs.copyFileSync(here + 'fonts/' + f, out + 'fonts/' + f);
+const css = fs.readFileSync(here + 'fonts/fonts.css', 'utf8') + fs.readFileSync(here + 'style.css', 'utf8');
 const js = fs.readFileSync(here + 'app.js', 'utf8');
 fs.writeFileSync(out + 'app.js', js);
 const sri = 'sha384-' + crypto.createHash('sha384').update(js).digest('base64');
@@ -34,14 +37,25 @@ const styleHash = "'sha256-" + crypto.createHash('sha256').update(css).digest('b
 const csp = [
   "default-src 'none'",
   "script-src 'self'",
-  `style-src ${styleHash} https://fonts.googleapis.com`,
-  'font-src https://fonts.gstatic.com',
+  `style-src ${styleHash}`,
+  "font-src 'self'",
   "img-src 'self' data:",
   "connect-src 'none'",
   "base-uri 'none'",
   "form-action 'none'",
   "object-src 'none'"
 ].join('; ');
+
+// --- Rocco's own photographs (optional, see data.mjs) ---
+const photoSlot = {};
+for (const ph of D.photos || []) {
+  const srcFile = here + 'photos/' + ph.file;
+  if (!fs.existsSync(srcFile)) { console.warn('photo missing, skipped:', ph.file); continue; }
+  fs.mkdirSync(out + 'photos', { recursive: true });
+  fs.copyFileSync(srcFile, out + 'photos/' + ph.file);
+  (photoSlot[ph.slot] ||= []).push(`<figure class="photo"><img src="photos/${esc(ph.file)}" alt="${esc(ph.alt)}" loading="lazy" decoding="async">${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`);
+}
+const photos = (slot) => photoSlot[slot] ? `<div class="photos">${photoSlot[slot].join('')}</div>` : '';
 
 const ext = (href, text) => `<a href="${href}" rel="noopener noreferrer" target="_blank">${text}</a>`;
 
@@ -95,9 +109,7 @@ const html = `<!doctype html>
 <meta name="robots" content="noindex">
 <title>Rocco Acocella</title>
 <meta name="description" content="Rocco Acocella: Italian teacher at the Canadian School of Milan, workshop leader and researcher in creativity and alternating attention.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/libre-franklin-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>${css}</style>
 </head>
 <body>
@@ -105,7 +117,7 @@ const html = `<!doctype html>
 
 <div class="lead">
   <div class="corners">
-    <h1 class="name"><span class="c1">Rocco</span> <span class="c2">Acocella</span><span class="sr"> , Italian teacher and creativity researcher in Milan</span></h1>
+    <h1 class="name"><span class="c1">Rocco</span> <span class="c2">Acocella</span></h1>
   </div>
 
   <header class="hero">
@@ -137,8 +149,8 @@ const html = `<!doctype html>
   <section class="approach" aria-labelledby="approach-h">
     <div class="approach-paper" data-rise>
       <h2 id="approach-h">Approach</h2>
-      <p class="statement">Language is how ideas move between people. Rocco teaches Italian, and teaches people to move their attention on purpose.</p>
-      <p class="approach-text">His work joins developmental and cognitive psychology, collaboration and creative process, with ideas borrowed from quantum physics, to make learning personal. In class it runs on one design cycle, The EduDesign Alchemist.</p>
+      <p class="statement">Rocco teaches Italian, and teaches people to move their attention on purpose.</p>
+      <p class="approach-text">Language is how ideas move between people. His work joins developmental and cognitive psychology, collaboration and creative process, with ideas borrowed from quantum physics, to make learning personal. In class it runs on one design cycle, The EduDesign Alchemist.</p>
     </div>
     <div class="approach-field">
       <h3 class="al-title">The Alchemy Cycle</h3>
@@ -154,7 +166,7 @@ const html = `<!doctype html>
       <p class="lede">Three years in the IB programmes at the Canadian School of Milan, now in primary.</p>
     </div>
     <div class="roles" data-rise>${roleRows}
-    </div>
+    </div>${photos('teaching')}
   </section>
 
   <section class="projects" aria-labelledby="proj-h">
@@ -166,17 +178,24 @@ const html = `<!doctype html>
   </section>
 
   <section id="workshops" class="workshops" aria-labelledby="ws-h">
-    <div class="held">
-      <div class="held-inner">
-        <p class="fact" id="fact-left">${esc(venueShort(D.workshops[0].venue))}</p>
-        <canvas id="frame-field" aria-hidden="true"></canvas>
-        <p class="fact fact-r" id="fact-right">${esc(D.workshops[0].when)}</p>
-      </div>
+    <div class="ws-top">
+      <h2 id="ws-h">Workshops</h2>
+      <p class="lede">Each name builds its own storey: one brick for every seat that was filled.</p>
     </div>
-    <h2 id="ws-h" class="ws-heading">Workshops</h2>
-    <ol class="ws-names">
-      ${names}
-    </ol>
+    <div class="ws-stage">
+      <div class="held" aria-hidden="true">
+        <div class="held-inner">
+          <canvas id="frame-field"></canvas>
+          <div class="facts">
+            <p class="fact" id="fact-left">${esc(venueShort(D.workshops[0].venue))}</p>
+            <p class="fact fact-r" id="fact-right">${esc(D.workshops[0].when)}</p>
+          </div>
+        </div>
+      </div>
+      <ol class="ws-names">
+        ${names}
+      </ol>
+    </div>
   </section>
 
   <section class="archive" aria-labelledby="arch-h">
@@ -184,7 +203,7 @@ const html = `<!doctype html>
       <h2 id="arch-h">Every workshop</h2>
       <p class="lede">Thirteen workshops since 2023, for ${seats} counted participants: teachers, student teachers and students.</p>
     </div>
-    <div class="ws-list">${archive}
+    ${photos('workshops')}<div class="ws-list">${archive}
     </div>
   </section>
 
@@ -202,7 +221,7 @@ const html = `<!doctype html>
       <h2 class="conf-h">Conferences</h2>
       <ol class="rows">${confRows}
       </ol>
-    </div>
+    </div>${photos('talks')}
   </section>
 
   <section id="training" class="training" aria-labelledby="train-h">
@@ -231,15 +250,16 @@ const html = `<!doctype html>
     </div>
     <div class="contact-foot">
       <p>Milan, Italy</p>
-      <p>On LinkedIn as Rocco Acocella</p>
-    </div>
+      <p>${D.linkedin ? ext(esc(D.linkedin), 'Rocco Acocella on LinkedIn') : 'On LinkedIn as Rocco Acocella'}</p>
+    </div>${photos('contact')}
   </section>
 </main>
 
 <footer class="foot">
-  <p>Rocco Acocella, curriculum vitae</p>
+  <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
+  <p>Curriculum vitae, ${new Date().getFullYear()}</p>
   <nav aria-label="Footer"><a href="#work">Teaching</a><a href="#workshops">Workshops</a><a href="#talks">Talks</a><a href="#contact">Contact</a></nav>
-  <p class="foot-r">2026. No cookies, no tracking; the email address is stored encrypted.</p>
+  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted.</p>
 </footer>
 
 <script type="application/json" id="cv-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
@@ -248,4 +268,21 @@ const html = `<!doctype html>
 </html>
 `;
 fs.writeFileSync(out + 'index.html', html);
+
+// Real HTTP headers for hosts that read a _headers file (Netlify, Cloudflare Pages). frame-ancestors only works as a header.
+const headers = `/*
+  Content-Security-Policy: ${csp}; frame-ancestors 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Robots-Tag: noindex
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+`;
+fs.writeFileSync(out + '_headers', headers);
 console.log('built', out, 'seats', seats, 'html', html.length, 'bytes');

@@ -181,3 +181,11 @@ export const publications = [
   { cite: 'Acocella, R. (2021). A Qualitative-Exploratory Pilot Study to Explore Students’ Perception on Experience and Multiple Intelligences’ Impact on Their Linguistic & Personal Growth. European Journal of Teaching and Education, 3(1), 34–43.', href: 'https://doi.org/10.33422/ejte.v3i1.669', link: 'Read via DOI' },
   { cite: 'Wanasika, I., Bakker, D., Wehner, R., Ahmed, G., Bakhadirov, M., Rong, L., … & Acocella, R. (2023). Cultural differences and entrepreneurial needs. In International Business with New Challenges and Entrepreneurial Opportunities (pp. 115–121). Würzburg International Business Press.' }
 ];
+
+// LinkedIn profile URL (not in the PDF). Leave empty to show the plain "On LinkedIn as Rocco Acocella" line.
+export const linkedin = '';
+
+// Rocco's own photographs. Put the files in src/photos/ and list them here; the build copies them and places each
+// as a full-width band in its slot. Slots: 'teaching', 'workshops', 'talks', 'contact'. Empty list = no photos shown.
+// Example: { file: 'workshop-turin.jpg', slot: 'workshops', alt: 'Teachers building with bricks at the Italian Summit, Turin', caption: 'Italian Summit 2026, Turin' }
+export const photos = [];

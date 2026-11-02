@@ -1,0 +1,7 @@
+# Netlify: builds with plain Node (no dependencies) and serves dist/. Security headers come from dist/_headers.
+[build]
+  command = "node src/build.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

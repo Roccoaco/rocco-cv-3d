@@ -8,14 +8,16 @@ A single-page CV built from `Copy_of_CV_Rocco_Acocella-2.pdf`. No frameworks, no
 
 - `src/data.mjs` — all CV content (duplicates in the PDF merged). Edit content here.
 - `src/style.css` — styles. `src/app.js` — behaviour.
-- `src/build.mjs` — generates `dist/index.html` + `dist/app.js`. Run `node src/build.mjs` after every change.
+- `src/build.mjs` — generates `dist/index.html`, `dist/app.js`, `dist/fonts/`, `dist/_headers` (and `dist/photos/` when photos are listed). Run `node src/build.mjs` after every change.
+- `src/fonts/` — self-hosted Latin subsets of Libre Franklin and Source Serif 4. Re-download with `node src/fetch-fonts.mjs`.
+- `netlify.toml` — Netlify build settings (command `node src/build.mjs`, publish `dist`).
 - `taste-skill/` — the Leonxlnx/taste-skill package (cloned from GitHub; `npx skills add` couldn't reach npm here).
 - `.taste-skill/direction.json` — the dealt design direction: "The pinned poster", seed 1165767103, palette kept from the CV.
 
 ## Design idea
 Rocco's own method (moving between divergent and convergent attention, LEGOciation) becomes the page's live 3D object: **349 bricks, one per counted seat across eleven workshops**, that scatter (Diverge) and assemble into a tower with one storey per workshop (Converge). Drag or use arrow keys to rotate. Hand-written canvas 3D renderer, no Three.js.
 
-Sections: pinned name hero with brick field → Approach + Alchemy Cycle (A-L-C-H-E-M-Y) → Teaching → Projects and skills → Workshops (huge names passing a held frame that rebuilds each workshop in bricks) → Every workshop (full details) → Talks + Conferences (sticky travel map from Milan, active row lights its city) → Publications, Education, Languages, Certificates → Contact → footer.
+Sections: pinned name hero with brick field → Approach + Alchemy Cycle (A-L-C-H-E-M-Y) → Teaching → Projects and skills → Workshops (huge names on the left pass a held frame on the right that rebuilds each workshop in bricks; on phones the frame is a sticky band at the top) → Every workshop (full details) → Talks + Conferences (sticky travel map from Milan, active row lights its city) → Publications, Education, Languages, Certificates → Contact → footer.
 
 Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted off violet), yellow accent #FFD43B. Type: Libre Franklin + Source Serif 4.
 
@@ -24,17 +26,24 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Subresource Integrity (sha384) on `app.js`; build regenerates hashes.
 - Email stored AES-256-GCM encrypted, decrypted in the browser only on "Show email address" (anti-scraper; key ships with the page, so it is obfuscation, not secrecy).
 - No cookies, storage, analytics or trackers; `referrer: no-referrer`; `noindex`; external links `noopener noreferrer`.
-- Only outside request: Google Fonts (self-host the fonts to remove it).
+- No outside requests at all: fonts are self-hosted (`font-src 'self'`).
+- `dist/_headers` (Netlify / Cloudflare Pages format) sends the same CSP as a real header plus `frame-ancestors 'none'`, HSTS (2 years, preload), `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, COOP/CORP and `X-Robots-Tag: noindex`. GitHub Pages ignores `_headers`, so prefer Netlify or Cloudflare Pages.
+
+## Done in session 2
+- Hero brick field zoom lowered (1.05 → 0.82); the converged tower fits.
+- `--s-display` is now `clamp(3.5rem,7vw,7rem)`, so "ACOCELLA" sits inside the cobalt panel at 1440 (11fr/9fr split at tablet).
+- Mode buttons: no colour transition (it caused the faded mid-transition look); unpressed state is white on cobalt with a soft hover fill.
+- Pinned name and held workshop frame no longer use the `margin-bottom: -100%` sticky trick, which made them stick a full screen past their sections (ACOCELLA ghosted over Teaching; the frame covered "Every workshop"). The h1 itself is now the sticky element, so it has a real box.
+- Workshops redesigned so names never collide with the facts or the bricks: names left, frame and facts right; phone uses a sticky top band.
+- Five type sizes (16 / 19 / 26 / 36 / display); statement shortened to three lines; Alchemy rows in one face; footer closes with the name at full width.
+- Section entrances are CSS scroll-driven animations with no fill, so content is never hidden if the animation does not run (old JS reveal removed).
+- Fonts self-hosted; `_headers` + `netlify.toml` added; LinkedIn and photo hooks in `data.mjs`.
+- Taste gate: `lint.mjs` 0 FAIL / 0 WARN; `inspect.mjs` 1 FAIL (few-pictures) / 1 WARN (no-footage), see below. Screenshots reviewed at 1440, 768 and 390.
 
 ## Still to do
-1. Hero brick field is too zoomed: lower `zoom` in the hero `BrickField` (app.js) so the converged tower fits.
-2. "ACOCELLA" slightly overhangs the cobalt panel at 1440px: reduce `--s-display` or widen the cobalt column.
-3. Mode buttons look faded mid-transition in screenshots; check contrast of the unpressed state.
-4. Run the taste-skill gate: `node taste-skill/skills/taste-skill/scripts/lint.mjs src` and `node taste-skill/skills/taste-skill/scripts/inspect.mjs dist/index.html`; fix FAILs, review screenshots at 1440/768/390.
-5. Check the phone layout and the workshops held frame scrolling.
-6. No real photographs yet (open image collections were unreachable from the previous session). Add Rocco's own photos if wanted.
-7. Add the LinkedIn URL (not in the PDF).
-8. Deploy (e.g. GitHub Pages / Netlify) and add real HTTP security headers there (CSP, frame-ancestors, HSTS).
+1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
+2. **LinkedIn URL**: set `linkedin` in `src/data.mjs` (not in the PDF).
+3. **Deploy**: connect the repo to Netlify (it reads `netlify.toml`) or Cloudflare Pages (build `node src/build.mjs`, output `dist`). Then check the headers at securityheaders.com. Remove `noindex` (meta + `X-Robots-Tag`) when Rocco wants the page found.
 
 ## CV inconsistencies to confirm with Rocco
 - 3rd Possibility Studies Conference (Dublin): talk listed as 2025, attendance as 2023 → used **2023**.
