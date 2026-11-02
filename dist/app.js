@@ -27,6 +27,7 @@
     return out;
   }
 
+  function isDark(hex) { var c = hexToRgb(hex); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 70; }
   var BRICK_COLORS = ['#FFFFFF', '#FFD43B', '#9DB1F5', '#0B1B4D'];
   var W = '#FFFFFF', Y = '#FFD43B', L = '#9DB1F5', N = '#0B1B4D', O = '#FF9F1C', P = '#C9D4FF';
 
@@ -150,7 +151,7 @@
     }
   };
   // long models are seen side-on, round ones from the corner: [yaw, pitch, zoom]
-  var VIEW = { arch: [0.22, 0.42, 1.1], bridge: [0.2, 0.42, 1.15], path: [0.3, 0.55, 1.15], deck: [0.3, 0.45, 1], creation: [0.35, 0.5, 1.15], spiral: [0.6, 0.45, 1.15], growth: [0.45, 0.45, 1.05] };
+  var VIEW = { arch: [0.22, 0.42, 1.1], bridge: [0.2, 0.5, 1.22], path: [0.3, 0.6, 1.26], deck: [0.3, 0.45, 1], creation: [0.35, 0.5, 1.15], spiral: [0.6, 0.45, 1.15], growth: [0.45, 0.45, 1.05] };
   function viewFor(w) { return VIEW[w.model] || [0.7, 0.55, 0.95]; }
   function modelFor(w, i) { return (MODELS[w.model] || MODELS.ring)(Math.max(1, w.count || 1)); }
 
@@ -206,7 +207,7 @@
       bricks.push({
         cx: b.x - mx, cy: b.y * 1.2, cz: b.z - mz, tr: b.r || 0,
         dx: rr * Math.sin(ph) * Math.cos(th), dy: rr * Math.cos(ph) * 0.8 + height / 2, dz: rr * Math.sin(ph) * Math.sin(th),
-        dr: R() * Math.PI * 2, delay: R() * 0.35, col: hexToRgb(b.c)
+        dr: R() * Math.PI * 2, delay: R() * 0.35, col: hexToRgb(b.c), dark: isDark(b.c)
       });
     });
     this.height = height; this.bricks = bricks; this.dirty = true;
@@ -287,6 +288,8 @@
         ctx.beginPath(); ctx.moveTo(P[fc[0]][0], P[fc[0]][1]);
         for (var q = 1; q < 4; q++) ctx.lineTo(P[fc[q]][0], P[fc[q]][1]);
         ctx.closePath(); ctx.fill();
+        // navy bricks get a fine light edge, so they still read against the blue field
+        if (br.dark) { ctx.strokeStyle = 'rgba(201,212,255,0.55)'; ctx.lineWidth = 1; ctx.lineJoin = 'round'; ctx.stroke(); }
         if (fi === 0) {
           // two studs
           for (var s = -1; s <= 1; s += 2) {
@@ -348,7 +351,7 @@
       ff.setBricks(modelFor(w, i), 100 + i * 37);
       ff.anim = 0; ff.mode = 'converge';
       if (facts.left) facts.left.textContent = w.place;
-      if (facts.right) facts.right.textContent = w.when + ', ' + w.audience.toLowerCase();
+      if (facts.right) facts.right.textContent = w.when + ', ' + w.audience.replace(/^(\d+\s+)([A-Z])(?=[a-z])/, function (m, a, b) { return a + b.toLowerCase(); });
       names.forEach(function (el, k) { el.classList.toggle('is-current', k === i); });
     }
     // the model is tied to the scroll: the name nearest the middle of the screen owns the frame, and its bricks
