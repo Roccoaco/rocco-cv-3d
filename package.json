@@ -1,0 +1,13 @@
+{
+  "name": "rocco-cv-3d",
+  "private": true,
+  "description": "Only needed to re-bundle the three.js figures (src/bundle-figures.mjs). The site itself builds with plain node: node src/build.mjs",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "bundle-figures": "node src/bundle-figures.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "three": "0.186.1"
+  }
+}

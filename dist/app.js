@@ -587,5 +587,45 @@
     });
   }
 
+
+  /* ---------- talks: show in person or online, in colours the reader picks (kept in this browser only) ---------- */
+  var tfBtns = Array.prototype.slice.call(document.querySelectorAll('.tf-btn'));
+  var talkRowsEl = Array.prototype.slice.call(document.querySelectorAll('.talk-rows .row'));
+  var tfStatus = document.querySelector('.tf-status');
+  if (tfBtns.length && talkRowsEl.length) {
+    var NAMES = { inperson: 'in-person', online: 'online' };
+    tfBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var show = b.getAttribute('data-show'), n = 0;
+        tfBtns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        talkRowsEl.forEach(function (r) { var on = show === 'all' || r.getAttribute('data-mode') === show; r.hidden = !on; if (on) n++; });
+        if (tfStatus) tfStatus.textContent = 'Showing ' + n + (show === 'all' ? ' talks' : ' ' + NAMES[show] + ' talk' + (n === 1 ? '' : 's')) + '.';
+      });
+    });
+
+    var rootStyle = document.documentElement.style, KEY = 'talk-colours', chosen = {};
+    var swatchBtns = Array.prototype.slice.call(document.querySelectorAll('.tf-sw'));
+    var pickers = Array.prototype.slice.call(document.querySelectorAll('.tf-custom input'));
+    function paint() {
+      ['inperson', 'online'].forEach(function (m) {
+        if (chosen[m]) rootStyle.setProperty('--c-' + m, chosen[m]); else rootStyle.removeProperty('--c-' + m);
+      });
+      swatchBtns.forEach(function (b) {
+        var m = b.getAttribute('data-for');
+        b.setAttribute('aria-pressed', String(!!chosen[m] && chosen[m].toLowerCase() === b.getAttribute('data-colour').toLowerCase()));
+      });
+      pickers.forEach(function (p) { var m = p.getAttribute('data-for'); if (chosen[m]) p.value = chosen[m]; });
+    }
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(chosen)); } catch (e) {} }
+    try { var saved = JSON.parse(localStorage.getItem(KEY) || '{}'); if (saved && typeof saved === 'object') chosen = saved; } catch (e) {}
+    ['inperson', 'online'].forEach(function (m) { if (chosen[m] && !/^#[0-9a-f]{6}$/i.test(chosen[m])) delete chosen[m]; });
+    paint();
+    function choose(m, c) { chosen[m] = c; paint(); save(); if (tfStatus) tfStatus.textContent = (m === 'online' ? 'Online' : 'In-person') + ' talks recoloured.'; }
+    swatchBtns.forEach(function (b) { b.addEventListener('click', function () { choose(b.getAttribute('data-for'), b.getAttribute('data-colour')); }); });
+    pickers.forEach(function (p) { p.addEventListener('input', function () { choose(p.getAttribute('data-for'), p.value); }); });
+    var reset = document.querySelector('.tf-reset');
+    if (reset) reset.addEventListener('click', function () { chosen = {}; paint(); try { localStorage.removeItem(KEY); } catch (e) {} if (tfStatus) tfStatus.textContent = 'Colours back to the defaults.'; });
+  }
+
   requestAnimationFrame(loop);
 })();

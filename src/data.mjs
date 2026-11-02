@@ -61,7 +61,7 @@ export const workshops = [
     id: 'w-friction', slug: 'productive-friction', model: 'hubs', short: 'Productive Friction', city: 'online', count: 30, sortDate: '2026-01-19',
     title: 'Productive Friction: Creative Freedom in Times of Political Contestation',
     venue: '5th Virtual Conference of the Possibility Studies Network', hub: 'create',
-    image: { file: 'productive-friction.jpg', alt: 'Title slide: Productive Friction: Creative Freedom in Times of Political Contestation, Alchemical Outcomes: Research in Creativity and Psychology 2026, with the C.R.E.A.T.E. PSN hub logo, over glowing spheres on water', caption: 'Title slide, Alchemical Outcomes: Research in Creativity and Psychology 2026, C.R.E.A.T.E., a hub of Saybrook University, California' }, when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
+    when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
     text: 'What happens to a creative community once its annual conference ends? Participants designed local PSN hubs, small events that carry the network into their own places, to keep connection alive and ease everyday tension through shared creative work.'
   },
   {
@@ -112,6 +112,12 @@ export const workshops = [
     venue: 'University of Iceland', when: 'March to April 2023', length: '8 hours in person', audience: '14 pre-service teachers',
     text: 'In-person sessions joining growth mindset with creative thinking methods to build future teachers’ creative dispositions. Participants reported more confidence, engagement and enthusiasm for using creative strategies in their teaching.'
   }
+];
+
+// Appearances: videos Rocco appears in, embedded from youtube-nocookie.com (title: shown on the page).
+export const appearances = [
+  { id: 'ZgZkhWetIQ8', title: 'Rocco Acocella on YouTube', note: '' },
+  { id: 'grIs0uHWAqw', title: 'Possibility Studies Conference 2026', note: 'Highlights from the Possibility Studies Network Conference 2026 at the University of Sussex, Brighton, United Kingdom.' }
 ];
 
 export const talks = [
@@ -173,8 +179,7 @@ export const alchemy = [
 export const projects = [
   { name: 'LEGO™ciation', text: 'Negotiating ideas through building. Groups talk, build in LEGO™, and rebuild, so thinking becomes something they can hold. Used from MYP classrooms to teacher conferences.' },
   { name: 'Shape Your Brain', text: 'An activity where students picture neural growth as their answer to a hard task: a working metaphor for how challenge changes the brain.' },
-  { name: 'The attention card deck', text: 'A facilitation deck that prompts deliberate switches of attention, built for the alternating-attention workshop at the Italian Summit 2026.' },
-  { name: 'PSN hubs', text: 'Small local gatherings that carry the Possibility Studies Network between conferences, developed in Productive Friction and the Mission Possible poster.' }
+  { name: 'The attention card deck', text: 'A facilitation deck that prompts deliberate switches of attention, built for the alternating-attention workshop at the Italian Summit 2026.' }
 ];
 
 export const skills = [

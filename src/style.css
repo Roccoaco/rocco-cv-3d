@@ -381,3 +381,79 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important}
 }
+
+/* ---------- session 7: the workshop figures, the talk filter, appearances ---------- */
+:root{--night:#0B1B4D;--c-inperson:#1537C7;--c-online:#C2410C;--who-2:#FFD43B;--who-3:#8FA6FF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-inperson:#8FA6FF;--c-online:#FF8A5B}}
+:root[data-theme="dark"]{--c-inperson:#8FA6FF;--c-online:#FF8A5B}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* figures: three.js scenes over three facts; the one centred moment on the page */
+.figures{position:relative;margin:0 calc(-1 * var(--m)) clamp(64px,8vw,120px);padding:0 var(--m) clamp(36px,4vw,64px);background:var(--night);color:#FFFFFF}
+#fig-canvas{display:block;width:100%;height:clamp(220px,30vw,420px);touch-action:pan-y}
+.figures.no-3d #fig-canvas{height:clamp(36px,4vw,64px)}
+.fig-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--g);align-items:end}
+.fig{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.fig-n{font-family:var(--f-display);font-weight:800;font-size:var(--s-display);line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.fig-l{font-family:var(--f-display);font-weight:600;font-size:var(--s-small);color:var(--on-field-soft)}
+.fig-ws{display:flex;flex-direction:column;align-items:center}
+.fig-w{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);line-height:1.05;letter-spacing:-.02em}
+.fig-w:nth-child(2){color:var(--who-2)}
+.fig-w:nth-child(3){color:var(--who-3)}
+.is-cycling .fig-ws{display:grid;align-items:end;justify-items:center;min-height:calc(var(--s-display) * .9)}
+.is-cycling .fig-w{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity .9s var(--ease),visibility 0s .9s}
+.is-cycling .fig-w.is-on{opacity:1;visibility:visible;transition:opacity .9s var(--ease),visibility 0s}
+
+/* talks: in person or online, each in a colour the reader can choose */
+.tf{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 4px}
+.tf-btn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:var(--s-small);cursor:pointer;transition:transform .18s var(--ease),background-color .18s,color .18s}
+.tf-btn:hover{transform:translateY(-2px)}
+.tf-btn:active{transform:translateY(1px)}
+.tf-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tf-n{margin-left:8px;font-weight:500;opacity:.75}
+.mode-dot{display:inline-block;flex:none;width:.62em;height:.62em;border-radius:50%;margin-right:.5em;vertical-align:.06em;background:var(--c-inperson);transition:background-color .3s}
+.mode-dot.is-online,.row[data-mode="online"] .mode-dot{background:var(--c-online)}
+.talk-rows .row[data-mode="inperson"] .row-title{color:var(--c-inperson)}
+.talk-rows .row[data-mode="online"] .row-title{color:var(--c-online)}
+.talk-rows .row.is-active .row-title{font-weight:800}
+.talk-rows .row[hidden]{display:none}
+.tf-colours{margin:4px 0 8px;font-size:var(--s-small)}
+.tf-colours summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;font-family:var(--f-display);font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.tf-pick{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px}
+.tf-name{min-width:6.5em;font-family:var(--f-display);font-weight:700}
+.tf-sw{width:44px;height:44px;padding:7px;border:2px solid transparent;border-radius:50%;background:transparent;cursor:pointer;transition:transform .18s var(--ease)}
+.tf-sw:hover{transform:scale(1.08)}
+.tf-sw span{display:block;width:100%;height:100%;border-radius:50%}
+.tf-sw[aria-pressed="true"]{border-color:var(--ink)}
+.tf-custom{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-left:8px;font-family:var(--f-display);font-weight:600;cursor:pointer}
+.tf-custom input{width:40px;height:40px;padding:0;border:0;background:none;cursor:pointer}
+.tf-reset{min-height:44px;margin-top:4px;padding:0;border:0;background:none;color:var(--ink);font-family:var(--f-display);font-weight:600;font-size:var(--s-small);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+
+/* appearances: the night field, two screens set off the grid's beat */
+.appearances{margin-top:clamp(96px,14vw,200px);padding-bottom:clamp(96px,14vw,200px)!important;background:var(--night);color:#FFFFFF}
+.app-head{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end}
+.app-head h2{grid-column:1/8}
+.app-head .lede{grid-column:8/13;color:var(--on-field-soft)}
+.app-list{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(40px,5vw,72px) var(--g);margin-top:clamp(48px,6vw,96px)}
+.app-1{grid-column:1/9}
+.app-2{grid-column:5/13}
+.app-frame{position:relative;aspect-ratio:16/9;background:#060F2E}
+.app-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.app figcaption{display:grid;justify-items:start;gap:6px;margin-top:18px}
+.app-note{font-size:var(--s-body);line-height:1.5;color:var(--on-field-soft);max-width:52ch}
+.app-title{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;max-width:28ch}
+.app figcaption a{margin-top:4px;color:var(--accent);font-family:var(--f-display);font-weight:600;font-size:var(--s-small);text-underline-offset:4px}
+.app figcaption a:hover{color:#FFFFFF}
+
+@media (max-width:700px){
+  .fig-n{font-size:clamp(2.5rem,12vw,3.5rem)}
+  .fig-w{font-size:1.0625rem}
+  .fig-l{font-size:.875rem}
+  .is-cycling .fig-ws{min-height:calc(clamp(2.5rem,12vw,3.5rem) * .9)}
+  .app-head{display:block}
+  .app-head .lede{margin-top:20px}
+  .app-list{display:block}
+  .app-2{margin-top:56px}
+}
+.appearances{padding-top:clamp(72px,9vw,128px)!important}
+@media (max-width:700px){#fig-canvas{height:180px}}

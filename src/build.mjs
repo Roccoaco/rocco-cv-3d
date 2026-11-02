@@ -43,6 +43,9 @@ const places = [...placeMap.values()].map((e) => ({ ...e, n: e.workshops + e.tal
 const countries = [...new Set(places.map((p) => D.cities[p.city].country))];
 const tally = (e) => [e.workshops && `${e.workshops} workshop${e.workshops > 1 ? 's' : ''}`, e.talks && `${e.talks} talk${e.talks > 1 ? 's' : ''}`].filter(Boolean).join(', ');
 
+// who took part: teachers, pre-service teachers, students (attendees and participants of open events stay uncounted)
+const whoOf = (a) => (/pre-service/i.test(a) ? 1 : /student/i.test(a) ? 2 : /teacher/i.test(a) ? 0 : -1);
+const who = ['Teachers', 'Pre-service teachers', 'Students'].map((label, i) => ({ label, n: D.workshops.filter((w) => whoOf(w.audience) === i).reduce((a, w) => a + w.count, 0) }));
 const workshopsData = D.workshops.map((w) => ({ id: w.id, slug: w.slug, model: w.model, count: w.count, when: w.when, audience: w.audience, place: place(w.city) }));
 const land = JSON.parse(fs.readFileSync(here + 'land.json', 'utf8'));
 const landCa = JSON.parse(fs.readFileSync(here + 'land-ca.json', 'utf8'));
@@ -53,7 +56,7 @@ const hubPlaces = [...new Set(hubEvents.map((e) => D.hubs[e.hub].city))].map((ci
   return { city, n: own.length, workshops: own.filter((e) => D.workshops.includes(e)).length, talks: own.filter((e) => D.talks.includes(e)).length, hub: own[0].hub };
 });
 const data = {
-  lock, alchemyKey: alKey.toString('base64'), seats, countedWords: word(counted.length),
+  lock, alchemyKey: alKey.toString('base64'), seats, countedWords: word(counted.length), who,
   cities: D.cities, workshops: workshopsData,
   places: places.map((p) => ({ city: p.city, n: p.n })), land,
   hubPlaces: hubPlaces.map((p) => ({ city: p.city, n: p.n, name: D.hubs[p.hub].name })), landCa
@@ -62,10 +65,17 @@ const data = {
 // self-hosted fonts (src/fetch-fonts.mjs): no request leaves the site
 fs.mkdirSync(out + 'fonts', { recursive: true });
 for (const f of fs.readdirSync(here + 'fonts')) if (f.endsWith('.woff2')) fs.copyFileSync(here + 'fonts/' + f, out + 'fonts/' + f);
-const css = fs.readFileSync(here + 'fonts/fonts.css', 'utf8') + fs.readFileSync(here + 'style.css', 'utf8');
+// the colours offered for in-person and online talks (the swatches are styled here: no inline style attributes)
+const SWATCH = { inperson: ['#1537C7', '#0F8A5F', '#7A3FD1', '#0B1B4D'], online: ['#C2410C', '#C2255C', '#9A6700', '#0E7C86'] };
+const swatchCss = Object.entries(SWATCH).flatMap(([m, list]) => list.map((c, i) => `.sw-${m}-${i}{background:${c}}`)).join('');
+const css = fs.readFileSync(here + 'fonts/fonts.css', 'utf8') + fs.readFileSync(here + 'style.css', 'utf8') + swatchCss;
 const js = fs.readFileSync(here + 'app.js', 'utf8');
 fs.writeFileSync(out + 'app.js', js);
 fs.writeFileSync(out + 'alchemy.js', alchemyJs);
+// the three.js figures (bundled by src/bundle-figures.mjs)
+const figuresJs = fs.readFileSync(here + 'vendor/figures.js');
+fs.writeFileSync(out + 'figures.js', figuresJs);
+const figSri = 'sha384-' + crypto.createHash('sha384').update(figuresJs).digest('base64');
 const alSri = 'sha384-' + crypto.createHash('sha384').update(alchemyJs).digest('base64');
 const sri = 'sha384-' + crypto.createHash('sha384').update(js).digest('base64');
 const styleHash = "'sha256-" + crypto.createHash('sha256').update(css).digest('base64') + "'";
@@ -77,6 +87,7 @@ const csp = [
   "font-src 'self'",
   "img-src 'self' data:",
   "connect-src 'none'",
+  "frame-src https://www.youtube-nocookie.com",
   "base-uri 'none'",
   "form-action 'none'",
   "object-src 'none'"
@@ -123,9 +134,25 @@ const archive = D.workshops.map((w) => `
         </div>
       </article>`).join('');
 
+const modeOf = (t) => (t.city === 'online' || /online/i.test(t.kind) ? 'online' : 'inperson');
+const nTalks = { inperson: D.talks.filter((t) => modeOf(t) === 'inperson').length, online: D.talks.filter((t) => modeOf(t) === 'online').length };
+const swatches = (m) => SWATCH[m].map((c, i) => `<button type="button" class="tf-sw" data-for="${m}" data-colour="${c}" aria-label="${m === 'online' ? 'Online' : 'In person'}: colour ${i + 1}" aria-pressed="false"><span class="sw-${m}-${i}"></span></button>`).join('');
+const talkFilter = `
+      <div class="tf" role="group" aria-label="Show talks">
+        <button type="button" class="tf-btn" data-show="all" aria-pressed="true">All <span class="tf-n">${D.talks.length}</span></button>
+        <button type="button" class="tf-btn" data-show="inperson" aria-pressed="false"><span class="mode-dot is-inperson" aria-hidden="true"></span>In person <span class="tf-n">${nTalks.inperson}</span></button>
+        <button type="button" class="tf-btn" data-show="online" aria-pressed="false"><span class="mode-dot is-online" aria-hidden="true"></span>Online <span class="tf-n">${nTalks.online}</span></button>
+      </div>
+      <details class="tf-colours">
+        <summary>Choose the colours</summary>
+        <div class="tf-pick"><span class="tf-name">In person</span>${swatches('inperson')}<label class="tf-custom"><input type="color" data-for="inperson" value="${SWATCH.inperson[0]}"><span>Your own</span></label></div>
+        <div class="tf-pick"><span class="tf-name">Online</span>${swatches('online')}<label class="tf-custom"><input type="color" data-for="online" value="${SWATCH.online[0]}"><span>Your own</span></label></div>
+        <button type="button" class="tf-reset">Back to the defaults</button>
+      </details>
+      <p class="tf-status sr-only" aria-live="polite"></p>`;
 const talkRows = D.talks.map((t) => `
-          <li class="row" tabindex="0" data-city="${t.hub ? D.hubs[t.hub].city : t.city}">
-            <div class="row-top"><span class="row-title">${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
+          <li class="row" tabindex="0" data-city="${t.hub ? D.hubs[t.hub].city : t.city}" data-mode="${modeOf(t)}">
+            <div class="row-top"><span class="row-title"><span class="mode-dot" aria-hidden="true"></span>${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
             <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.hub ? ', ' + esc(t.conf.startsWith(D.hubs[t.hub].name) ? `a hub of ${D.hubs[t.hub].org}, ${D.hubs[t.hub].region}` : D.hubLine(t.hub)) : ''}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
           </li>`).join('');
 
@@ -143,7 +170,7 @@ const placesLede = `Talks and workshops in ${word(places.length)} cities across 
 
 const nav = (prefix) => `<nav class="bar" aria-label="Main">
   <a class="bar-mark" href="${prefix}#top">Rocco Acocella</a>
-  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>
+  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#appearances">Appearances</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>
 </nav>`;
 const footer = (prefix) => `<footer class="foot">
   <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
@@ -228,7 +255,7 @@ ${nav('')}
   <section id="work" class="work" aria-labelledby="work-h">
     <div class="work-head" data-rise>
       <h2 id="work-h">Teaching</h2>
-      <p class="lede">Three years in the IB programmes at the Canadian School of Milan, now in primary.</p>
+      <p class="lede">After 2 years in the IB programs (MYP &amp; DP) at the Canadian School of Milan, moved last year and currently holding the position of Italian Primary Teacher.</p>
     </div>
     <div class="roles" data-rise>${roleRows}
     </div>${photos('teaching')}
@@ -277,7 +304,16 @@ ${nav('')}
   <section class="archive" aria-labelledby="arch-h">
     <div class="arch-head" data-rise>
       <h2 id="arch-h">Every workshop</h2>
-      <p class="lede">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, student teachers and students. Each has its own page.</p>
+      <p class="lede">Each workshop has its own page, with its model and the full abstract.</p>
+    </div>
+    <div class="figures" id="figures">
+      <p class="sr-only">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, pre-service teachers and students.</p>
+      <canvas id="fig-canvas" aria-hidden="true"></canvas>
+      <div class="fig-row" aria-hidden="true">
+        <div class="fig"><span class="fig-n">+${D.workshops.length}</span><span class="fig-l">Workshops</span></div>
+        <div class="fig"><span class="fig-n">${seats}</span><span class="fig-l">Participants</span></div>
+        <div class="fig fig-who"><span class="fig-ws">${who.map((w) => `<span class="fig-w">${esc(w.label)}</span>`).join('')}</span><span class="fig-l">Who took part</span></div>
+      </div>
     </div>
     ${photos('workshops')}<div class="ws-list">${archive}
     </div>
@@ -291,13 +327,26 @@ ${nav('')}
       </figure>
     </div>
     <div class="lists">
-      <h2 id="talks-h">Talks</h2>
-      <ol class="rows">${talkRows}
+      <h2 id="talks-h">Talks</h2>${talkFilter}
+      <ol class="rows talk-rows">${talkRows}
       </ol>
       <h2 class="conf-h">Conferences</h2>
       <ol class="rows">${confRows}
       </ol>
     </div>${photos('talks')}
+  </section>
+
+  <section id="appearances" class="appearances" aria-labelledby="app-h">
+    <div class="app-head" data-rise>
+      <h2 id="app-h">Appearances</h2>
+      <p class="lede">On screen: talks and conference moments, to watch here.</p>
+    </div>
+    <div class="app-list">${D.appearances.map((a, i) => `
+      <figure class="app app-${i + 1}">
+        <div class="app-frame"><iframe src="https://www.youtube-nocookie.com/embed/${a.id}?rel=0" title="${esc(a.title)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+        <figcaption><span class="app-title">${esc(a.title)}</span>${a.note ? `<span class="app-note">${esc(a.note)}</span>` : ''}${ext(`https://www.youtube.com/watch?v=${a.id}`, 'Watch on YouTube')}</figcaption>
+      </figure>`).join('')}
+    </div>
   </section>
 
   <section id="training" class="training" aria-labelledby="train-h">
@@ -340,6 +389,7 @@ ${footer('')}
 
 <script type="application/json" id="cv-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="alchemy.js" integrity="${alSri}" defer></script>
+<script src="figures.js" integrity="${figSri}" defer></script>
 <script src="app.js" integrity="${sri}" defer></script>
 </body>
 </html>
