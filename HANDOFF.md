@@ -55,6 +55,10 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Full abstracts on each workshop page; Chromasoma lists Barbara Doran as co-host and 1.5 hours.
 - The workshop frame is scrubbed by the scroll: the model assembles as its name nears the middle of the screen and scatters as it leaves.
 
+## Done in session 5
+- Pictures: Multilingualism (title slide; Bridget Bova as co-presenter), Chromasoma (body maps, plus a small body map linking to https://chromasoma.netlify.app), Productive Friction (title slide), and a page for the Layers of Complexity talk (title frame with the email strip trimmed).
+- The Alchemy Cycle infographic sits beside the phases. The source is `src/protected/alchemy-cycle.jpg`; the build ships it only AES-256-GCM encrypted (`dist/alchemy.js`, key in the page data), decrypts it in memory and paints it to a canvas, with no image file or URL, no context menu or dragging, and blanked when printing. This deters saving; it cannot stop screenshots, and the source image is in the repo (keep the repo private).
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
 2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.

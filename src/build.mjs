@@ -21,6 +21,13 @@ const c = crypto.createCipheriv('aes-256-gcm', key, iv);
 const enc = Buffer.concat([c.update('racocella46@gmail.com', 'utf8'), c.final(), c.getAuthTag()]);
 const lock = { key: key.toString('base64'), iv: iv.toString('base64'), data: enc.toString('base64') };
 
+// --- the Alchemy Cycle infographic: shipped only encrypted, decrypted in the browser and painted to a canvas,
+// so the site holds no image file of it (a deterrent against saving and copying, not secrecy: the key ships too)
+const alKey = crypto.randomBytes(32), alIv = crypto.randomBytes(12);
+const alC = crypto.createCipheriv('aes-256-gcm', alKey, alIv);
+const alEnc = Buffer.concat([alC.update(fs.readFileSync(here + 'protected/alchemy-cycle.jpg')), alC.final(), alC.getAuthTag()]);
+const alchemyJs = `window.CV_ALCHEMY=${JSON.stringify({ iv: alIv.toString('base64'), data: alEnc.toString('base64'), w: 1048, h: 1424 })};\n`;
+
 const counted = D.workshops.filter((w) => w.count);
 const seats = counted.reduce((a, w) => a + w.count, 0);
 
@@ -36,7 +43,7 @@ const tally = (e) => [e.workshops && `${e.workshops} workshop${e.workshops > 1 ?
 const workshopsData = D.workshops.map((w) => ({ id: w.id, slug: w.slug, model: w.model, count: w.count, when: w.when, audience: w.audience, place: place(w.city) }));
 const land = JSON.parse(fs.readFileSync(here + 'land.json', 'utf8'));
 const data = {
-  lock, seats, countedWords: word(counted.length),
+  lock, alchemyKey: alKey.toString('base64'), seats, countedWords: word(counted.length),
   cities: D.cities, workshops: workshopsData,
   places: places.map((p) => ({ city: p.city, n: p.n })), land
 };
@@ -47,6 +54,8 @@ for (const f of fs.readdirSync(here + 'fonts')) if (f.endsWith('.woff2')) fs.cop
 const css = fs.readFileSync(here + 'fonts/fonts.css', 'utf8') + fs.readFileSync(here + 'style.css', 'utf8');
 const js = fs.readFileSync(here + 'app.js', 'utf8');
 fs.writeFileSync(out + 'app.js', js);
+fs.writeFileSync(out + 'alchemy.js', alchemyJs);
+const alSri = 'sha384-' + crypto.createHash('sha384').update(alchemyJs).digest('base64');
 const sri = 'sha384-' + crypto.createHash('sha384').update(js).digest('base64');
 const styleHash = "'sha256-" + crypto.createHash('sha256').update(css).digest('base64') + "'";
 
@@ -191,7 +200,13 @@ const html = `<!doctype html>
     </div>
     <div class="approach-field">
       <h3 class="al-title">The Alchemy Cycle</h3>
-      <ol class="alchemy">${alchemy}</ol>
+      <div class="al-body">
+        <ol class="alchemy">${alchemy}</ol>
+        <button type="button" class="al-open" id="al-open" aria-haspopup="dialog" hidden>
+          <canvas class="guarded" id="al-thumb" role="img" aria-label="The A·L·C·H·E·M·Y Cycle, a transformative course design framework: seven phases from Attunement to Yield, each with its outcome."></canvas>
+          <span>Open the full cycle</span>
+        </button>
+      </div>
     </div>
   </section>
 </div>
@@ -307,7 +322,13 @@ ${nav('')}
 
 ${footer('')}
 
+<dialog class="al-dialog" id="al-dialog" aria-label="The Alchemy Cycle">
+  <button type="button" class="al-close" id="al-close">Close</button>
+  <canvas class="guarded" id="al-full" role="img" aria-label="The A·L·C·H·E·M·Y Cycle, a transformative course design framework. Attunement: enter with curiosity and intention. Listen: listen deeply to people, ideas and the context. Cultivate: generate possibilities and explore widely. Humanize: center human values, voices and impact. Envision: design and shape the future you want to create. Metacognize: reflect on thinking, process and growth. Yield: share, contribute and make an impact."></canvas>
+</dialog>
+
 <script type="application/json" id="cv-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+<script src="alchemy.js" integrity="${alSri}" defer></script>
 <script src="app.js" integrity="${sri}" defer></script>
 </body>
 </html>

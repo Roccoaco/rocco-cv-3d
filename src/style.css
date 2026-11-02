@@ -68,7 +68,19 @@ h3{font-weight:700;font-size:var(--s-lead);line-height:1.15;letter-spacing:-.015
 .approach-text{max-width:52ch}
 .approach-field{background:var(--field);color:var(--on-field);padding:18vh var(--m) 26vh;display:flex;flex-direction:column;justify-content:center;gap:28px}
 .al-title{color:var(--on-field)}
+.al-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(20px,2.4vw,40px);align-items:start}
 .alchemy{display:grid;gap:6px}
+.al-open{display:grid;gap:12px;padding:0;border:0;background:none;cursor:zoom-in;text-align:left;color:var(--on-field);font-family:var(--f-display);font-weight:700;font-size:var(--s-small)}
+.al-open canvas{display:block;width:100%;aspect-ratio:1048/1424;background:#FBF7EF;transition:transform .3s var(--ease)}
+.al-open:hover canvas{transform:translateY(-4px)}
+.al-open span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.al-open:hover span{color:var(--accent)}
+.guarded{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.al-dialog{border:0;padding:0;background:#FBF7EF;width:min(94vw,calc(92vh * 1048 / 1424));max-width:none;max-height:none;overflow:visible;box-shadow:0 24px 80px rgba(11,27,77,.45)} /* taste-skill-ignore: a real dialog floats */
+.al-dialog::backdrop{background:rgba(11,27,77,.82)}
+.al-dialog canvas{display:block;width:100%;aspect-ratio:1048/1424}
+.al-close{position:absolute;top:-52px;right:0;min-height:44px;padding:0 18px;border:0;background:var(--accent);color:var(--on-accent);font-family:var(--f-display);font-weight:700;font-size:var(--s-small);cursor:pointer}
+@media print{.guarded,.al-open{display:none!important}}
 .alchemy li{display:grid;grid-template-columns:1.1em 1fr;align-items:baseline;gap:18px}
 .al-letter{font-weight:800;font-size:var(--s-head);line-height:1;color:var(--accent)}
 .al-word{font-family:var(--f-display);font-weight:600;font-size:var(--s-lead)}
@@ -271,6 +283,8 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .stage canvas{top:150px;height:calc(100% - 350px)}
   .side-nav{display:none}
   .statement{font-size:var(--s-lead)}
+  .al-body{grid-template-columns:1fr}
+  .al-open{max-width:300px}
   .places-map{grid-column:1/13}
   .places-list{grid-column:1/13;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
   .places-head h2,.places-head .lede{grid-column:1/13}
@@ -328,6 +342,9 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .modes{left:var(--m);right:auto;top:20px}
   .approach-paper{padding:96px var(--m) 64px}
   .approach-field{padding:64px var(--m)}
+  .al-body{grid-template-columns:1fr}
+  .al-open{max-width:320px}
+  .al-dialog{width:96vw;margin-top:64px}
   .work-head,.arch-head,.role,.ws,.talks,.training,.contact-top{display:block}
   .work-head .lede,.arch-head .lede{margin-top:20px}
   .role-head{margin:8px 0 16px}

@@ -53,7 +53,8 @@ export const workshops = [
   {
     id: 'w-friction', slug: 'productive-friction', model: 'hubs', short: 'Productive Friction', city: 'online', count: 30, sortDate: '2026-01-19',
     title: 'Productive Friction: Creative Freedom in Times of Political Contestation',
-    venue: '5th Virtual Conference of the Possibility Studies Network', when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
+    venue: '5th Virtual Conference of the Possibility Studies Network',
+    image: { file: 'productive-friction.jpg', alt: 'Title slide: Productive Friction: Creative Freedom in Times of Political Contestation, Alchemical Outcomes: Research in Creativity and Psychology 2026, with the C.R.E.A.T.E. PSN hub logo, over glowing spheres on water', caption: 'Title slide, Alchemical Outcomes: Research in Creativity and Psychology 2026, C.R.E.A.T.E., a PSN hub' }, when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
     text: 'What happens to a creative community once its annual conference ends? Participants designed local PSN hubs, small events that carry the network into their own places, to keep connection alive and ease everyday tension through shared creative work.'
   },
   {

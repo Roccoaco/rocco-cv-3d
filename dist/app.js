@@ -483,6 +483,38 @@
     if (!reduce) setTimeout(function () { setM('converge'); }, 900); else setM('converge');
   }
 
+  /* ---------- the Alchemy Cycle: decrypted in memory and painted to canvas, never an image file or URL ---------- */
+  var AL = window.CV_ALCHEMY, alOpen = document.getElementById('al-open');
+  if (AL && DATA.alchemyKey && alOpen && window.crypto && crypto.subtle && window.createImageBitmap) {
+    window.CV_ALCHEMY = null;
+    var alThumb = document.getElementById('al-thumb'), alFull = document.getElementById('al-full');
+    var alDlg = document.getElementById('al-dialog'), alBmp = null;
+    function u8(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
+    function paint(cv) {
+      if (!alBmp) return;
+      var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.min(Math.round(r.width * dpr), alBmp.width); if (w < 2) return;
+      cv.width = w; cv.height = Math.round(w * alBmp.height / alBmp.width);
+      var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high'; c.drawImage(alBmp, 0, 0, cv.width, cv.height);
+    }
+    crypto.subtle.importKey('raw', u8(DATA.alchemyKey), 'AES-GCM', false, ['decrypt'])
+      .then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u8(AL.iv) }, k, u8(AL.data)); })
+      .then(function (buf) { AL = null; return createImageBitmap(new Blob([buf], { type: 'image/jpeg' })); })
+      .then(function (bmp) { alBmp = bmp; alOpen.hidden = false; paint(alThumb); })
+      .catch(function () {});
+    window.addEventListener('resize', function () { paint(alThumb); if (alDlg.open) paint(alFull); });
+    alOpen.addEventListener('click', function () { if (alDlg.showModal) { alDlg.showModal(); paint(alFull); } });
+    document.getElementById('al-close').addEventListener('click', function () { alDlg.close(); });
+    alDlg.addEventListener('click', function (e) { if (e.target === alDlg) alDlg.close(); });
+    // no context menu, no dragging the picture out, nothing to select
+    document.querySelectorAll('.guarded').forEach(function (g) {
+      g.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+      g.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    });
+    window.addEventListener('beforeprint', function () { [alThumb, alFull].forEach(function (cv) { cv.width = 1; cv.height = 1; }); });
+    window.addEventListener('afterprint', function () { paint(alThumb); if (alDlg.open) paint(alFull); });
+  }
+
   /* ---------- the email address is stored encrypted and decrypted on request ---------- */
   var reveal = document.getElementById('reveal');
   if (reveal && DATA.lock) {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-18gzcFomgoC1Md9OkJT8fENueW8pNDCYnBbz83d0bmw='; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-DmLYbYQtyewYMEhUu/Hv2Y6ZBu0oNI+Fyicv77qSY40='; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Chromasoma, a workshop by Rocco Acocella</title>
@@ -169,7 +169,19 @@ h3{font-weight:700;font-size:var(--s-lead);line-height:1.15;letter-spacing:-.015
 .approach-text{max-width:52ch}
 .approach-field{background:var(--field);color:var(--on-field);padding:18vh var(--m) 26vh;display:flex;flex-direction:column;justify-content:center;gap:28px}
 .al-title{color:var(--on-field)}
+.al-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(20px,2.4vw,40px);align-items:start}
 .alchemy{display:grid;gap:6px}
+.al-open{display:grid;gap:12px;padding:0;border:0;background:none;cursor:zoom-in;text-align:left;color:var(--on-field);font-family:var(--f-display);font-weight:700;font-size:var(--s-small)}
+.al-open canvas{display:block;width:100%;aspect-ratio:1048/1424;background:#FBF7EF;transition:transform .3s var(--ease)}
+.al-open:hover canvas{transform:translateY(-4px)}
+.al-open span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.al-open:hover span{color:var(--accent)}
+.guarded{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.al-dialog{border:0;padding:0;background:#FBF7EF;width:min(94vw,calc(92vh * 1048 / 1424));max-width:none;max-height:none;overflow:visible;box-shadow:0 24px 80px rgba(11,27,77,.45)} /* taste-skill-ignore: a real dialog floats */
+.al-dialog::backdrop{background:rgba(11,27,77,.82)}
+.al-dialog canvas{display:block;width:100%;aspect-ratio:1048/1424}
+.al-close{position:absolute;top:-52px;right:0;min-height:44px;padding:0 18px;border:0;background:var(--accent);color:var(--on-accent);font-family:var(--f-display);font-weight:700;font-size:var(--s-small);cursor:pointer}
+@media print{.guarded,.al-open{display:none!important}}
 .alchemy li{display:grid;grid-template-columns:1.1em 1fr;align-items:baseline;gap:18px}
 .al-letter{font-weight:800;font-size:var(--s-head);line-height:1;color:var(--accent)}
 .al-word{font-family:var(--f-display);font-weight:600;font-size:var(--s-lead)}
@@ -372,6 +384,8 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .stage canvas{top:150px;height:calc(100% - 350px)}
   .side-nav{display:none}
   .statement{font-size:var(--s-lead)}
+  .al-body{grid-template-columns:1fr}
+  .al-open{max-width:300px}
   .places-map{grid-column:1/13}
   .places-list{grid-column:1/13;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
   .places-head h2,.places-head .lede{grid-column:1/13}
@@ -429,6 +443,9 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .modes{left:var(--m);right:auto;top:20px}
   .approach-paper{padding:96px var(--m) 64px}
   .approach-field{padding:64px var(--m)}
+  .al-body{grid-template-columns:1fr}
+  .al-open{max-width:320px}
+  .al-dialog{width:96vw;margin-top:64px}
   .work-head,.arch-head,.role,.ws,.talks,.training,.contact-top{display:block}
   .work-head .lede,.arch-head .lede{margin-top:20px}
   .role-head{margin:8px 0 16px}
@@ -524,6 +541,6 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 </footer>
 
 <script type="application/json" id="cv-data">{"cities":{"milan":{"name":"Milan","country":"Italy","lat":45.46,"lon":9.19,"lab":"r"},"chieri":{"name":"Chieri (Turin)","country":"Italy","lat":45.01,"lon":7.82,"lab":"l"},"rome":{"name":"Rome","country":"Italy","lat":41.9,"lon":12.5,"lab":"r"},"basel":{"name":"Basel","country":"Switzerland","lat":47.56,"lon":7.59,"lab":"l"},"vienna":{"name":"Vienna","country":"Austria","lat":48.21,"lon":16.37,"lab":"r"},"brighton":{"name":"Brighton","country":"United Kingdom","lat":50.82,"lon":-0.14,"lab":"b"},"cambridge":{"name":"Cambridge","country":"United Kingdom","lat":52.21,"lon":0.12,"lab":"r"},"maynooth":{"name":"Maynooth","country":"Ireland","lat":53.38,"lon":-6.59,"lab":"l"},"dublin":{"name":"Dublin","country":"Ireland","lat":53.35,"lon":-6.26,"lab":"r"},"brussels":{"name":"Brussels","country":"Belgium","lat":50.85,"lon":4.35,"lab":"r"},"reykjavik":{"name":"Reykjavík","country":"Iceland","lat":64.15,"lon":-21.94,"lab":"r"},"athens":{"name":"Athens","country":"Greece","lat":37.98,"lon":23.73,"lab":"r"},"sharm":{"name":"Sharm El-Sheikh","country":"Egypt","lat":27.92,"lon":34.33,"lab":"l"},"malta":{"name":"Msida","country":"Malta","lat":35.9,"lon":14.48,"lab":"r"},"venice":{"name":"Venice","country":"Italy","lat":45.44,"lon":12.33,"lab":"r"},"como":{"name":"Como","country":"Italy","lat":45.81,"lon":9.09,"lab":"l"},"online":{"name":"Online","country":"","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","slug":"multilingualism","model":"ring","count":8,"when":"23 October 2026","audience":"8 language teachers","place":"Vienna, Austria"},{"id":"w-chromasoma","slug":"chromasoma","model":"spiral","count":25,"when":"19 June 2026","audience":"25 attendees","place":"Online"},{"id":"w-turin","slug":"alternating-attention","model":"deck","count":48,"when":"8 May 2026","audience":"48 IB teachers","place":"Chieri (Turin), Italy"},{"id":"w-mita","slug":"idea-bouncing","model":"arch","count":14,"when":"21 March 2026","audience":"14 teachers","place":"Milan, Italy"},{"id":"w-friction","slug":"productive-friction","model":"hubs","count":30,"when":"19 January 2026","audience":"30 participants","place":"Online"},{"id":"w-csm26","slug":"legociation","model":"arch","count":25,"when":"7 January 2026","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-basel","slug":"idea-to-creation","model":"creation","count":15,"when":"24 October 2025","audience":"15 teachers","place":"Basel, Switzerland"},{"id":"w-rome","slug":"thinker","model":"profile","count":70,"when":"6 June 2025","audience":"70 IB teachers","place":"Rome, Italy"},{"id":"w-ai","slug":"raising-awareness","model":"stairs","count":25,"when":"January to February 2025","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-journey","slug":"thinking-journey","model":"stations","count":80,"when":"October 2024","audience":"80 MYP students","place":"Milan, Italy"},{"id":"w-iceland24","slug":"creative-mindset","model":"growth","count":14,"when":"October 2024","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"},{"id":"w-rights","slug":"human-rights-and-the-brain","model":"bridge","count":14,"when":"February to April 2024","audience":"14 MYP3 students","place":"Milan, Italy"},{"id":"w-iceland23","slug":"mindset-journey","model":"path","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"}]}</script>
-<script src="app.js" integrity="sha384-3xvnO6sRNZ3Z1uv+XxyBpc8KL4jyCCdaErNGl8H3Lf709HWSL//xVjiHW76Vkt1P" defer></script>
+<script src="app.js" integrity="sha384-IuTwrHTuYCKXIcysaP03lI2ZLB7qgRZcBH/SUZlKoxR6kzndm+Ak2BKvfgintfGG" defer></script>
 </body>
 </html>
