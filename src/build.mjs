@@ -11,6 +11,7 @@ fs.mkdirSync(out, { recursive: true });
 const tm = (h) => h.replace(/(<script[\s\S]*?<\/script>|<title>[\s\S]*?<\/title>|<[^>]*>)|™/g, (m, keep) => keep || '<span class="tm">™</span>');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const place = D.place;
+const hubFact = (k) => `${D.hubs[k].name}, ${D.hubs[k].org}, ${D.hubs[k].region}`;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const word = (n) => WORDS[n] || String(n);
 const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
@@ -44,10 +45,18 @@ const tally = (e) => [e.workshops && `${e.workshops} workshop${e.workshops > 1 ?
 
 const workshopsData = D.workshops.map((w) => ({ id: w.id, slug: w.slug, model: w.model, count: w.count, when: w.when, audience: w.audience, place: place(w.city) }));
 const land = JSON.parse(fs.readFileSync(here + 'land.json', 'utf8'));
+const landCa = JSON.parse(fs.readFileSync(here + 'land-ca.json', 'utf8'));
+// online events with a hub at home in a city outside Europe: counted per hub city for the California inset
+const hubEvents = [...D.workshops, ...D.talks].filter((e) => e.hub);
+const hubPlaces = [...new Set(hubEvents.map((e) => D.hubs[e.hub].city))].map((city) => {
+  const own = hubEvents.filter((e) => D.hubs[e.hub].city === city);
+  return { city, n: own.length, workshops: own.filter((e) => D.workshops.includes(e)).length, talks: own.filter((e) => D.talks.includes(e)).length, hub: own[0].hub };
+});
 const data = {
   lock, alchemyKey: alKey.toString('base64'), seats, countedWords: word(counted.length),
   cities: D.cities, workshops: workshopsData,
-  places: places.map((p) => ({ city: p.city, n: p.n })), land
+  places: places.map((p) => ({ city: p.city, n: p.n })), land,
+  hubPlaces: hubPlaces.map((p) => ({ city: p.city, n: p.n, name: D.hubs[p.hub].name })), landCa
 };
 
 // self-hosted fonts (src/fetch-fonts.mjs): no request leaves the site
@@ -108,16 +117,16 @@ const archive = D.workshops.map((w) => `
         <div class="ws-meta"><p class="ws-when">${esc(w.when)}</p><p class="muted">${esc(place(w.city))}</p></div>
         <div class="ws-body">
           <h3>${esc(w.title)}</h3>
-          <p class="ws-facts">${esc(w.venue)}. ${esc(w.length)}, ${esc(w.audience.charAt(0).toLowerCase() + w.audience.slice(1))}.</p>
+          <p class="ws-facts">${esc(w.venue)}${w.hub ? ', with ' + esc(D.hubLine(w.hub)) : ''}. ${esc(w.length)}, ${esc(w.audience.charAt(0).toLowerCase() + w.audience.slice(1))}.</p>
           <p>${esc(w.text)}</p>
           <p><a class="more" href="${pageOf(w)}">See the ${esc(w.short)} model and the full abstract</a></p>
         </div>
       </article>`).join('');
 
 const talkRows = D.talks.map((t) => `
-          <li class="row" tabindex="0" data-city="${t.city}">
+          <li class="row" tabindex="0" data-city="${t.hub ? D.hubs[t.hub].city : t.city}">
             <div class="row-top"><span class="row-title">${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
-            <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
+            <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.hub ? ', ' + esc(t.conf.startsWith(D.hubs[t.hub].name) ? `a hub of ${D.hubs[t.hub].org}, ${D.hubs[t.hub].region}` : D.hubLine(t.hub)) : ''}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
           </li>`).join('');
 
 const confRows = D.conferences.map((t) => `
@@ -239,9 +248,9 @@ ${nav('')}
       <p class="lede">${placesLede}</p>
     </div>
     <figure class="places-map">
-      <canvas id="places-map" role="img" aria-label="Map of Europe marking the ${word(places.length)} cities where Rocco has given talks and workshops, sized by how many."></canvas>
+      <canvas id="places-map" role="img" aria-label="Map of Europe marking the ${word(places.length)} cities where Rocco has given talks and workshops, sized by how many, with an inset of California marking Saybrook University, home of the C.R.E.A.T.E. hub."></canvas>
     </figure>
-    <ul class="places-list">${byCountry}${online ? `<li class="country"><h3>Online</h3><ul><li><span class="pl-n">${tally(online)}</span></li></ul></li>` : ''}</ul>
+    <ul class="places-list">${byCountry}${online ? `<li class="country"><h3>Online</h3><ul><li><span class="pl-n">${tally(online)}</span></li>${hubPlaces.map((p) => `<li tabindex="0" data-place="${p.city}"><span class="pl-city">${esc(D.hubs[p.hub].name)}</span> <span class="pl-n">${tally(p)}, with ${esc(D.hubs[p.hub].org)}, ${esc(place(p.city))}</span></li>`).join('')}</ul></li>` : ''}</ul>
   </section>
 
   <section id="workshops" class="workshops" aria-labelledby="ws-h">
@@ -366,7 +375,8 @@ ${nav('index.html')}
     <dl class="w-facts">
       <div><dt>When</dt><dd>${esc(w.when)}</dd></div>
       <div><dt>Where</dt><dd>${esc(place(w.city))}</dd></div>
-      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>${w.cohost ? `
+      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>${w.hub ? `
+      <div><dt>Hub</dt><dd>${esc(hubFact(w.hub))}</dd></div>` : ''}${w.cohost ? `
       <div><dt>Co-host</dt><dd>${esc(w.cohost)}</dd></div>` : ''}${w.copresenter ? `
       <div><dt>Presented with</dt><dd>${esc(w.copresenter)}</dd></div>` : ''}
       <div><dt>Length</dt><dd>${esc(cap(w.length))}</dd></div>
@@ -442,7 +452,8 @@ ${nav('index.html')}
       <div><dt>When</dt><dd>${esc(t.when)}</dd></div>
       <div><dt>Where</dt><dd>${t.city === 'online' ? 'Online' : esc(place(t.city))}</dd></div>
       <div><dt>Format</dt><dd>${esc(t.kind)}</dd></div>
-      <div><dt>Event</dt><dd>${esc(t.conf)}</dd></div>
+      <div><dt>Event</dt><dd>${esc(t.conf)}</dd></div>${t.hub ? `
+      <div><dt>Hub</dt><dd>${esc(hubFact(t.hub))}</dd></div>` : ''}
     </dl>
     <div class="actions"><a class="btn" href="index.html#talks">All talks</a><a class="link" href="index.html#contact">Write to Rocco</a></div>
   </div>

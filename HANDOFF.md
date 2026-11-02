@@ -59,6 +59,11 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Pictures: Multilingualism (title slide; Bridget Bova as co-presenter), Chromasoma (body maps, plus a small body map linking to https://chromasoma.netlify.app), Productive Friction (title slide), and a page for the Layers of Complexity talk (title frame with the email strip trimmed).
 - The Alchemy Cycle infographic sits beside the phases. The source is `src/protected/alchemy-cycle.jpg`; the build ships it only AES-256-GCM encrypted (`dist/alchemy.js`, key in the page data), decrypts it in memory and paints it to a canvas, with no image file or URL, no context menu or dragging, and blanked when printing. This deters saving; it cannot stop screenshots, and the source image is in the repo (keep the repo private).
 
+## Done in session 6
+- LEGO™: every "LEGO" in the content carries ™ (also inside LEGO™ciation). The build wraps the sign in `<span class="tm">` (not in titles or attributes) so display headings can shrink it.
+- C.R.E.A.T.E. is described as a hub of Saybrook University, California (`hubs` in `data.mjs`; entries with `hub: 'create'`: the Layers of Complexity keynote and Productive Friction). Both stay "Online"; the maps mark the hub in a California inset (bottom left), drawn from `src/land-ca.json` (`node src/make-land.mjs <land-50m.json> ca`). The Places list shows it under Online; the talks map draws Milan's arc into the inset.
+- The CV and the user wrote "Saybrooks"; the university's name is Saybrook University (Pasadena). Confirm.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
 2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.

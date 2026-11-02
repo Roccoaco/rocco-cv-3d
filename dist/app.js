@@ -390,7 +390,41 @@
     f.ctx.fill('evenodd');
   }
   var cities = DATA.cities;
-  function cityLabel(k) { return cities[k].country ? cities[k].name + ', ' + cities[k].country : cities[k].name; }
+  function cityLabel(k) { var c = cities[k]; return c.inset ? 'Online, ' + c.region : (c.country ? c.name + ', ' + c.country : c.name); }
+
+  /* California inset, bottom left: Saybrook University (Pasadena), home of the C.R.E.A.T.E. hub, which meets online */
+  var CA_BOX = [-124.6, 31.6, -113.4, 42.4];
+  function insetFrame(f) {
+    var iw = Math.max(132, Math.min(f.w * 0.27, 210)), ih = iw * 0.92, x = 12, y = f.h - ih - 12;
+    var kx = Math.cos((CA_BOX[1] + CA_BOX[3]) / 2 * Math.PI / 180);
+    var s = Math.min(iw / ((CA_BOX[2] - CA_BOX[0]) * kx), ih / (CA_BOX[3] - CA_BOX[1]));
+    var P = function (lon, lat) { return [x + (lon - CA_BOX[0]) * kx * s, y + (CA_BOX[3] - lat) * s]; };
+    return { x: x, y: y, iw: iw, ih: ih, P: P, at: P(cities.pasadena.lon, cities.pasadena.lat) };
+  }
+  function drawInset(f, on) {
+    var ctx = f.ctx, g = insetFrame(f), x = g.x, y = g.y, iw = g.iw, ih = g.ih, P = g.P;
+    ctx.save();
+    ctx.fillStyle = '#0B1B4D'; ctx.fillRect(x, y, iw, ih);
+    ctx.beginPath(); ctx.rect(x, y, iw, ih); ctx.clip();
+    var land = DATA.landCa || [];
+    ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.beginPath();
+    for (var i = 0; i < land.length; i++) {
+      var r = land[i];
+      for (var j = 0; j < r.length; j += 2) { var q = P(r[j], r[j + 1]); if (j) ctx.lineTo(q[0], q[1]); else ctx.moveTo(q[0], q[1]); }
+      ctx.closePath();
+    }
+    ctx.fill('evenodd');
+    ctx.restore();
+    ctx.strokeStyle = on ? '#FFD43B' : 'rgba(255,255,255,0.45)'; ctx.lineWidth = on ? 2 : 1;
+    ctx.strokeRect(x + 0.5, y + 0.5, iw - 1, ih - 1);
+    // the hub's name sits in the top-left corner (over the Pacific), so nothing runs past the inset
+    var small = iw < 170, fs = small ? 10 : 12, F = '"Libre Franklin", system-ui, sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = '#FFFFFF';
+    ctx.font = (on ? '800 ' : '700 ') + (fs + 1) + 'px ' + F; ctx.fillText('C.R.E.A.T.E.', x + 8, y + 8);
+    ctx.font = '500 ' + fs + 'px ' + F; ctx.fillText('Saybrook University', x + 8, y + 10 + fs + 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillText('California, online', x + 8, y + 12 + (fs + 2) * 2);
+    return { P: g.at, small: small };
+  }
 
   /* ---------- places: every city where Rocco has given a talk or a workshop ---------- */
   var placesCanvas = document.getElementById('places-map');
@@ -415,6 +449,14 @@
         else if (c.lab === 'b') { ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(c.name, p[0], p[1] + gap - 3); }
         else { ctx.textAlign = 'left'; ctx.fillText(c.name, p[0] + gap, p[1]); }
       });
+      (DATA.hubPlaces || []).forEach(function (hp) {
+        var on = hp.city === hot, ins = drawInset(f, on), p = ins.P;
+        var rad = (small ? 3 : 4) + Math.sqrt(hp.n) * (small ? 2.2 : 3.2);
+        ctx.fillStyle = on ? '#FFFFFF' : '#FFD43B';
+        ctx.beginPath(); ctx.arc(p[0], p[1], rad + (on ? 3 : 0), 0, TAU); ctx.fill();
+        ctx.fillStyle = '#0B1B4D'; ctx.font = '700 ' + (small ? 11 : 13) + 'px "Libre Franklin", system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(hp.n), p[0], p[1] + 0.5);
+      });
     }
     drawPlaces(); window.addEventListener('resize', drawPlaces);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawPlaces);
@@ -434,19 +476,22 @@
     function drawMap() {
       var f = mapFrame(map, [-26, 25, 38, 67], 28), mctx = f.ctx;
       drawLand(f, 'rgba(255,255,255,0.16)');
-      var home = f.P(cities.milan.lon, cities.milan.lat);
+      // the inset is laid over the arcs, so the line to California stops at its edge, as on a printed map
+      var home = f.P(cities.milan.lon, cities.milan.lat), insAt = insetFrame(f).at;
+      function at(k) { return cities[k].inset ? insAt : f.P(cities[k].lon, cities[k].lat); }
       Object.keys(cities).forEach(function (k) {
         var c = cities[k]; if (c.lat == null || k === 'milan') return;
-        var p = f.P(c.lon, c.lat);
+        var p = at(k);
         mctx.strokeStyle = k === active ? '#FFD43B' : 'rgba(255,255,255,0.4)';
         mctx.lineWidth = k === active ? 3 : 1.25;
         mctx.beginPath(); mctx.moveTo(home[0], home[1]);
         var mx = (home[0] + p[0]) / 2, my = (home[1] + p[1]) / 2 - Math.hypot(p[0] - home[0], p[1] - home[1]) * 0.22;
         mctx.quadraticCurveTo(mx, my, p[0], p[1]); mctx.stroke();
       });
+      drawInset(f, active === 'pasadena');
       Object.keys(cities).forEach(function (k) {
         var c = cities[k]; if (c.lat == null) return;
-        var p = f.P(c.lon, c.lat), on = k === active || (active === 'milan' && k === 'milan');
+        var p = at(k), on = k === active || (active === 'milan' && k === 'milan');
         mctx.fillStyle = on ? '#FFD43B' : '#FFFFFF';
         mctx.beginPath(); mctx.arc(p[0], p[1], on ? 9 : (k === 'milan' ? 6 : 4.5), 0, TAU); mctx.fill();
       });

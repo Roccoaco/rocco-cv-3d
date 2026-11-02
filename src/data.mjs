@@ -17,9 +17,16 @@ export const cities = {
   malta: { name: 'Msida', country: 'Malta', lat: 35.9, lon: 14.48, lab: 'r' },
   venice: { name: 'Venice', country: 'Italy', lat: 45.44, lon: 12.33, lab: 'r' },
   como: { name: 'Como', country: 'Italy', lat: 45.81, lon: 9.09, lab: 'l' },
+  // C.R.E.A.T.E. meets online; Saybrook University sits in Pasadena. Drawn in the maps' California inset.
+  pasadena: { name: 'Pasadena', country: 'United States', region: 'California', lat: 34.15, lon: -118.14, lab: 'r', inset: true },
   online: { name: 'Online', country: '', lat: null, lon: null }
 };
-export const place = (k) => (cities[k].country ? `${cities[k].name}, ${cities[k].country}` : cities[k].name);
+// Online events run by a hub with a home somewhere: shown as "online" but marked on the maps at the hub's city.
+export const hubs = {
+  create: { name: 'C.R.E.A.T.E.', org: 'Saybrook University', region: 'California', city: 'pasadena' }
+};
+export const hubLine = (k) => `${hubs[k].name}, a hub of ${hubs[k].org}, ${hubs[k].region}`;
+export const place = (k) => [cities[k].name, cities[k].region, cities[k].country].filter(Boolean).join(', ');
 
 export const workshops = [
   {
@@ -53,8 +60,8 @@ export const workshops = [
   {
     id: 'w-friction', slug: 'productive-friction', model: 'hubs', short: 'Productive Friction', city: 'online', count: 30, sortDate: '2026-01-19',
     title: 'Productive Friction: Creative Freedom in Times of Political Contestation',
-    venue: '5th Virtual Conference of the Possibility Studies Network',
-    image: { file: 'productive-friction.jpg', alt: 'Title slide: Productive Friction: Creative Freedom in Times of Political Contestation, Alchemical Outcomes: Research in Creativity and Psychology 2026, with the C.R.E.A.T.E. PSN hub logo, over glowing spheres on water', caption: 'Title slide, Alchemical Outcomes: Research in Creativity and Psychology 2026, C.R.E.A.T.E., a PSN hub' }, when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
+    venue: '5th Virtual Conference of the Possibility Studies Network', hub: 'create',
+    image: { file: 'productive-friction.jpg', alt: 'Title slide: Productive Friction: Creative Freedom in Times of Political Contestation, Alchemical Outcomes: Research in Creativity and Psychology 2026, with the C.R.E.A.T.E. PSN hub logo, over glowing spheres on water', caption: 'Title slide, Alchemical Outcomes: Research in Creativity and Psychology 2026, C.R.E.A.T.E., a hub of Saybrook University, California' }, when: '19 January 2026', length: '2 hours, online', audience: '30 participants',
     text: 'What happens to a creative community once its annual conference ends? Participants designed local PSN hubs, small events that carry the network into their own places, to keep connection alive and ease everyday tension through shared creative work.'
   },
   {
@@ -108,7 +115,7 @@ export const workshops = [
 ];
 
 export const talks = [
-  { city: 'online', slug: 'layers-of-complexity', title: 'Layers of Complexity', kind: 'Online keynote', conf: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', when: '6 October 2026',
+  { city: 'online', slug: 'layers-of-complexity', title: 'Layers of Complexity', kind: 'Online keynote', hub: 'create', conf: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', when: '6 October 2026',
     image: { file: 'layers-of-complexity.jpg', alt: 'Title frame of the Layers of Complexity keynote: a glass sphere holding a mountain range, among glass prisms, in black and white', caption: 'Layers of Complexity, Mr Acocella x C.R.E.A.T.E., 6 October 2026' } },
   { city: 'brighton', title: 'Mission Possible: Hub Creation', kind: 'Poster', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'brighton', title: 'Life and its synergistic interplay: a possibility for the network', kind: 'Symposium', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
