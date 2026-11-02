@@ -35,7 +35,7 @@ export const workshops = [
     title: 'Chromasoma: Minds, Memories, Morphing, and Surfacing Collective Intuition',
     venue: 'Possibility Studies Network', cohost: 'Barbara Doran',
     image: { file: 'chromasoma-body-maps.jpg', alt: 'Two body maps on black: outlined figures marked with colour, linked by a web of circles, triangles and lines', caption: 'Body maps from the Chromasoma session' },
-    bodymap: { href: 'https://claude.ai/artifact/Tva5ugQwfsfv2WjLeJf6bL', file: 'chromasoma-body-map.jpg', label: 'Open the collective body field', alt: 'A single body map: an outlined figure marked in magenta, with coloured shapes around it' }, when: '19 June 2026', length: '1.5 hours, online', audience: '25 attendees',
+    bodymap: { href: 'https://chromasoma.netlify.app', file: 'chromasoma-body-map.jpg', label: 'Open the collective body field', alt: 'A single body map: an outlined figure marked in magenta, with coloured shapes around it' }, when: '19 June 2026', length: '1.5 hours, online', audience: '25 attendees',
     text: 'An experimental collaborative workshop combining body mapping, visual scoring, quantum-inspired tools and AI-assisted creation. Colour became a rhizomatic space for surfacing memories, sensations, intuitions and rhythms, which were turned into a shared animated visual field: a collective prelude to the conference.'
   },
   {
