@@ -180,7 +180,7 @@ const html = `<!doctype html>
   <header class="hero">
     <div class="hero-paper">
       <div class="hero-copy">
-        <p class="hero-line">Italian teacher at the Canadian School of Milan, and a workshop leader who trains teachers and students to switch attention on purpose.</p>
+        <p class="hero-line">An international educator who designs learning experiences that harmoniously blend attention, play, and collaboration, catering to schools, teams, and individuals with a thirst for innovative thinking.</p>
         <div class="actions">
           <a class="btn" href="#workshops">See the workshops</a>
           <a class="link" href="#contact">Write to Rocco</a>
