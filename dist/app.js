@@ -650,5 +650,44 @@
     if (reset) reset.addEventListener('click', function () { chosen = {}; paint(); try { localStorage.removeItem(KEY); } catch (e) {} if (tfStatus) tfStatus.textContent = 'Colours back to the defaults.'; });
   }
 
+
+  /* ---------- jumps land at the top: a link to a section brings the section's first content (its heading,
+     or the Talks map on a phone) to just under the top bar, not the empty space above it. Links arriving
+     from another page wait until the page has settled, then land the same way. ---------- */
+  function landOn(id, smooth) {
+    var el = id && document.getElementById(id);
+    if (!el) return false;
+    // where the content starts: the section's top plus its own padding (sticky children would mislead)
+    var pad = parseFloat(getComputedStyle(el).paddingTop) || 0;
+    var bar = document.querySelector('.bar'), barH = bar ? bar.offsetHeight : 0;
+    var y = window.pageYOffset + el.getBoundingClientRect().top + pad - barH - 20;
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    if (!smooth || reduce) html.style.scrollBehavior = 'auto';
+    window.scrollTo(0, Math.max(0, y));
+    if (!smooth || reduce) html.style.scrollBehavior = was;
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    return true;
+  }
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest ? e.target.closest('a[href*="#"]') : null;
+    if (!a || a.target === '_blank') return;
+    var url = a.href.split('#'), here = location.href.split('#')[0];
+    if (url[0] !== here || !url[1]) return;
+    if (landOn(decodeURIComponent(url[1]), true)) {
+      e.preventDefault();
+      if (history.pushState) history.pushState(null, '', '#' + url[1]);
+    }
+  });
+  if (location.hash.length > 1) {
+    var arrive = decodeURIComponent(location.hash.slice(1));
+    var settle = function () { landOn(arrive, false); };
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    settle();
+    window.addEventListener('load', function () { settle(); setTimeout(settle, 350); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+  }
+
   requestAnimationFrame(loop);
 })();
