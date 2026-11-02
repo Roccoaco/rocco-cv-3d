@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-v9a8mRy3ZKLQOcflV2yjeCTvlRJdhmSbL6I834N1API=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Rocco Acocella</title>
+<meta name="description" content="Rocco Acocella: Italian teacher at the Canadian School of Milan, workshop leader and researcher in creativity and alternating attention.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>:root{
+  --bg:#F3F5FA; --surface:#E3E9F6; --ink:#0B1B4D; --muted:#3E4A73;
+  --field:#1537C7; --on-field:#FFFFFF; --on-field-soft:#D5DDFA; --accent:#FFD43B; --on-accent:#0B1B4D; --frame:#DCE3F7;
+  --m:clamp(16px,2.2vw,32px); --g:clamp(16px,1.7vw,24px);
+  --f-display:"Libre Franklin",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --f-text:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --s-small:0.875rem; --s-body:clamp(1.0625rem,1rem + .25vw,1.1875rem); --s-lead:clamp(1.25rem,1.1rem + .7vw,1.625rem);
+  --s-head:clamp(1.75rem,1.2rem + 1.4vw,2.25rem); --s-display:clamp(3.5rem,8vw,8rem);
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0A1640;--surface:#102058;--ink:#F3F5FA;--muted:#C2CBEA;--frame:#132A73}
+}
+:root[data-theme="dark"]{--bg:#0A1640;--surface:#102058;--ink:#F3F5FA;--muted:#C2CBEA;--frame:#132A73}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-text);font-size:var(--s-body);line-height:1.55;overflow-x:hidden}
+h1,h2,h3,p,ol,ul,figure{margin:0}
+ol,ul{padding:0;list-style:none}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:var(--m);top:-100px;z-index:20;background:var(--accent);color:var(--on-accent);padding:12px 16px;font-family:var(--f-display);font-weight:700}
+.skip:focus{top:12px}
+h2,h3,.name,.btn,.mode,.side-nav,.ws-name,.reveal,.al-letter,.row-title,.fact,.foot{font-family:var(--f-display)}
+h2{font-weight:800;font-size:var(--s-display);line-height:.92;letter-spacing:-.035em}
+h3{font-weight:700;font-size:var(--s-lead);line-height:1.15;letter-spacing:-.015em}
+.muted{color:var(--muted)}
+.strong{font-weight:600}
+.lede{font-size:var(--s-lead);line-height:1.35;max-width:34ch}
+
+/* ---------- lead: pinned name across hero and approach ---------- */
+.lead{position:relative}
+.corners{position:sticky;top:0;height:100svh;margin-bottom:-100svh;z-index:5;pointer-events:none}
+.name{font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em}
+.c1{position:absolute;left:var(--m);top:28px;color:var(--ink)}
+.c2{position:absolute;right:var(--m);bottom:28px;color:var(--on-field)}
+.hero,.approach{display:grid;grid-template-columns:7fr 5fr;min-height:100svh}
+.hero-paper{position:relative;padding:0 var(--m)}
+.hero-copy{position:absolute;left:calc(var(--m) + 14%);top:44%;max-width:36ch}
+.hero-line{font-size:var(--s-lead);line-height:1.35}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:36px}
+.btn{display:inline-flex;align-items:center;min-height:52px;padding:0 24px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:1rem;text-decoration:none;transition:transform .18s var(--ease),background-color .18s}
+.btn:hover{background:#FFE170}
+.btn:active{transform:translateY(2px)}
+.link{font-weight:600;text-decoration-thickness:2px;text-underline-offset:5px}
+.link:hover{text-decoration-color:var(--field)}
+.side-nav{position:absolute;right:var(--m);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-size:1rem;font-weight:600}
+.side-nav a{text-decoration:none;padding:4px 0;transition:transform .18s var(--ease)}
+.side-nav a:hover{transform:translateX(-4px);text-decoration:underline;text-underline-offset:4px}
+.stage{position:relative;background:var(--field);color:var(--on-field)}
+.stage canvas{position:absolute;left:0;right:0;top:96px;bottom:200px;width:100%;height:calc(100% - 296px);cursor:grab;touch-action:pan-y}
+.stage canvas:active{cursor:grabbing}
+.modes{position:absolute;top:28px;right:var(--m);display:flex;gap:0;z-index:2}
+.mode{min-height:44px;padding:0 18px;border:2px solid var(--on-field);background:transparent;color:var(--on-field);font-size:.9375rem;font-weight:700;cursor:pointer;transition:background-color .18s,color .18s,transform .18s var(--ease)}
+.mode+.mode{border-left:0}
+.mode[aria-pressed="true"]{background:var(--on-field);color:var(--field)}
+.mode:active{transform:translateY(1px)}
+.stage figcaption{position:absolute;left:var(--m);top:36px;max-width:24ch;font-size:var(--s-small);line-height:1.4;color:var(--on-field)}
+
+.approach-paper{padding:20vh var(--m) 16vh calc(var(--m) + 14%);display:flex;flex-direction:column;justify-content:center;gap:32px}
+.approach-paper h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em}
+.statement{font-size:var(--s-head);line-height:1.22;max-width:24ch;font-weight:600}
+.approach-text{max-width:52ch}
+.approach-field{background:var(--field);color:var(--on-field);padding:18vh var(--m) 26vh;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.al-title{color:var(--on-field)}
+.alchemy{display:grid;gap:6px}
+.alchemy li{display:grid;grid-template-columns:1.1em 1fr;align-items:baseline;gap:18px}
+.al-letter{font-weight:800;font-size:clamp(2.25rem,3.6vw,3.5rem);line-height:1;color:var(--accent)}
+.al-word{font-size:var(--s-lead)}
+
+/* ---------- teaching ---------- */
+main>section{padding:clamp(96px,14vw,200px) var(--m) 0}
+.work-head,.arch-head{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end;margin-bottom:clamp(48px,6vw,96px)}
+.work-head h2,.arch-head h2{grid-column:1/9}
+.work-head .lede,.arch-head .lede{grid-column:9/13}
+.roles{display:grid;gap:clamp(40px,4.5vw,72px)}
+.role{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.role-when{grid-column:1/3;font-weight:600;padding-top:4px}
+.role-head{grid-column:3/7}
+.role-head .muted{margin-top:6px}
+.role-points{grid-column:7/13;display:grid;gap:12px;max-width:62ch}
+.role-points li{padding-left:22px;position:relative}
+.role-points li::before{content:"";position:absolute;left:0;top:.62em;width:10px;height:10px;background:var(--field)}
+
+.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);background:var(--surface);margin-top:clamp(96px,14vw,200px);padding-bottom:clamp(96px,12vw,160px)!important}
+.proj-head{grid-column:1/7;display:flex;flex-direction:column;gap:36px}
+.skills{font-size:var(--s-lead);line-height:1.4;max-width:34ch}
+.proj-list{grid-column:8/13;display:grid;gap:36px;align-content:start;padding-top:12px}
+.proj p{margin-top:8px;max-width:48ch}
+
+/* ---------- workshops: names pass a held frame ---------- */
+.workshops{position:relative;padding-bottom:30vh!important}
+.held{position:sticky;top:calc(50svh - min(15.5vw,225px));height:min(31vw,450px);margin-bottom:calc(-1 * min(31vw,450px));z-index:0}
+.held-inner{position:relative;width:min(31vw,450px);height:100%;margin:0 auto}
+#frame-field{width:100%;height:100%;display:block;background:var(--frame)}
+.fact{position:absolute;top:50%;transform:translateY(-50%);width:min(26vw,320px);font-size:1rem;font-weight:600;line-height:1.35}
+#fact-left{right:calc(100% + 48px);text-align:right}
+.fact-r{left:calc(100% + 48px)}
+.ws-heading{position:relative;z-index:1;text-align:center;color:var(--muted);padding-top:10vh}
+.ws-names{position:relative;z-index:1;text-align:center;display:grid;gap:16vh;padding:16vh 0 10vh}
+.ws-name{display:inline-block;font-weight:800;font-size:var(--s-display);line-height:.9;letter-spacing:-.04em;text-decoration:none;color:var(--ink);transition:color .2s,transform .25s var(--ease)}
+.ws-name:hover{color:var(--field)}
+.ws-name.is-current{color:var(--field)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ws-name.is-current{color:var(--accent)}}
+
+.archive{padding-top:clamp(64px,8vw,120px)!important}
+.ws-list{display:grid;gap:clamp(40px,4vw,64px)}
+.ws{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);scroll-margin-top:24px}
+.ws-meta{grid-column:1/4}
+.ws-when{font-weight:600}
+.ws-body{grid-column:4/11;display:grid;gap:10px;max-width:70ch}
+.ws-facts{color:var(--muted)}
+.ws:target .ws-body h3{color:var(--field)}
+
+/* ---------- talks: sticky map, active list ---------- */
+.talks{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:start}
+.map-col{grid-column:1/6;position:sticky;top:10vh}
+.map-wrap{position:relative;aspect-ratio:4/5;background:var(--field)}
+#map{position:absolute;inset:0;width:100%;height:100%}
+#map-label{position:absolute;left:24px;top:20px;font-family:var(--f-display);font-weight:800;font-size:var(--s-head);color:var(--accent);letter-spacing:-.02em}
+.lists{grid-column:7/13}
+.lists h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
+.conf-h{margin-top:clamp(64px,8vw,112px)}
+.rows{display:grid;gap:4px}
+.row{padding:14px 0;cursor:default;outline-offset:6px}
+.row-top{display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+.row-title{font-weight:600;font-size:1.125rem;line-height:1.3}
+.row-when{font-size:var(--s-small);color:var(--muted);white-space:nowrap}
+.row-sub{font-size:1rem;color:var(--muted);margin-top:4px;max-width:58ch}
+.row.is-active .row-title{color:var(--field);font-weight:800}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .row.is-active .row-title{color:var(--accent)}}
+
+/* ---------- training ---------- */
+.training{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.training h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;margin-bottom:24px}
+.train-a{grid-column:1/6}
+.train-b{grid-column:7/13}
+.pubs{display:grid;gap:28px}
+.pubs a{font-weight:600;text-underline-offset:4px}
+.edu{display:grid;gap:18px}
+.train-pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:48px}
+.train-pair h3{margin-bottom:12px}
+.plain{display:grid;gap:8px}
+
+/* ---------- contact ---------- */
+.contact{background:var(--field);color:var(--on-field);min-height:100svh;margin-top:clamp(96px,14vw,200px);padding-bottom:var(--m)!important;display:grid;grid-template-rows:auto 1fr auto;gap:40px}
+.contact-top{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);padding-top:12px}
+.contact-top h2{grid-column:1/9;color:var(--on-field)}
+.contact-top p{grid-column:9/13;font-size:var(--s-lead);line-height:1.35;align-self:end}
+.email{align-self:end;padding-bottom:6vh}
+.reveal,.email-link{display:inline-block;font-family:var(--f-display);font-weight:700;font-size:clamp(2.5rem,6.4vw,7rem);line-height:.95;letter-spacing:-.04em;color:var(--on-field);background:none;border:0;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.12em;transition:color .2s}
+.reveal:hover,.email-link:hover{color:var(--accent)}
+.contact-foot{display:flex;justify-content:space-between;gap:24px;font-size:1rem}
+.nos{font-size:var(--s-lead)}
+
+/* ---------- footer ---------- */
+.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:24px;padding:30svh var(--m) 30px;font-size:.9375rem;color:var(--muted)}
+.foot nav{display:flex;gap:24px}
+.foot nav a{color:var(--ink);font-weight:600}
+.foot-r{text-align:right}
+
+/* ---------- entrances (only when script runs and motion is allowed) ---------- */
+.rise>*{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise>.in{opacity:1;transform:none}
+
+/* ---------- tablet ---------- */
+@media (max-width:1000px){
+  .hero,.approach{grid-template-columns:1fr 1fr}
+  .hero-copy{left:var(--m);right:var(--m)}
+  .side-nav{display:none}
+  .role-when{grid-column:1/13}
+  .role-head{grid-column:1/6}
+  .role-points{grid-column:6/13}
+  .proj-head{grid-column:1/13}
+  .proj-list{grid-column:1/13;grid-template-columns:1fr 1fr}
+  .ws-meta{grid-column:1/13;display:flex;gap:16px}
+  .ws-body{grid-column:1/13}
+  .fact{display:none}
+}
+/* ---------- phone: its own composition ---------- */
+@media (max-width:700px){
+  .corners{position:relative;height:auto;margin:0;padding:20px var(--m) 0}
+  .name{font-size:15vw}
+  .c1,.c2{position:static;display:block;color:var(--ink)}
+  .c2{text-align:right}
+  .hero,.approach{display:block;min-height:0}
+  .hero-paper{padding:32px var(--m) 40px}
+  .hero-copy{position:static;max-width:none}
+  .stage{height:78svh}
+  .stage canvas{top:110px;bottom:24px;height:calc(100% - 134px)}
+  .stage figcaption{top:auto;bottom:16px;max-width:none;right:var(--m)}
+  .stage canvas{bottom:64px;height:calc(100% - 174px)}
+  .modes{left:var(--m);right:auto;top:20px}
+  .approach-paper{padding:96px var(--m) 64px}
+  .approach-field{padding:64px var(--m)}
+  .work-head,.arch-head,.role,.ws,.talks,.training,.contact-top{display:block}
+  .work-head .lede,.arch-head .lede{margin-top:20px}
+  .role-head{margin:8px 0 16px}
+  .proj-head,.proj-list{grid-column:1/13}
+  .proj-list{grid-template-columns:1fr;margin-top:48px}
+  .projects{display:block}
+  .held{top:calc(50svh - 30vw);height:60vw;margin-bottom:-60vw}
+  .held-inner{width:60vw}
+  .ws-name{font-size:12vw}
+  .ws-names{gap:22vh}
+  .ws-meta{margin-bottom:8px}
+  .map-col{position:sticky;top:0;z-index:2;margin:0 calc(-1 * var(--m)) 32px}
+  .map-wrap{aspect-ratio:auto;height:38svh}
+  .row-top{flex-direction:column;gap:2px}
+  .train-b{margin-top:72px}
+  .train-pair{grid-template-columns:1fr}
+  .contact{min-height:86svh}
+  .contact-top p{margin-top:24px}
+  .reveal,.email-link{font-size:11.5vw}
+  .contact-foot{flex-direction:column;gap:12px}
+  .foot{display:flex;flex-direction:column;gap:8px;padding-top:20svh}
+  .foot nav{flex-wrap:wrap}
+  .foot-r{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  .rise>*{opacity:1!important;transform:none!important;transition:none}
+  *{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#work">Skip to the CV</a>
+
+<div class="lead">
+  <div class="corners">
+    <h1 class="name"><span class="c1">Rocco</span> <span class="c2">Acocella</span><span class="sr"> , Italian teacher and creativity researcher in Milan</span></h1>
+  </div>
+
+  <header class="hero">
+    <div class="hero-paper">
+      <div class="hero-copy">
+        <p class="hero-line">Italian teacher at the Canadian School of Milan, and a workshop leader who trains teachers and students to switch attention on purpose.</p>
+        <div class="actions">
+          <a class="btn" href="#workshops">See the workshops</a>
+          <a class="link" href="#contact">Write to Rocco</a>
+        </div>
+      </div>
+      <nav class="side-nav" aria-label="Sections">
+        <a href="#work">Teaching</a>
+        <a href="#workshops">Workshops</a>
+        <a href="#talks">Talks</a>
+        <a href="#training">Training</a>
+      </nav>
+    </div>
+    <figure class="stage">
+      <div class="modes" role="group" aria-label="Attention mode">
+        <button type="button" class="mode" data-mode="diverge" aria-pressed="false">Diverge</button>
+        <button type="button" class="mode" data-mode="converge" aria-pressed="true">Converge</button>
+      </div>
+      <canvas id="field" tabindex="0" role="img" aria-label="349 three-dimensional bricks, one for every seat in eleven of Rocco's workshops. Drag or use the arrow keys to turn them."></canvas>
+      <figcaption id="field-state" aria-live="polite">349 bricks, one for every seat in eleven workshops.</figcaption>
+    </figure>
+  </header>
+
+  <section class="approach" aria-labelledby="approach-h">
+    <div class="approach-paper" data-rise>
+      <h2 id="approach-h">Approach</h2>
+      <p class="statement">Language is how ideas move between people. Rocco teaches Italian, and teaches people to move their attention on purpose.</p>
+      <p class="approach-text">His work joins developmental and cognitive psychology, collaboration and creative process, with ideas borrowed from quantum physics, to make learning personal. In class it runs on one design cycle, The EduDesign Alchemist.</p>
+    </div>
+    <div class="approach-field">
+      <h3 class="al-title">The Alchemy Cycle</h3>
+      <ol class="alchemy"><li><span class="al-letter" aria-hidden="true">A</span><span class="al-word">Attunement</span></li><li><span class="al-letter" aria-hidden="true">L</span><span class="al-word">Listening</span></li><li><span class="al-letter" aria-hidden="true">C</span><span class="al-word">Cultivate</span></li><li><span class="al-letter" aria-hidden="true">H</span><span class="al-word">Humanise</span></li><li><span class="al-letter" aria-hidden="true">E</span><span class="al-word">Envision</span></li><li><span class="al-letter" aria-hidden="true">M</span><span class="al-word">Metacognise</span></li><li><span class="al-letter" aria-hidden="true">Y</span><span class="al-word">Yield</span></li></ol>
+    </div>
+  </section>
+</div>
+
+<main>
+  <section id="work" class="work" aria-labelledby="work-h">
+    <div class="work-head" data-rise>
+      <h2 id="work-h">Teaching</h2>
+      <p class="lede">Three years in the IB programmes at the Canadian School of Milan, now in primary.</p>
+    </div>
+    <div class="roles" data-rise>
+      <article class="role">
+        <p class="role-when">Aug 2025 – present</p>
+        <div class="role-head"><h3>Primary School Italian Teacher</h3><p class="muted">Canadian School of Milan</p></div>
+        <ul class="role-points"><li>Brings AI and LEGO into primary Italian through The EduDesign Alchemist, his own layered system for designing learning.</li></ul>
+      </article>
+      <article class="role">
+        <p class="role-when">Aug 2024 – Jun 2025</p>
+        <div class="role-head"><h3>IB MYP Italian Language Acquisition Teacher</h3><p class="muted">Canadian School of Milan</p></div>
+        <ul class="role-points"><li>Taught Italian language acquisition across the Middle Years Programme.</li></ul>
+      </article>
+      <article class="role">
+        <p class="role-when">Nov 2023 – Jun 2024</p>
+        <div class="role-head"><h3>IB MYP Italian Literature and IB DP Italian Language Acquisition Teacher</h3><p class="muted">Canadian School of Milan</p></div>
+        <ul class="role-points"><li>Built the IB Learner Profile into daily teaching so students grew as inquirers, thinkers, communicators and principled global citizens.</li><li>Designed MYP units around key concepts, global contexts and the inquiry cycle, with ATL skills and interdisciplinary links to real-world problems.</li><li>Led MYP workshops and assemblies joining Learner Profile attributes with creative thinking and cognitive psychology, for metacognition, empathy and self-expression.</li><li>Tracked homework, progress and next steps for every student, gave regular feedback, and kept parents and colleagues informed.</li></ul>
+      </article>
+      <article class="role">
+        <p class="role-when">Jan – Apr 2021</p>
+        <div class="role-head"><h3>Online Italian Language Teacher</h3><p class="muted">Lycée Franco-Hellénique Eugène Delacroix, Athens</p></div>
+        <ul class="role-points"><li>Built a personal Italian learning plan for each student from their personality, temperament, multiple intelligences, curiosity and motivation, with workshops and group reflection.</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="projects" aria-labelledby="proj-h">
+    <div class="proj-head" data-rise>
+      <h2 id="proj-h">Projects and skills</h2>
+      <p class="skills">Creative, critical, lateral and non-linear thinking, workshop design and leadership, team dynamics, personalised learning, mental imagery, visual conceptualisation, AI tools in practice, public speaking, classroom management, problem solving, lesson planning.</p>
+    </div>
+    <div class="proj-list" data-rise><div class="proj"><h3>LEGOciation</h3><p>Negotiating ideas through building. Groups talk, build in LEGO, and rebuild, so thinking becomes something they can hold. Used from MYP classrooms to teacher conferences.</p></div><div class="proj"><h3>Shape Your Brain</h3><p>An activity where students picture neural growth as their answer to a hard task: a working metaphor for how challenge changes the brain.</p></div><div class="proj"><h3>The attention card deck</h3><p>A facilitation deck that prompts deliberate switches of attention, built for the alternating-attention workshop at the Italian Summit 2026.</p></div><div class="proj"><h3>PSN hubs</h3><p>Small local gatherings that carry the Possibility Studies Network between conferences, developed in Productive Friction and the Mission Possible poster.</p></div></div>
+  </section>
+
+  <section id="workshops" class="workshops" aria-labelledby="ws-h">
+    <div class="held">
+      <div class="held-inner">
+        <p class="fact" id="fact-left">American International School of Vienna</p>
+        <canvas id="frame-field" aria-hidden="true"></canvas>
+        <p class="fact fact-r" id="fact-right">23 October 2026</p>
+      </div>
+    </div>
+    <h2 id="ws-h" class="ws-heading">Workshops</h2>
+    <ol class="ws-names">
+      <li><a class="ws-name" data-i="0" href="#w-vienna">Multilingualism</a></li><li><a class="ws-name" data-i="1" href="#w-chromasoma">Chromasoma</a></li><li><a class="ws-name" data-i="2" href="#w-turin">Alternating Attention</a></li><li><a class="ws-name" data-i="3" href="#w-mita">Idea Bouncing</a></li><li><a class="ws-name" data-i="4" href="#w-friction">Productive Friction</a></li><li><a class="ws-name" data-i="5" href="#w-csm26">LEGOciation</a></li><li><a class="ws-name" data-i="6" href="#w-basel">Idea to Creation</a></li><li><a class="ws-name" data-i="7" href="#w-rome">Thinker</a></li><li><a class="ws-name" data-i="8" href="#w-ai">R(AI)sing Awareness</a></li><li><a class="ws-name" data-i="9" href="#w-journey">The Thinking Journey</a></li><li><a class="ws-name" data-i="10" href="#w-iceland24">Creative Mindset</a></li><li><a class="ws-name" data-i="11" href="#w-rights">Human Rights &amp; the Brain</a></li><li><a class="ws-name" data-i="12" href="#w-iceland23">Mindset Journey</a></li>
+    </ol>
+  </section>
+
+  <section class="archive" aria-labelledby="arch-h">
+    <div class="arch-head" data-rise>
+      <h2 id="arch-h">Every workshop</h2>
+      <p class="lede">Thirteen workshops since 2023, for 349 counted participants: teachers, student teachers and students.</p>
+    </div>
+    <div class="ws-list">
+      <article class="ws" id="w-vienna">
+        <div class="ws-meta"><p class="ws-when">23 October 2026</p><p class="muted">Vienna</p></div>
+        <div class="ws-body">
+          <h3>Multilingualism and Attention Alternation: Creative-Cerebral Strategies</h3>
+          <p class="ws-facts">World Languages Conference 2026, American International School of Vienna. In person, headcount not recorded.</p>
+          <p>How multilingualism and switching attention lift learning and group creativity. Participants used languages, gestures and cultural perspectives as a creative method, moving between divergent and convergent modes, and left with practical strategies for innovation and collaborative learning.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-chromasoma">
+        <div class="ws-meta"><p class="ws-when">19 June 2026</p><p class="muted">Online</p></div>
+        <div class="ws-body">
+          <h3>Chromasoma: Minds, Memories, Morphing, and Surfacing Collective Intuition</h3>
+          <p class="ws-facts">Possibility Studies Network. Online, headcount not recorded.</p>
+          <p>An experimental collaborative workshop combining body mapping, visual scoring, quantum-inspired tools and AI-assisted creation. Colour became a rhizomatic space for surfacing memories, sensations, intuitions and rhythms, which were turned into a shared animated visual field: a collective prelude to the conference.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-turin">
+        <div class="ws-meta"><p class="ws-when">8 May 2026</p><p class="muted">Chieri, Turin</p></div>
+        <div class="ws-body">
+          <h3>Alternating Attention as a Catalyst for a Creative-Cerebral Educational Perspective</h3>
+          <p class="ws-facts">Italian Summit 2026, International School of Turin. 1 hour, 48 IB teachers.</p>
+          <p>Teachers played through an alternate scenario at the meeting point of creative cognition, play, sense-making and collaboration. Experiential activities used transdisciplinary materials and systemic thinking, and a facilitating card deck trained deliberate attention-shifting and metacognitive awareness for cognitive and temporal flexibility.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-mita">
+        <div class="ws-meta"><p class="ws-when">21 March 2026</p><p class="muted">Milan</p></div>
+        <div class="ws-body">
+          <h3>Idea Bouncing: Building the Future through Vibrational LEGOciation</h3>
+          <p class="ws-facts">MITA 2026, American School of Milan. 1 hour, 14 teachers.</p>
+          <p>Language, communication and creative cognition in practice. Linguistic interaction and collaborative problem-solving, with deliberate attention-shifting, turned abstract ideas into built, tangible outcomes, showing how dialogue mediates creativity and learning design.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-friction">
+        <div class="ws-meta"><p class="ws-when">19 January 2026</p><p class="muted">Online</p></div>
+        <div class="ws-body">
+          <h3>Productive Friction: Creative Freedom in Times of Political Contestation</h3>
+          <p class="ws-facts">5th Virtual Conference of the Possibility Studies Network. 2 hours, online, 30 participants.</p>
+          <p>What happens to a creative community once its annual conference ends? Participants designed local PSN hubs, small events that carry the network into their own places, to keep connection alive and ease everyday tension through shared creative work.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-csm26">
+        <div class="ws-meta"><p class="ws-when">7 January 2026</p><p class="muted">Milan</p></div>
+        <div class="ws-body">
+          <h3>Idea Bouncing: Building the Future through Vibrational LEGOciation</h3>
+          <p class="ws-facts">Canadian School of Milan. 1 hour, 25 teachers.</p>
+          <p>The in-house edition of Idea Bouncing for colleagues: linguistic interaction, collaborative building and deliberate attention-shifting to move ideas from abstract to tangible.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-basel">
+        <div class="ws-meta"><p class="ws-when">24 October 2025</p><p class="muted">Basel</p></div>
+        <div class="ws-body">
+          <h3>From Idea to Creation: A Creative-Cerebral Perspective for Language Education</h3>
+          <p class="ws-facts">2nd Annual World Languages Conference, International School of Basel. 1 hour 20 minutes, 15 teachers.</p>
+          <p>Experiential activities for language teachers on how communication and language act as mediators of creativity, using structured collaboration and metacognitive awareness to turn ideas into purposeful learning design.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-rome">
+        <div class="ws-meta"><p class="ws-when">6 June 2025</p><p class="muted">Rome</p></div>
+        <div class="ws-body">
+          <h3>IB Learner Profile Thinker: Una prospettiva creativo-cerebrale per la didattica dell’italiano e oltre!</h3>
+          <p class="ws-facts">Italian Summit 2025, Marymount International School Rome. 2 hours, 70 IB teachers.</p>
+          <p>The IB Learner Profile attribute Thinker seen through creativity and cognitive neuroscience. Educators reflected on their own teaching approaches and cognitive styles, and explored brain-based learning and strategies that bring creative thinking into the Learner Profile.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-ai">
+        <div class="ws-meta"><p class="ws-when">January to February 2025</p><p class="muted">Milan</p></div>
+        <div class="ws-body">
+          <h3>R(AI)sing Awareness in the Pl(AI)ground</h3>
+          <p class="ws-facts">Canadian School of Milan. 4.5 hours over three sessions, 25 teachers.</p>
+          <p>Staff training on artificial intelligence: prompt frameworks in ChatGPT for lesson plans, assessments, reports and creative tasks, and hands-on use of NotebookLM, Napkin AI, Gamma, Revoldiv and NoteGPT for designing teaching content.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-journey">
+        <div class="ws-meta"><p class="ws-when">October 2024</p><p class="muted">Milan</p></div>
+        <div class="ws-body">
+          <h3>The Thinking Journey</h3>
+          <p class="ws-facts">Canadian School of Milan. 2 hours, 80 MYP students.</p>
+          <p>Students explored how the brain works while building critical thinking. In Shape Your Brain they pictured neural growth as a response to challenge; in LEGOciation at the Station they rotated through nine thematic stations of dialogue and LEGO construction, closing with reflection on high-quality thinking.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-iceland24">
+        <div class="ws-meta"><p class="ws-when">October 2024</p><p class="muted">Reykjavík</p></div>
+        <div class="ws-body">
+          <h3>Creative Mindset and Language Learning</h3>
+          <p class="ws-facts">University of Iceland. 2 hours, online, 14 pre-service teachers.</p>
+          <p>Growth mindset meets creative thinking for future language teachers: creativity and neuroplasticity in theory, then Random Word, Random Picture, Reverse Brainstorming and Six Thinking Hats in practice.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-rights">
+        <div class="ws-meta"><p class="ws-when">February to April 2024</p><p class="muted">Milan</p></div>
+        <div class="ws-body">
+          <h3>Human Rights, Emotions &amp; the Brain: a Transversal Bridge between Past and Future</h3>
+          <p class="ws-facts">Canadian School of Milan. 12 sessions, 14 MYP3 students.</p>
+          <p>A series on creativity, change and perspective within personal and cultural expression and fairness and development. Memory, thinking strategies, emotions and brain function were explored through Memory, LEGO and jigsaw games, and students presented on human rights, memory, emotional intelligence and divergent thinking.</p>
+        </div>
+      </article>
+      <article class="ws" id="w-iceland23">
+        <div class="ws-meta"><p class="ws-when">March to April 2023</p><p class="muted">Reykjavík</p></div>
+        <div class="ws-body">
+          <h3>The Creative Mindset Journey</h3>
+          <p class="ws-facts">University of Iceland, Reykjavík. 8 hours in person, 14 pre-service teachers.</p>
+          <p>In-person sessions joining growth mindset with creative thinking methods to build future teachers’ creative dispositions. Participants reported more confidence, engagement and enthusiasm for using creative strategies in their teaching.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="talks" class="talks" aria-labelledby="talks-h">
+    <div class="map-col">
+      <figure class="map-wrap">
+        <canvas id="map" role="img" aria-label="Map of the cities where Rocco has taught, presented and studied, linked to Milan."></canvas>
+        <figcaption id="map-label">Milan</figcaption>
+      </figure>
+    </div>
+    <div class="lists">
+      <h2 id="talks-h">Talks</h2>
+      <ol class="rows">
+          <li class="row" tabindex="0" data-city="brighton">
+            <div class="row-top"><span class="row-title">Mission Possible: Hub Creation</span><span class="row-when">July 2026</span></div>
+            <p class="row-sub">Poster. Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex, Brighton</p>
+          </li>
+          <li class="row" tabindex="0" data-city="brighton">
+            <div class="row-top"><span class="row-title">Life and its synergistic interplay: a possibility for the network</span><span class="row-when">July 2026</span></div>
+            <p class="row-sub">Symposium. Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex, Brighton</p>
+          </li>
+          <li class="row" tabindex="0" data-city="maynooth">
+            <div class="row-top"><span class="row-title">Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy</span><span class="row-when">July 2025</span></div>
+            <p class="row-sub">Paper. Communities of Possibilities, 5th International Possibility Studies Conference, Maynooth University, Maynooth</p>
+          </li>
+          <li class="row" tabindex="0" data-city="cambridge">
+            <div class="row-top"><span class="row-title">The SEC-Cr Dimensional Continuum: A Journey through Energy and Potential</span><span class="row-when">July 2024</span></div>
+            <p class="row-sub">Paper. Expanding Research on Possibilities, 4th International Possibility Studies Conference, Faculty of Education, University of Cambridge, Cambridge</p>
+          </li>
+          <li class="row" tabindex="0" data-city="dublin">
+            <div class="row-top"><span class="row-title">An alternating attention-driven theory of creativity: a sensory-processing approach for Higher Education</span><span class="row-when">July 2023</span></div>
+            <p class="row-sub">Paper. Cultivating the Possible, 3rd International Possibility Studies Conference, Dublin</p>
+          </li>
+          <li class="row" tabindex="0" data-city="brussels">
+            <div class="row-top"><span class="row-title">How Experience, Creativity and Multiple Intelligence influence Language Teaching</span><span class="row-when">September 2020</span></div>
+            <p class="row-sub">Online paper. 2nd World Conference on Future of Education, Brussels</p>
+          </li>
+      </ol>
+      <h2 class="conf-h">Conferences</h2>
+      <ol class="rows">
+          <li class="row row-tight" tabindex="0" data-city="vienna">
+            <div class="row-top"><span class="row-title">3rd World Languages Conference</span><span class="row-when">23–24 Oct 2026</span></div>
+            <p class="row-sub">American International School of Vienna</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="brighton">
+            <div class="row-top"><span class="row-title">Waves of Possibilities, 6th International Possibility Studies Conference</span><span class="row-when">29 Jun – 2 Jul 2026</span></div>
+            <p class="row-sub">University of Sussex, Brighton</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="chieri">
+            <div class="row-top"><span class="row-title">Italian Summit 2026</span><span class="row-when">May 2026</span></div>
+            <p class="row-sub">International School of Turin, Chieri, Turin</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="milan">
+            <div class="row-top"><span class="row-title">MITA 2026, Milan International Teacher Association</span><span class="row-when">21 Mar 2026</span></div>
+            <p class="row-sub">American School of Milan</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="basel">
+            <div class="row-top"><span class="row-title">2nd World Languages Conference</span><span class="row-when">23–24 Oct 2025</span></div>
+            <p class="row-sub">International School of Basel</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="milan">
+            <div class="row-top"><span class="row-title">Learning Festival</span><span class="row-when">10–11 Oct 2025</span></div>
+            <p class="row-sub">Museo Nazionale della Scienza e della Tecnologia Leonardo da Vinci, Milan</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="maynooth">
+            <div class="row-top"><span class="row-title">Communities of Possibilities, 5th International Possibility Studies Conference</span><span class="row-when">30 Jun – 4 Jul 2025</span></div>
+            <p class="row-sub">Maynooth</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="rome">
+            <div class="row-top"><span class="row-title">Italian Summit 2025</span><span class="row-when">6 Jun 2025</span></div>
+            <p class="row-sub">Marymount International School Rome</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="milan">
+            <div class="row-top"><span class="row-title">MITA 2025</span><span class="row-when">22 Mar 2025</span></div>
+            <p class="row-sub">Milan</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="cambridge">
+            <div class="row-top"><span class="row-title">Expanding Research on Possibilities, 4th International Possibility Studies Conference</span><span class="row-when">8–12 Jul 2024</span></div>
+            <p class="row-sub">Cambridge</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="milan">
+            <div class="row-top"><span class="row-title">MITA 2024</span><span class="row-when">22 Mar 2024</span></div>
+            <p class="row-sub">Milan</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="dublin">
+            <div class="row-top"><span class="row-title">Cultivating the Possible, 3rd International Possibility Studies Conference</span><span class="row-when">17–21 Jul 2023</span></div>
+            <p class="row-sub">Dublin</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="brussels">
+            <div class="row-top"><span class="row-title">2nd World Conference on Future of Education</span><span class="row-when">11–13 Sep 2020</span></div>
+            <p class="row-sub">Brussels</p>
+          </li>
+          <li class="row row-tight" tabindex="0" data-city="sharm">
+            <div class="row-top"><span class="row-title">3rd World Youth Forum</span><span class="row-when">11–18 Dec 2019</span></div>
+            <p class="row-sub">Sharm El-Sheikh</p>
+          </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="training" class="training" aria-labelledby="train-h">
+    <div class="train-a" data-rise>
+      <h2 id="train-h">Publications</h2>
+      <ul class="pubs"><li><p>Acocella, R. (2021). A Qualitative-Exploratory Pilot Study to Explore Students’ Perception on Experience and Multiple Intelligences’ Impact on Their Linguistic &amp; Personal Growth. European Journal of Teaching and Education, 3(1), 34–43.</p><p><a href="https://doi.org/10.33422/ejte.v3i1.669" rel="noopener noreferrer" target="_blank">Read via DOI</a></p></li><li><p>Wanasika, I., Bakker, D., Wehner, R., Ahmed, G., Bakhadirov, M., Rong, L., … &amp; Acocella, R. (2023). Cultural differences and entrepreneurial needs. In International Business with New Challenges and Entrepreneurial Opportunities (pp. 115–121). Würzburg International Business Press.</p></li></ul>
+    </div>
+    <div class="train-b" data-rise>
+      <h2>Education</h2>
+      <ul class="edu"><li><p class="strong">Master in Creativity and Innovation, M.CI (Melit.)</p><p class="muted">The Edward de Bono Institute for Creative Thinking and Innovation, Malta</p></li><li><p class="strong">Master ITALS, first level: teaching Italian as a foreign language</p><p class="muted">Ca’ Foscari University, Venice</p></li><li><p class="strong">BA L-12, Interlinguistic and Intercultural Mediation</p><p class="muted">University of Insubria, Como</p></li><li><p class="strong">Erasmus Programme</p><p class="muted">Háskóli Íslands, Reykjavík</p></li></ul>
+      <div class="train-pair">
+        <div><h3>Languages</h3><ul class="plain"><li><span class="strong">Italian</span> Mother tongue</li><li><span class="strong">English</span> C1, IELTS</li><li><span class="strong">Spanish</span> B1</li></ul></div>
+        <div><h3>Certificates</h3><ul class="plain"><li>IB MYP Language Acquisition, Category 1</li><li>IELTS, English C1</li><li>Certificate of Recognition, 4th Possibility Studies Network Conference</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="contact-h">
+    <div class="contact-top">
+      <h2 id="contact-h">Write to Rocco</h2>
+      <p>For a workshop at your school or conference, a paper, or a conversation about attention and language.</p>
+    </div>
+    <div id="email" class="email">
+      <button type="button" id="reveal" class="reveal">Show email address</button>
+      <noscript><p class="nos">Turn on JavaScript to show the address, or find Rocco Acocella on LinkedIn.</p></noscript>
+    </div>
+    <div class="contact-foot">
+      <p>Milan, Italy</p>
+      <p>On LinkedIn as Rocco Acocella</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Rocco Acocella, curriculum vitae</p>
+  <nav aria-label="Footer"><a href="#work">Teaching</a><a href="#workshops">Workshops</a><a href="#talks">Talks</a><a href="#contact">Contact</a></nav>
+  <p class="foot-r">2026. No cookies, no tracking; the email address is stored encrypted.</p>
+</footer>
+
+<script type="application/json" id="cv-data">{"lock":{"key":"phm4jiTcsQPPpwTQ9BE8VHQcrrtnMVI8vNrtZ9tYCdo=","iv":"m68rReWburM8uPHT","data":"6BBgzYwUS2s7nOZFLRay/z15iIflYd5sTXiCxR9xWRyLpsOWag=="},"cities":{"milan":{"name":"Milan","lat":45.46,"lon":9.19},"chieri":{"name":"Chieri, Turin","lat":45.01,"lon":7.82},"rome":{"name":"Rome","lat":41.9,"lon":12.5},"basel":{"name":"Basel","lat":47.56,"lon":7.59},"vienna":{"name":"Vienna","lat":48.21,"lon":16.37},"brighton":{"name":"Brighton","lat":50.82,"lon":-0.14},"cambridge":{"name":"Cambridge","lat":52.21,"lon":0.12},"maynooth":{"name":"Maynooth","lat":53.38,"lon":-6.59},"dublin":{"name":"Dublin","lat":53.35,"lon":-6.26},"brussels":{"name":"Brussels","lat":50.85,"lon":4.35},"reykjavik":{"name":"Reykjavík","lat":64.15,"lon":-21.94},"athens":{"name":"Athens","lat":37.98,"lon":23.73},"sharm":{"name":"Sharm El-Sheikh","lat":27.92,"lon":34.33},"malta":{"name":"Malta","lat":35.9,"lon":14.51},"venice":{"name":"Venice","lat":45.44,"lon":12.33},"como":{"name":"Como","lat":45.81,"lon":9.09},"online":{"name":"Online","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","count":null,"when":"23 October 2026","audience":"Headcount not recorded","venueShort":"American International School of Vienna"},{"id":"w-chromasoma","count":null,"when":"19 June 2026","audience":"Headcount not recorded","venueShort":"Possibility Studies Network"},{"id":"w-turin","count":48,"when":"8 May 2026","audience":"48 IB teachers","venueShort":"International School of Turin"},{"id":"w-mita","count":14,"when":"21 March 2026","audience":"14 teachers","venueShort":"American School of Milan"},{"id":"w-friction","count":30,"when":"19 January 2026","audience":"30 participants","venueShort":"5th Virtual Conference of the Possibility Studies Network"},{"id":"w-csm26","count":25,"when":"7 January 2026","audience":"25 teachers","venueShort":"Canadian School of Milan"},{"id":"w-basel","count":15,"when":"24 October 2025","audience":"15 teachers","venueShort":"International School of Basel"},{"id":"w-rome","count":70,"when":"6 June 2025","audience":"70 IB teachers","venueShort":"Marymount International School Rome"},{"id":"w-ai","count":25,"when":"January to February 2025","audience":"25 teachers","venueShort":"Canadian School of Milan"},{"id":"w-journey","count":80,"when":"October 2024","audience":"80 MYP students","venueShort":"Canadian School of Milan"},{"id":"w-iceland24","count":14,"when":"October 2024","audience":"14 pre-service teachers","venueShort":"University of Iceland"},{"id":"w-rights","count":14,"when":"February to April 2024","audience":"14 MYP3 students","venueShort":"Canadian School of Milan"},{"id":"w-iceland23","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","venueShort":"Reykjavík"}]}</script>
+<script src="app.js" integrity="sha384-S4VQkYqYilKS7TeQhY0g92yU+mk6S9oM3Gs1Ic1qdaLzdhQnbImMGKM6mgCqDEBJ" defer></script>
+</body>
+</html>
