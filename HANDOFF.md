@@ -15,7 +15,7 @@ A single-page CV built from `Copy_of_CV_Rocco_Acocella-2.pdf`. No frameworks, no
 - `.taste-skill/direction.json` — the dealt design direction: "The pinned poster", seed 1165767103, palette kept from the CV.
 
 ## Design idea
-Rocco's own method (moving between divergent and convergent attention, LEGOciation) becomes the page's live 3D object: **349 bricks, one per counted seat across eleven workshops**, that scatter (Diverge) and assemble into a tower with one storey per workshop (Converge). Drag or use arrow keys to rotate. Hand-written canvas 3D renderer, no Three.js.
+Rocco's own method (moving between divergent and convergent attention, LEGOciation) becomes the page's live 3D object: **382 bricks, one per seat across all thirteen workshops**, that scatter (Diverge) and assemble into a tower with one storey per workshop (Converge). Drag or use arrow keys to rotate. Hand-written canvas 3D renderer, no Three.js.
 
 Sections: pinned name hero with brick field → Approach + Alchemy Cycle (A-L-C-H-E-M-Y) → Teaching → Projects and skills → Workshops (huge names on the left pass a held frame on the right that rebuilds each workshop in bricks; on phones the frame is a sticky band at the top) → Every workshop (full details) → Talks + Conferences (sticky travel map from Milan, active row lights its city) → Publications, Education, Languages, Certificates → Contact → footer.
 
@@ -40,10 +40,20 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Fonts self-hosted; `_headers` + `netlify.toml` added; LinkedIn and photo hooks in `data.mjs`.
 - Taste gate: `lint.mjs` 0 FAIL / 0 WARN; `inspect.mjs` 1 FAIL (few-pictures) / 1 WARN (no-footage), see below. Screenshots reviewed at 1440, 768 and 390.
 
+## Done in session 3
+- Sticky nav bar after the opening screen (Teaching, Places, Workshops, Talks, Training, Contact); phones show four links.
+- "Places": a Natural Earth map of every city with a talk or workshop, sized by count, with a country list that lights its city. Land data in `src/land.json` (made by `src/make-land.mjs`); the Talks map now draws land too.
+- Every place reads "City, Country" (`place()` in `data.mjs`), including roles, education and conferences.
+- Headcounts: Multilingualism 8 language teachers, Chromasoma 25 attendees (hero now 382 bricks, 13 storeys).
+- New talk: C.R.E.A.T.E., online keynote, Layers of Complexity, October 2026.
+- One page per workshop (`dist/<slug>.html`): its own 3D brick model built from the workshop's idea (one brick per seat; models in `MODELS` in `app.js`, captions in `modelNotes` in `data.mjs`), facts, abstract, previous/next. The main page's held frame shows the same models.
+- Display size bounded so ACOCELLA always fits the cobalt column; inactive workshop names are a solid, readable blue-grey instead of faded.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
-2. **LinkedIn URL**: set `linkedin` in `src/data.mjs` (not in the PDF).
-3. **Deploy**: connect the repo to Netlify (it reads `netlify.toml`) or Cloudflare Pages (build `node src/build.mjs`, output `dist`). Then check the headers at securityheaders.com. Remove `noindex` (meta + `X-Robots-Tag`) when Rocco wants the page found.
+2. **Full abstracts**: the CV PDF is not in the repo. The workshop pages use the texts in `data.mjs`; paste the PDF's full abstracts into each workshop's `text`.
+3. **LinkedIn URL**: set `linkedin` in `src/data.mjs` (not in the PDF).
+4. **Deploy**: connect the repo to Netlify (it reads `netlify.toml`) or Cloudflare Pages (build `node src/build.mjs`, output `dist`). Then check the headers at securityheaders.com. Remove `noindex` (meta + `X-Robots-Tag`) when Rocco wants the page found.
 
 ## CV inconsistencies to confirm with Rocco
 - 3rd Possibility Studies Conference (Dublin): talk listed as 2025, attendance as 2023 → used **2023**.
@@ -51,4 +61,5 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - Italian Summit 2026: workshop dated 8 May 2026, attendance 21 March 2026 → used **May 2026**.
 - R(AI)sing Awareness: header says 1 h, text says 4.5 h over three sessions → used **4.5 h**.
 - That workshop cites "ChatGPT 5.0" in Jan–Feb 2025, before GPT-5 existed → written as **ChatGPT**.
-- 349 participants is the sum of recorded headcounts; some people may have attended more than once.
+- 382 participants is the sum of headcounts (Multilingualism 8 and Chromasoma 25 added in session 3); some people may have attended more than once.
+- Malta is given as "Msida, Malta" (the University of Malta campus of the Edward de Bono Institute). Confirm.

@@ -1,4 +1,4 @@
-// Builds dist/index.html + dist/app.js from data.mjs. Encrypts the email, hashes the inline style and app.js for CSP/SRI.
+// Builds dist/index.html, one page per workshop and dist/app.js from data.mjs. Encrypts the email, hashes the inline style and app.js for CSP/SRI.
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import * as D from './data.mjs';
@@ -8,7 +8,12 @@ const out = here + '../dist/';
 fs.mkdirSync(out, { recursive: true });
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const venueShort = (v) => { const i = v.lastIndexOf(', '); return i > -1 ? v.slice(i + 2) : v; };
+const place = D.place;
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+const word = (n) => WORDS[n] || String(n);
+const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+const lower1 = (t) => t.charAt(0).toLowerCase() + t.slice(1);
+const pageOf = (w) => `${w.slug}.html`;
 
 // --- encrypted email (AES-256-GCM, decrypted in the browser only when a visitor asks) ---
 const key = crypto.randomBytes(32), iv = crypto.randomBytes(12);
@@ -19,10 +24,21 @@ const lock = { key: key.toString('base64'), iv: iv.toString('base64'), data: enc
 const counted = D.workshops.filter((w) => w.count);
 const seats = counted.reduce((a, w) => a + w.count, 0);
 
+// every city where a talk or a workshop was given, with how many of each
+const placeMap = new Map();
+for (const w of D.workshops) { const e = placeMap.get(w.city) || { city: w.city, workshops: 0, talks: 0 }; e.workshops++; placeMap.set(w.city, e); }
+for (const t of D.talks) { const e = placeMap.get(t.city) || { city: t.city, workshops: 0, talks: 0 }; e.talks++; placeMap.set(t.city, e); }
+const online = placeMap.get('online'); placeMap.delete('online');
+const places = [...placeMap.values()].map((e) => ({ ...e, n: e.workshops + e.talks })).sort((a, b) => b.n - a.n);
+const countries = [...new Set(places.map((p) => D.cities[p.city].country))];
+const tally = (e) => [e.workshops && `${e.workshops} workshop${e.workshops > 1 ? 's' : ''}`, e.talks && `${e.talks} talk${e.talks > 1 ? 's' : ''}`].filter(Boolean).join(', ');
+
+const workshopsData = D.workshops.map((w) => ({ id: w.id, slug: w.slug, model: w.model, count: w.count, when: w.when, audience: w.audience, place: place(w.city) }));
+const land = JSON.parse(fs.readFileSync(here + 'land.json', 'utf8'));
 const data = {
-  lock,
-  cities: D.cities,
-  workshops: D.workshops.map((w) => ({ id: w.id, count: w.count, when: w.when, audience: w.audience, venueShort: venueShort(w.venue) }))
+  lock, seats, countedWords: word(counted.length),
+  cities: D.cities, workshops: workshopsData,
+  places: places.map((p) => ({ city: p.city, n: p.n })), land
 };
 
 // self-hosted fonts (src/fetch-fonts.mjs): no request leaves the site
@@ -62,7 +78,7 @@ const ext = (href, text) => `<a href="${href}" rel="noopener noreferrer" target=
 const roleRows = D.roles.map((r) => `
       <article class="role">
         <p class="role-when">${esc(r.when)}</p>
-        <div class="role-head"><h3>${esc(r.role)}</h3><p class="muted">${esc(r.school)}</p></div>
+        <div class="role-head"><h3>${esc(r.role)}</h3><p class="muted">${esc(r.school)}, ${esc(place(r.city))}</p></div>
         <ul class="role-points">${r.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
       </article>`).join('');
 
@@ -70,32 +86,50 @@ const alchemy = D.alchemy.map(([l, w]) => `<li><span class="al-letter" aria-hidd
 
 const projectRows = D.projects.map((p) => `<div class="proj"><h3>${esc(p.name)}</h3><p>${esc(p.text)}</p></div>`).join('');
 
-const names = D.workshops.map((w, i) => `<li><a class="ws-name" data-i="${i}" href="#${w.id}">${esc(w.short)}</a></li>`).join('');
+const names = D.workshops.map((w, i) => `<li><a class="ws-name" data-i="${i}" href="${pageOf(w)}">${esc(w.short)}</a></li>`).join('');
 
 const archive = D.workshops.map((w) => `
       <article class="ws" id="${w.id}">
-        <div class="ws-meta"><p class="ws-when">${esc(w.when)}</p><p class="muted">${esc(D.cities[w.city].name)}</p></div>
+        <div class="ws-meta"><p class="ws-when">${esc(w.when)}</p><p class="muted">${esc(place(w.city))}</p></div>
         <div class="ws-body">
           <h3>${esc(w.title)}</h3>
           <p class="ws-facts">${esc(w.venue)}. ${esc(w.length)}, ${esc(w.audience.charAt(0).toLowerCase() + w.audience.slice(1))}.</p>
           <p>${esc(w.text)}</p>
+          <p><a class="more" href="${pageOf(w)}">See the ${esc(w.short)} model and the full abstract</a></p>
         </div>
       </article>`).join('');
 
 const talkRows = D.talks.map((t) => `
           <li class="row" tabindex="0" data-city="${t.city}">
             <div class="row-top"><span class="row-title">${esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
-            <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}, ${esc(D.cities[t.city].name)}</p>
+            <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
           </li>`).join('');
 
 const confRows = D.conferences.map((t) => `
           <li class="row row-tight" tabindex="0" data-city="${t.city}">
             <div class="row-top"><span class="row-title">${esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
-            <p class="row-sub">${esc(t.place)}${t.place.includes(D.cities[t.city].name) ? '' : ', ' + esc(D.cities[t.city].name)}</p>
+            <p class="row-sub">${t.place ? esc(t.place) + ', ' : ''}${esc(place(t.city))}</p>
           </li>`).join('');
 
+const byCountry = countries.map((co) => {
+  const items = places.filter((p) => D.cities[p.city].country === co);
+  return `<li class="country"><h3>${esc(co)}</h3><ul>${items.map((p) => `<li tabindex="0" data-place="${p.city}"><span class="pl-city">${esc(D.cities[p.city].name)}</span> <span class="pl-n">${tally(p)}</span></li>`).join('')}</ul></li>`;
+}).join('');
+const placesLede = `Talks and workshops in ${word(places.length)} cities across ${word(countries.length)} countries${online ? `, and ${word(online.n || online.workshops + online.talks)} more online` : ''}.`;
+
+const nav = (prefix) => `<nav class="bar" aria-label="Main">
+  <a class="bar-mark" href="${prefix}#top">Rocco Acocella</a>
+  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>
+</nav>`;
+const footer = (prefix) => `<footer class="foot">
+  <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
+  <p>Curriculum vitae, ${new Date().getFullYear()}</p>
+  <nav aria-label="Footer"><a href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a href="${prefix}#contact">Contact</a></nav>
+  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted. Map: Natural Earth.</p>
+</footer>`;
+
 const pubs = D.publications.map((p) => `<li><p>${esc(p.cite)}</p>${p.href ? `<p>${ext(p.href, p.link)}</p>` : ''}</li>`).join('');
-const edu = D.education.map((e) => `<li><p class="strong">${esc(e.title)}</p><p class="muted">${esc(e.place)}</p></li>`).join('');
+const edu = D.education.map((e) => `<li><p class="strong">${esc(e.title)}</p><p class="muted">${esc(e.place)}, ${esc(place(e.city))}</p></li>`).join('');
 const langs = D.languages.map(([l, v]) => `<li><span class="strong">${l}</span> ${v}</li>`).join('');
 const certs = D.certificates.map((c) => `<li>${esc(c)}</li>`).join('');
 
@@ -112,7 +146,7 @@ const html = `<!doctype html>
 <link rel="preload" href="fonts/libre-franklin-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>${css}</style>
 </head>
-<body>
+<body id="top">
 <a class="skip" href="#work">Skip to the CV</a>
 
 <div class="lead">
@@ -141,8 +175,8 @@ const html = `<!doctype html>
         <button type="button" class="mode" data-mode="diverge" aria-pressed="false">Diverge</button>
         <button type="button" class="mode" data-mode="converge" aria-pressed="true">Converge</button>
       </div>
-      <canvas id="field" tabindex="0" role="img" aria-label="${seats} three-dimensional bricks, one for every seat in eleven of Rocco's workshops. Drag or use the arrow keys to turn them."></canvas>
-      <figcaption id="field-state" aria-live="polite">${seats} bricks, one for every seat in eleven workshops.</figcaption>
+      <canvas id="field" tabindex="0" role="img" aria-label="${seats} three-dimensional bricks, one for every seat in ${word(counted.length)} of Rocco's workshops. Drag or use the arrow keys to turn them."></canvas>
+      <figcaption id="field-state" aria-live="polite">${seats} bricks, one for every seat in ${word(counted.length)} workshops.</figcaption>
     </figure>
   </header>
 
@@ -158,6 +192,8 @@ const html = `<!doctype html>
     </div>
   </section>
 </div>
+
+${nav('')}
 
 <main>
   <section id="work" class="work" aria-labelledby="work-h">
@@ -177,6 +213,17 @@ const html = `<!doctype html>
     <div class="proj-list" data-rise>${projectRows}</div>
   </section>
 
+  <section id="places" class="places" aria-labelledby="places-h">
+    <div class="places-head" data-rise>
+      <h2 id="places-h">Places</h2>
+      <p class="lede">${placesLede}</p>
+    </div>
+    <figure class="places-map">
+      <canvas id="places-map" role="img" aria-label="Map of Europe marking the ${word(places.length)} cities where Rocco has given talks and workshops, sized by how many."></canvas>
+    </figure>
+    <ul class="places-list">${byCountry}${online ? `<li class="country"><h3>Online</h3><ul><li><span class="pl-n">${tally(online)}</span></li></ul></li>` : ''}</ul>
+  </section>
+
   <section id="workshops" class="workshops" aria-labelledby="ws-h">
     <div class="ws-top">
       <h2 id="ws-h">Workshops</h2>
@@ -187,7 +234,7 @@ const html = `<!doctype html>
         <div class="held-inner">
           <canvas id="frame-field"></canvas>
           <div class="facts">
-            <p class="fact" id="fact-left">${esc(venueShort(D.workshops[0].venue))}</p>
+            <p class="fact" id="fact-left">${esc(place(D.workshops[0].city))}</p>
             <p class="fact fact-r" id="fact-right">${esc(D.workshops[0].when)}</p>
           </div>
         </div>
@@ -201,7 +248,7 @@ const html = `<!doctype html>
   <section class="archive" aria-labelledby="arch-h">
     <div class="arch-head" data-rise>
       <h2 id="arch-h">Every workshop</h2>
-      <p class="lede">Thirteen workshops since 2023, for ${seats} counted participants: teachers, student teachers and students.</p>
+      <p class="lede">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, student teachers and students. Each has its own page.</p>
     </div>
     ${photos('workshops')}<div class="ws-list">${archive}
     </div>
@@ -255,12 +302,7 @@ const html = `<!doctype html>
   </section>
 </main>
 
-<footer class="foot">
-  <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
-  <p>Curriculum vitae, ${new Date().getFullYear()}</p>
-  <nav aria-label="Footer"><a href="#work">Teaching</a><a href="#workshops">Workshops</a><a href="#talks">Talks</a><a href="#contact">Contact</a></nav>
-  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted.</p>
-</footer>
+${footer('')}
 
 <script type="application/json" id="cv-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="app.js" integrity="${sri}" defer></script>
@@ -268,6 +310,75 @@ const html = `<!doctype html>
 </html>
 `;
 fs.writeFileSync(out + 'index.html', html);
+
+// --- one page per workshop: its brick model, its facts and its full abstract ---
+const pageData = JSON.stringify({ cities: D.cities, workshops: workshopsData }).replace(/</g, '\\u003c');
+D.workshops.forEach((w, i) => {
+  const prev = D.workshops[(i - 1 + D.workshops.length) % D.workshops.length], next = D.workshops[(i + 1) % D.workshops.length];
+  const note = D.modelNotes[w.model] ? D.modelNotes[w.model](w.count) : '';
+  const page = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="${csp}">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>${esc(w.short)}, a workshop by Rocco Acocella</title>
+<meta name="description" content="${esc(w.title)}. ${esc(w.when)}, ${esc(place(w.city))}.">
+<link rel="preload" href="fonts/libre-franklin-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>${css}</style>
+</head>
+<body id="top" class="wpage">
+<a class="skip" href="#abstract">Skip to the abstract</a>
+${nav('index.html')}
+
+<header class="w-hero">
+  <div class="w-paper">
+    <h1 class="w-name">${esc(w.short)}</h1>
+    <p class="w-title">${esc(w.title)}</p>
+    <dl class="w-facts">
+      <div><dt>When</dt><dd>${esc(w.when)}</dd></div>
+      <div><dt>Where</dt><dd>${esc(place(w.city))}</dd></div>
+      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>
+      <div><dt>Length</dt><dd>${esc(cap(w.length))}</dd></div>
+      <div><dt>Participants</dt><dd>${esc(w.audience)}</dd></div>
+    </dl>
+    <div class="actions"><a class="btn" href="#abstract">Read the abstract</a><a class="link" href="index.html#workshops">All workshops</a></div>
+  </div>
+  <figure class="stage w-stage">
+    <div class="modes" role="group" aria-label="Attention mode">
+      <button type="button" class="mode" data-mode="diverge" aria-pressed="false">Diverge</button>
+      <button type="button" class="mode" data-mode="converge" aria-pressed="true">Converge</button>
+    </div>
+    <canvas id="model" data-i="${i}" tabindex="0" role="img" aria-label="Three-dimensional brick model of the ${esc(w.short)} workshop. ${esc(note)} Drag or use the arrow keys to turn it."></canvas>
+    <figcaption>${esc(note)}</figcaption>
+  </figure>
+</header>
+
+<main>
+  <section id="abstract" class="w-abstract" aria-labelledby="abs-h">
+    <h2 id="abs-h">Abstract</h2>
+    <div class="w-text" data-rise>
+      <p class="w-lead">${esc(w.title)}</p>
+      <p>${esc(w.text)}</p>
+    </div>
+  </section>
+  <nav class="w-next" aria-label="Other workshops" data-rise>
+    <a href="${pageOf(prev)}"><span class="w-dir">Previous workshop</span><span class="w-to">${esc(prev.short)}</span></a>
+    <a href="${pageOf(next)}"><span class="w-dir">Next workshop</span><span class="w-to">${esc(next.short)}</span></a>
+  </nav>
+</main>
+
+${footer('index.html')}
+
+<script type="application/json" id="cv-data">${pageData}</script>
+<script src="app.js" integrity="${sri}" defer></script>
+</body>
+</html>
+`;
+  fs.writeFileSync(out + pageOf(w), page);
+});
 
 // Real HTTP headers for hosts that read a _headers file (Netlify, Cloudflare Pages). frame-ancestors only works as a header.
 const headers = `/*

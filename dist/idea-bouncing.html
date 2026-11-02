@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-ZaLtgpRr8qwZ8F5mmqgyg0SRCAYlNvvG1EsTKeazMy0='; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Idea Bouncing, a workshop by Rocco Acocella</title>
+<meta name="description" content="Idea Bouncing: Building the Future through Vibrational LEGOciation. 21 March 2026, Milan, Italy.">
+<link rel="preload" href="fonts/libre-franklin-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>/* latin-ext */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/libre-franklin-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/source-serif-4-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/source-serif-4-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/source-serif-4-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/source-serif-4-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+:root{
+  --bg:#F3F5FA; --surface:#E3E9F6; --ink:#0B1B4D; --muted:#3E4A73;
+  --field:#1537C7; --on-field:#FFFFFF; --on-field-soft:#D5DDFA; --accent:#FFD43B; --on-accent:#0B1B4D; --frame:#DCE3F7;
+  --m:clamp(16px,2.2vw,32px); --g:clamp(16px,1.7vw,24px);
+  --f-display:"Libre Franklin",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --f-text:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --s-small:1rem; --s-body:clamp(1.0625rem,1rem + .25vw,1.1875rem); --s-lead:clamp(1.25rem,1.1rem + .7vw,1.625rem);
+  --s-head:clamp(1.75rem,1.2rem + 1.4vw,2.25rem); --s-display:min(clamp(3.5rem,7vw,7rem),calc((41.6vw - 2 * var(--m)) / 5.7));
+  --ease:cubic-bezier(.2,.7,.1,1); --bar-h:56px; --soft:#6E7AA6;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0A1640;--surface:#102058;--ink:#F3F5FA;--muted:#C2CBEA;--frame:#132A73;--soft:#8C97C6}
+}
+:root[data-theme="dark"]{--bg:#0A1640;--surface:#102058;--ink:#F3F5FA;--muted:#C2CBEA;--frame:#132A73;--soft:#8C97C6}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--bar-h) + 16px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-text);font-size:var(--s-body);line-height:1.55;overflow-x:hidden}
+h1,h2,h3,p,ol,ul,figure{margin:0}
+ol,ul{padding:0;list-style:none}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:var(--m);top:12px;z-index:20;background:var(--accent);color:var(--on-accent);padding:12px 16px;font-family:var(--f-display);font-weight:700}
+.skip:not(:focus){clip-path:inset(50%);width:1px;height:1px;overflow:hidden;padding:0}
+h2,h3,.name,.w-name,.btn,.mode,.side-nav,.ws-name,.reveal,.al-letter,.row-title,.fact,.foot{font-family:var(--f-display)}
+h2{font-weight:800;font-size:var(--s-display);line-height:.92;letter-spacing:-.035em}
+h3{font-weight:700;font-size:var(--s-lead);line-height:1.15;letter-spacing:-.015em}
+.muted{color:var(--muted)}
+.strong{font-weight:600}
+.lede{font-size:var(--s-lead);line-height:1.35;max-width:34ch}
+
+/* ---------- lead: pinned name across hero and approach ---------- */
+.lead{position:relative}
+.corners{position:absolute;inset:0;z-index:5;pointer-events:none}
+.c1,.c2{pointer-events:auto}
+.name{position:sticky;top:0;height:100svh;font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em}
+.c1{position:absolute;left:var(--m);top:28px;color:var(--ink)}
+.c2{position:absolute;right:var(--m);bottom:28px;color:var(--on-field)}
+.hero,.approach{display:grid;grid-template-columns:7fr 5fr;min-height:100svh}
+.hero-paper{position:relative;padding:0 var(--m)}
+.hero-copy{position:absolute;left:calc(var(--m) + 14%);top:44%;max-width:36ch}
+.hero-line{font-size:var(--s-lead);line-height:1.35}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:36px}
+.btn{display:inline-flex;align-items:center;min-height:52px;padding:0 24px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:var(--s-small);text-decoration:none;transition:transform .18s var(--ease),background-color .18s}
+.btn:hover{background:#FFE170}
+.btn:active{transform:translateY(2px)}
+.link{font-weight:600;text-decoration-thickness:2px;text-underline-offset:5px}
+.link:hover{text-decoration-color:var(--field)}
+.side-nav{position:absolute;right:var(--m);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-size:var(--s-small);font-weight:600}
+.side-nav a{text-decoration:none;padding:4px 0;transition:transform .18s var(--ease)}
+.side-nav a:hover{transform:translateX(-4px);text-decoration:underline;text-underline-offset:4px}
+.stage{position:relative;background:var(--field);color:var(--on-field)}
+.stage canvas{position:absolute;left:0;right:0;top:96px;bottom:200px;width:100%;height:calc(100% - 296px);cursor:grab;touch-action:pan-y}
+.stage canvas:active{cursor:grabbing}
+.modes{position:absolute;top:28px;right:var(--m);display:flex;gap:0;z-index:2}
+.mode{min-height:44px;padding:0 18px;border:2px solid var(--on-field);background:transparent;color:var(--on-field);font-size:var(--s-small);font-weight:700;cursor:pointer;transition:transform .18s var(--ease)}
+.mode[aria-pressed="false"]:hover{background:var(--on-field-soft);color:var(--field)}
+.mode+.mode{border-left:0}
+.mode[aria-pressed="true"]{background:var(--on-field);color:var(--field)}
+.mode:active{transform:translateY(1px)}
+.stage figcaption{position:absolute;left:var(--m);top:36px;max-width:24ch;font-size:var(--s-small);line-height:1.4;color:var(--on-field)}
+
+.approach-paper{padding:20vh var(--m) 16vh calc(var(--m) + 14%);display:flex;flex-direction:column;justify-content:center;gap:32px}
+.approach-paper h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em}
+.statement{font-size:var(--s-head);line-height:1.22;max-width:28ch;font-weight:600}
+.approach-text{max-width:52ch}
+.approach-field{background:var(--field);color:var(--on-field);padding:18vh var(--m) 26vh;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.al-title{color:var(--on-field)}
+.alchemy{display:grid;gap:6px}
+.alchemy li{display:grid;grid-template-columns:1.1em 1fr;align-items:baseline;gap:18px}
+.al-letter{font-weight:800;font-size:var(--s-head);line-height:1;color:var(--accent)}
+.al-word{font-family:var(--f-display);font-weight:600;font-size:var(--s-lead)}
+
+/* ---------- the bar: appears after the opening, then stays ---------- */
+.bar{position:sticky;top:0;z-index:30;height:var(--bar-h);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 var(--m);background:var(--bg);font-family:var(--f-display);font-size:var(--s-small);font-weight:600}
+.bar a{text-decoration:none;color:var(--ink)}
+.bar-mark{font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.bar-links{display:flex;gap:clamp(16px,2.2vw,32px)}
+.bar-links a{padding:8px 0;text-decoration:underline 2px transparent;text-underline-offset:6px;transition:text-decoration-color .2s}
+.bar-links a:hover,.bar-links a:focus-visible{text-decoration-color:currentColor}
+
+/* ---------- teaching ---------- */
+main>section{padding:clamp(96px,14vw,200px) var(--m) 0}
+main>section#work{padding-top:clamp(72px,9vw,128px)}
+.work-head,.arch-head{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end;margin-bottom:clamp(48px,6vw,96px)}
+.work-head h2,.arch-head h2{grid-column:1/9}
+.work-head .lede,.arch-head .lede{grid-column:9/13}
+.roles{display:grid;gap:clamp(40px,4.5vw,72px)}
+.role{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.role-when{grid-column:1/3;font-weight:600;padding-top:4px}
+.role-head{grid-column:3/7}
+.role-head .muted{margin-top:6px}
+.role-points{grid-column:7/13;display:grid;gap:12px;max-width:62ch}
+.role-points li{padding-left:22px;position:relative}
+.role-points li::before{content:"";position:absolute;left:0;top:.62em;width:10px;height:10px;background:var(--field)}
+
+.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);background:var(--surface);margin-top:clamp(72px,9vw,128px);padding-top:clamp(72px,9vw,128px)!important;padding-bottom:clamp(72px,9vw,128px)!important}
+.proj-head{grid-column:1/7;display:flex;flex-direction:column;gap:36px}
+.skills{font-size:var(--s-lead);line-height:1.4;max-width:34ch}
+.proj-list{grid-column:8/13;display:grid;gap:36px;align-content:start;padding-top:12px}
+.proj p{margin-top:8px;max-width:48ch}
+
+/* ---------- places ---------- */
+.places{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);background:var(--field);color:var(--on-field);margin-top:clamp(72px,9vw,128px);padding-bottom:clamp(72px,9vw,128px)!important;row-gap:clamp(32px,4vw,56px)}
+.places-head{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end}
+.places-head h2{grid-column:1/8}
+.places-head .lede{grid-column:8/13}
+.places-map{grid-column:1/9;position:relative;aspect-ratio:5/4;background:#102FB0}
+#places-map{position:absolute;inset:0;width:100%;height:100%}
+.places-list{grid-column:9/13;display:grid;gap:22px;align-content:start}
+.country h3{font-size:var(--s-body);color:var(--accent);margin-bottom:6px}
+.country ul{display:grid;gap:2px}
+.country li{display:flex;justify-content:space-between;gap:16px;padding:4px 0;outline-offset:4px;cursor:default}
+.pl-city{font-family:var(--f-display);font-weight:600}
+.pl-n{color:var(--on-field-soft);font-size:var(--s-small);text-align:right}
+.country li.is-active .pl-city{color:var(--accent)}
+
+/* ---------- workshops: names pass a held frame ---------- */
+.ws-top{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end}
+.ws-top h2{grid-column:1/8}
+.ws-top .lede{grid-column:8/13}
+.ws-stage{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.held{grid-column:8/13;grid-row:1}
+.held-inner{position:sticky;top:calc(var(--bar-h) + 10svh);width:min(100%,60svh)}
+#frame-field{width:100%;aspect-ratio:1;display:block;background:var(--field)}
+.facts{display:flex;justify-content:space-between;gap:24px;padding-top:14px;min-height:4.2em}
+.fact{font-size:var(--s-small);font-weight:600;line-height:1.35}
+.fact-r{text-align:right}
+.ws-names{grid-column:1/8;grid-row:1;display:grid;gap:18svh;padding:34svh 0 40svh}
+.ws-name{display:inline-block;font-weight:800;font-size:var(--s-display);line-height:.92;letter-spacing:-.04em;text-decoration:none;color:var(--soft);transition:color .25s,transform .3s var(--ease)}
+.ws-name:hover,.ws-name:focus-visible{color:var(--ink)}
+.ws-name.is-current{color:var(--field);transform:translateX(12px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ws-name.is-current{color:var(--accent)}}
+
+.archive{padding-top:clamp(72px,9vw,128px)!important}
+.ws-list{display:grid;gap:clamp(40px,4vw,64px)}
+.ws{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);scroll-margin-top:24px}
+.ws-meta{grid-column:1/4}
+.ws-when{font-weight:600}
+.ws-body{grid-column:4/11;display:grid;gap:10px;max-width:70ch}
+.ws-facts{color:var(--muted)}
+.ws:target .ws-body h3{color:var(--field)}
+.more{font-family:var(--f-display);font-weight:700;font-size:var(--s-small);text-underline-offset:5px;text-decoration-thickness:2px}
+.more:hover{color:var(--field)}
+
+/* ---------- talks: sticky map, active list ---------- */
+.talks{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:start}
+.map-col{grid-column:1/6;position:sticky;top:calc(var(--bar-h) + 6vh)}
+.map-wrap{position:relative;aspect-ratio:4/5;background:var(--field)}
+#map{position:absolute;inset:0;width:100%;height:100%}
+#map-label{position:absolute;left:24px;top:20px;font-family:var(--f-display);font-weight:800;font-size:var(--s-head);color:var(--accent);letter-spacing:-.02em}
+.lists{grid-column:7/13}
+.lists h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
+.conf-h{margin-top:clamp(64px,8vw,112px)}
+.rows{display:grid;gap:4px}
+.row{padding:14px 0;cursor:default;outline-offset:6px}
+.row-top{display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+.row-title{font-weight:600;font-size:var(--s-body);line-height:1.3}
+.row-when{font-size:var(--s-small);color:var(--muted);white-space:nowrap}
+.row-sub{font-size:var(--s-small);color:var(--muted);margin-top:4px;max-width:58ch}
+.row.is-active .row-title{color:var(--field);font-weight:800}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .row.is-active .row-title{color:var(--accent)}}
+
+/* ---------- training ---------- */
+.training{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.training h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em;margin-bottom:24px}
+.train-a{grid-column:1/6}
+.train-b{grid-column:7/13}
+.pubs{display:grid;gap:28px}
+.pubs a{font-weight:600;text-underline-offset:4px}
+.edu{display:grid;gap:18px}
+.train-pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);margin-top:48px}
+.train-pair h3{margin-bottom:12px}
+.plain{display:grid;gap:8px}
+
+/* ---------- contact ---------- */
+.contact{background:var(--field);color:var(--on-field);margin-top:clamp(96px,12vw,160px);padding-top:clamp(72px,9vw,128px)!important;padding-bottom:var(--m)!important;display:grid;gap:clamp(48px,7vw,112px)}
+.contact-top{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);padding-top:12px}
+.contact-top h2{grid-column:1/9;color:var(--on-field)}
+.contact-top p{grid-column:9/13;font-size:var(--s-lead);line-height:1.35;align-self:end}
+.email{min-height:2em}
+.reveal,.email-link{display:inline-block;font-family:var(--f-display);font-weight:700;font-size:var(--s-display);line-height:.95;letter-spacing:-.04em;color:var(--on-field);background:none;border:0;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.12em;transition:color .2s}
+.reveal:hover,.email-link:hover{color:var(--accent)}
+.contact-foot{display:flex;justify-content:space-between;gap:24px;font-size:var(--s-small)}
+.contact-foot a{color:var(--on-field);text-underline-offset:4px}
+.nos{font-size:var(--s-lead)}
+
+/* ---------- a workshop's own page ---------- */
+.w-hero{display:grid;grid-template-columns:7fr 5fr;min-height:calc(100svh - var(--bar-h))}
+.w-paper{padding:clamp(40px,6vw,96px) var(--m) clamp(48px,6vw,96px);display:flex;flex-direction:column;justify-content:center;gap:32px}
+.w-name{font-weight:800;font-size:var(--s-display);line-height:.9;letter-spacing:-.04em;max-width:12ch}
+.w-title{font-size:var(--s-lead);line-height:1.35;max-width:36ch}
+.w-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px var(--g);margin:0;max-width:44rem}
+.w-facts dt{font-family:var(--f-display);font-weight:700;font-size:var(--s-small);color:var(--field)}
+.w-facts dd{margin:2px 0 0}
+.w-stage{min-height:520px}
+.w-stage canvas{top:96px;bottom:120px;height:calc(100% - 216px)}
+.w-stage figcaption{top:auto;bottom:28px;right:var(--m);max-width:40ch}
+.w-abstract{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.w-abstract h2{grid-column:1/5;font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em}
+.w-text{grid-column:5/12;display:grid;gap:24px;max-width:68ch}
+.w-lead{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25}
+.w-next{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);padding:clamp(96px,12vw,160px) var(--m) 0}
+.w-next a{display:grid;gap:8px;text-decoration:none;padding:28px;background:var(--surface);transition:background-color .2s,transform .2s var(--ease)}
+.w-next a:last-child{text-align:right}
+.w-next a:hover{background:var(--frame)}
+.w-next a:active{transform:translateY(2px)}
+.w-dir{font-size:var(--s-small);color:var(--muted)}
+.w-to{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);line-height:1.05;letter-spacing:-.02em}
+
+/* ---------- Rocco's own photographs (optional) ---------- */
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--g);margin-top:clamp(48px,6vw,96px);grid-column:1/-1}
+.photo img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
+.photo figcaption{font-size:var(--s-small);margin-top:10px}
+.contact .photo figcaption{color:var(--on-field)}
+
+/* ---------- footer ---------- */
+.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:24px var(--g);padding:clamp(48px,6vw,96px) var(--m) 30px;font-size:var(--s-small);color:var(--muted)}
+.foot-name{grid-column:1/-1;font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em;color:var(--ink);margin-bottom:clamp(24px,3vw,48px)}
+.foot nav{display:flex;gap:24px}
+.foot nav a{color:var(--ink);font-weight:600}
+.foot-r{text-align:right}
+
+/* ---------- a workshop page arrives: its words rise in turn (CSS only, settled within a second) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .w-paper>*{animation:rise .7s var(--ease) both}
+  .w-paper>:nth-child(2){animation-delay:.08s}
+  .w-paper>:nth-child(3){animation-delay:.16s}
+  .w-paper>:nth-child(4){animation-delay:.24s}
+}
+
+/* ---------- entrances: scroll-driven, no fill, so content is visible before and after, and without support ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    [data-rise]>*,.ws,.row,.pubs>li,.edu>li,.country{animation:rise linear none;animation-timeline:view();animation-range:entry 0% entry 55%}
+    [data-rise]>:nth-child(2){animation-range:entry 8% entry 63%}
+    [data-rise]>:nth-child(3){animation-range:entry 16% entry 71%}
+  }
+}
+
+/* ---------- tablet ---------- */
+@media (max-width:1000px){
+  .hero,.approach{grid-template-columns:11fr 9fr}
+  .hero-copy{left:var(--m);right:var(--m)}
+  .stage figcaption{top:96px;right:var(--m);max-width:none}
+  .stage canvas{top:150px;height:calc(100% - 350px)}
+  .side-nav{display:none}
+  .statement{font-size:var(--s-lead)}
+  .places-map{grid-column:1/13}
+  .places-list{grid-column:1/13;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .places-head h2,.places-head .lede{grid-column:1/13}
+  .w-hero{grid-template-columns:1fr 1fr}
+  .work-head h2,.arch-head h2{grid-column:1/7}
+  .work-head .lede,.arch-head .lede{grid-column:7/13}
+  .role-when{grid-column:1/13}
+  .role-head{grid-column:1/6}
+  .role-points{grid-column:6/13}
+  .proj-head{grid-column:1/13}
+  .proj-list{grid-column:1/13;grid-template-columns:1fr 1fr}
+  .ws-meta{grid-column:1/13;display:flex;gap:16px}
+  .ws-body{grid-column:1/13}
+  .ws-top h2,.ws-top .lede{grid-column:1/13}
+  .held{grid-column:7/13}
+  .ws-names{grid-column:1/7}
+  .ws-name{font-size:clamp(2.25rem,6.4vw,3.5rem)}
+}
+/* ---------- phone: its own composition ---------- */
+@media (max-width:700px){
+  :root{--s-display:13vw;--bar-h:48px}
+  .name{font-size:var(--s-display)}
+  .bar-mark{display:none}
+  .bar-links{flex:1;justify-content:space-between;gap:12px;white-space:nowrap}
+  .bar-opt{display:none}
+  .places{display:block}
+  .places-head{display:block}
+  .places-head .lede{margin-top:20px}
+  .places-map{margin:32px calc(-1 * var(--m)) 32px;aspect-ratio:1}
+  .places-list{grid-template-columns:1fr}
+  .w-hero{display:block}
+  .w-paper{padding:40px var(--m) 48px}
+  .w-facts{grid-template-columns:1fr}
+  .w-stage{height:80svh;min-height:0}
+  .w-stage canvas{top:84px;bottom:110px;height:calc(100% - 194px)}
+  .w-stage figcaption{bottom:20px}
+  .w-abstract,.w-next{display:block}
+  .w-text{margin-top:24px}
+  .w-next a{margin-bottom:12px}
+  .w-next a:last-child{text-align:left}
+  .corners{position:relative;padding:20px var(--m) 0}
+  .name{position:static;height:auto}
+  .c1,.c2{position:static;display:block;color:var(--ink)}
+  .c2{text-align:right}
+  .hero,.approach{display:block;min-height:0}
+  .hero-paper{padding:32px var(--m) 40px}
+  .hero-copy{position:static;max-width:none}
+  .stage{height:78svh}
+  .stage canvas{top:110px;bottom:24px;height:calc(100% - 134px)}
+  .stage figcaption{top:auto;bottom:16px;max-width:none;right:var(--m)}
+  .stage canvas{bottom:64px;height:calc(100% - 174px)}
+  .modes{left:var(--m);right:auto;top:20px}
+  .approach-paper{padding:96px var(--m) 64px}
+  .approach-field{padding:64px var(--m)}
+  .work-head,.arch-head,.role,.ws,.talks,.training,.contact-top{display:block}
+  .work-head .lede,.arch-head .lede{margin-top:20px}
+  .role-head{margin:8px 0 16px}
+  .proj-head,.proj-list{grid-column:1/13}
+  .proj-list{grid-template-columns:1fr;margin-top:48px}
+  .projects{display:block}
+  .ws-top{display:block}
+  .ws-top .lede{margin-top:20px}
+  .ws-stage{display:block;margin-top:40px}
+  .held{position:sticky;top:var(--bar-h);z-index:2;margin:0 calc(-1 * var(--m));background:var(--frame);padding:12px var(--m)}
+  .held-inner{position:static;width:auto;display:grid;grid-template-columns:38vw 1fr;gap:16px;align-items:center}
+  .facts{display:grid;gap:8px;padding:0;min-height:0}
+  .fact-r{text-align:left}
+  .ws-names{gap:14svh;padding:22svh 0 34svh}
+  .ws-name{font-size:var(--s-display);opacity:.45}
+  .ws-name.is-current{transform:none}
+  .ws-meta{margin-bottom:8px}
+  .map-col{position:sticky;top:var(--bar-h);z-index:2;margin:0 calc(-1 * var(--m)) 32px}
+  .map-wrap{aspect-ratio:auto;height:38svh}
+  .row-top{flex-direction:column;gap:2px}
+  .train-b{margin-top:72px}
+  .train-pair{grid-template-columns:1fr}
+  .contact{min-height:86svh}
+  .contact-top p{margin-top:24px}
+  .reveal,.email-link{font-size:10.5vw}
+  .statement{font-size:var(--s-lead)}
+  .contact-foot{flex-direction:column;gap:12px}
+  .foot{display:flex;flex-direction:column;gap:8px;padding-top:88px}
+  .foot nav{flex-wrap:wrap}
+  .foot-r{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body id="top" class="wpage">
+<a class="skip" href="#abstract">Skip to the abstract</a>
+<nav class="bar" aria-label="Main">
+  <a class="bar-mark" href="index.html#top">Rocco Acocella</a>
+  <div class="bar-links"><a class="bar-opt" href="index.html#work">Teaching</a><a href="index.html#places">Places</a><a href="index.html#workshops">Workshops</a><a href="index.html#talks">Talks</a><a class="bar-opt" href="index.html#training">Training</a><a href="index.html#contact">Contact</a></div>
+</nav>
+
+<header class="w-hero">
+  <div class="w-paper">
+    <h1 class="w-name">Idea Bouncing</h1>
+    <p class="w-title">Idea Bouncing: Building the Future through Vibrational LEGOciation</p>
+    <dl class="w-facts">
+      <div><dt>When</dt><dd>21 March 2026</dd></div>
+      <div><dt>Where</dt><dd>Milan, Italy</dd></div>
+      <div><dt>Hosted by</dt><dd>MITA 2026, American School of Milan</dd></div>
+      <div><dt>Length</dt><dd>1 hour</dd></div>
+      <div><dt>Participants</dt><dd>14 teachers</dd></div>
+    </dl>
+    <div class="actions"><a class="btn" href="#abstract">Read the abstract</a><a class="link" href="index.html#workshops">All workshops</a></div>
+  </div>
+  <figure class="stage w-stage">
+    <div class="modes" role="group" aria-label="Attention mode">
+      <button type="button" class="mode" data-mode="diverge" aria-pressed="false">Diverge</button>
+      <button type="button" class="mode" data-mode="converge" aria-pressed="true">Converge</button>
+    </div>
+    <canvas id="model" data-i="3" tabindex="0" role="img" aria-label="Three-dimensional brick model of the Idea Bouncing workshop. 14 bricks, one per teacher: two speakers, and the ideas bouncing between them built into an arch. Drag or use the arrow keys to turn it."></canvas>
+    <figcaption>14 bricks, one per teacher: two speakers, and the ideas bouncing between them built into an arch.</figcaption>
+  </figure>
+</header>
+
+<main>
+  <section id="abstract" class="w-abstract" aria-labelledby="abs-h">
+    <h2 id="abs-h">Abstract</h2>
+    <div class="w-text" data-rise>
+      <p class="w-lead">Idea Bouncing: Building the Future through Vibrational LEGOciation</p>
+      <p>Language, communication and creative cognition in practice. Linguistic interaction and collaborative problem-solving, with deliberate attention-shifting, turned abstract ideas into built, tangible outcomes, showing how dialogue mediates creativity and learning design.</p>
+    </div>
+  </section>
+  <nav class="w-next" aria-label="Other workshops" data-rise>
+    <a href="alternating-attention.html"><span class="w-dir">Previous workshop</span><span class="w-to">Alternating Attention</span></a>
+    <a href="productive-friction.html"><span class="w-dir">Next workshop</span><span class="w-to">Productive Friction</span></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
+  <p>Curriculum vitae, 2026</p>
+  <nav aria-label="Footer"><a href="index.html#work">Teaching</a><a href="index.html#places">Places</a><a href="index.html#workshops">Workshops</a><a href="index.html#talks">Talks</a><a href="index.html#contact">Contact</a></nav>
+  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted. Map: Natural Earth.</p>
+</footer>
+
+<script type="application/json" id="cv-data">{"cities":{"milan":{"name":"Milan","country":"Italy","lat":45.46,"lon":9.19,"lab":"r"},"chieri":{"name":"Chieri (Turin)","country":"Italy","lat":45.01,"lon":7.82,"lab":"l"},"rome":{"name":"Rome","country":"Italy","lat":41.9,"lon":12.5,"lab":"r"},"basel":{"name":"Basel","country":"Switzerland","lat":47.56,"lon":7.59,"lab":"l"},"vienna":{"name":"Vienna","country":"Austria","lat":48.21,"lon":16.37,"lab":"r"},"brighton":{"name":"Brighton","country":"United Kingdom","lat":50.82,"lon":-0.14,"lab":"b"},"cambridge":{"name":"Cambridge","country":"United Kingdom","lat":52.21,"lon":0.12,"lab":"r"},"maynooth":{"name":"Maynooth","country":"Ireland","lat":53.38,"lon":-6.59,"lab":"l"},"dublin":{"name":"Dublin","country":"Ireland","lat":53.35,"lon":-6.26,"lab":"r"},"brussels":{"name":"Brussels","country":"Belgium","lat":50.85,"lon":4.35,"lab":"r"},"reykjavik":{"name":"Reykjavík","country":"Iceland","lat":64.15,"lon":-21.94,"lab":"r"},"athens":{"name":"Athens","country":"Greece","lat":37.98,"lon":23.73,"lab":"r"},"sharm":{"name":"Sharm El-Sheikh","country":"Egypt","lat":27.92,"lon":34.33,"lab":"l"},"malta":{"name":"Msida","country":"Malta","lat":35.9,"lon":14.48,"lab":"r"},"venice":{"name":"Venice","country":"Italy","lat":45.44,"lon":12.33,"lab":"r"},"como":{"name":"Como","country":"Italy","lat":45.81,"lon":9.09,"lab":"l"},"online":{"name":"Online","country":"","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","slug":"multilingualism","model":"ring","count":8,"when":"23 October 2026","audience":"8 language teachers","place":"Vienna, Austria"},{"id":"w-chromasoma","slug":"chromasoma","model":"spiral","count":25,"when":"19 June 2026","audience":"25 attendees","place":"Online"},{"id":"w-turin","slug":"alternating-attention","model":"deck","count":48,"when":"8 May 2026","audience":"48 IB teachers","place":"Chieri (Turin), Italy"},{"id":"w-mita","slug":"idea-bouncing","model":"arch","count":14,"when":"21 March 2026","audience":"14 teachers","place":"Milan, Italy"},{"id":"w-friction","slug":"productive-friction","model":"hubs","count":30,"when":"19 January 2026","audience":"30 participants","place":"Online"},{"id":"w-csm26","slug":"legociation","model":"arch","count":25,"when":"7 January 2026","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-basel","slug":"idea-to-creation","model":"creation","count":15,"when":"24 October 2025","audience":"15 teachers","place":"Basel, Switzerland"},{"id":"w-rome","slug":"thinker","model":"profile","count":70,"when":"6 June 2025","audience":"70 IB teachers","place":"Rome, Italy"},{"id":"w-ai","slug":"raising-awareness","model":"stairs","count":25,"when":"January to February 2025","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-journey","slug":"thinking-journey","model":"stations","count":80,"when":"October 2024","audience":"80 MYP students","place":"Milan, Italy"},{"id":"w-iceland24","slug":"creative-mindset","model":"growth","count":14,"when":"October 2024","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"},{"id":"w-rights","slug":"human-rights-and-the-brain","model":"bridge","count":14,"when":"February to April 2024","audience":"14 MYP3 students","place":"Milan, Italy"},{"id":"w-iceland23","slug":"mindset-journey","model":"path","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"}]}</script>
+<script src="app.js" integrity="sha384-cAOPhozjwFo4QxwIAlnCWEUX4wsEcNwLJW5CGKu/1jUk5lgUzMaMVSW+hV7tB0YV" defer></script>
+</body>
+</html>

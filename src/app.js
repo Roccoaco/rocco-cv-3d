@@ -28,6 +28,131 @@
   }
 
   var BRICK_COLORS = ['#FFFFFF', '#FFD43B', '#9DB1F5', '#0B1B4D'];
+  var W = '#FFFFFF', Y = '#FFD43B', L = '#9DB1F5', N = '#0B1B4D', O = '#FF9F1C', P = '#C9D4FF';
+
+  /* ---------- one brick model per workshop, built from what the workshop did (n = seats) ---------- */
+  var TAU = Math.PI * 2;
+  function towerRing(n, k, radius, colours, perLayer) {
+    // k towers on a circle, bricks shared out between them, perLayer bricks per layer (1 or 2, crossed)
+    var out = [], each = [];
+    for (var t = 0; t < k; t++) each.push(Math.floor(n / k) + (t < n % k ? 1 : 0));
+    each.forEach(function (m, t) {
+      var a = t / k * TAU, x = Math.cos(a) * radius, z = Math.sin(a) * radius;
+      for (var i = 0; i < m; i++) {
+        var layer = perLayer === 2 ? Math.floor(i / 2) : i, side = perLayer === 2 ? (i % 2 ? 0.5 : -0.5) : 0;
+        var rot = a + Math.PI / 2 + (perLayer === 2 && layer % 2 ? Math.PI / 2 : 0);
+        out.push({ x: x + Math.cos(rot + Math.PI / 2) * side, y: layer, z: z + Math.sin(rot + Math.PI / 2) * side, r: rot, c: colours(t, i) });
+      }
+    });
+    return out;
+  }
+  var MODELS = {
+    // Multilingualism: one brick per teacher, a ring of voices around a shared centre, a colour for each
+    ring: function (n) {
+      var cols = [Y, W, L, O, P, W, Y, L], per = Math.max(6, Math.min(10, n)), out = [];
+      for (var i = 0; i < n; i++) {
+        var layer = Math.floor(i / per), a = (i % per) / per * TAU + layer * Math.PI / per, R = per * 2.15 / TAU;
+        out.push({ x: Math.cos(a) * R, y: layer, z: Math.sin(a) * R, r: a + Math.PI / 2, c: cols[i % cols.length] });
+      }
+      return out;
+    },
+    // Chromasoma: colour as a shared field; a double helix that runs through the palette
+    spiral: function (n) {
+      var cols = [N, L, W, Y, O], out = [];
+      for (var i = 0; i < n; i++) {
+        var layer = Math.floor(i / 2), a = layer * 0.55 + (i % 2) * Math.PI;
+        out.push({ x: Math.cos(a) * 3, y: layer, z: Math.sin(a) * 3, r: a + Math.PI / 2, c: cols[Math.floor(layer / 2.6) % cols.length] });
+      }
+      return out;
+    },
+    // Alternating Attention: the card deck; one pile fanned out (divergent), one squared up (convergent)
+    deck: function (n) {
+      var out = [], half = Math.ceil(n / 2);
+      for (var i = 0; i < n; i++) {
+        var fan = i < half, j = fan ? i : i - half, layer = Math.floor(j / 2), side = j % 2 ? 0.5 : -0.5;
+        var r = fan ? layer * 0.32 : 0, cx = fan ? -3.6 : 3.6;
+        out.push({ x: cx - Math.sin(r) * side, y: layer, z: Math.cos(r) * side, r: r, c: fan ? (layer % 2 ? Y : W) : (layer % 2 ? L : W) });
+      }
+      return out;
+    },
+    // Idea Bouncing / LEGOciation: two speakers, and the ideas that bounce between them as an arch
+    arch: function (n) {
+      var out = [], p = Math.max(2, Math.floor(n * 0.3)), m = n - 2 * p, S = Math.max(3, m * 2 / Math.PI * 0.95);
+      for (var i = 0; i < p; i++) { out.push({ x: -S, y: i, z: 0, r: Math.PI / 2, c: N }); out.push({ x: S, y: i, z: 0, r: Math.PI / 2, c: N }); }
+      for (var j = 0; j < m; j++) {
+        var t = (j + 0.5) / m * Math.PI;
+        out.push({ x: -Math.cos(t) * S, y: p + Math.sin(t) * S / 1.2, z: 0, r: 0, c: j % 2 ? Y : W });
+      }
+      return out;
+    },
+    // Productive Friction: the conference ends and the network lives on in small local hubs
+    hubs: function (n) {
+      var k = Math.max(3, Math.round(n / 6)), cols = [Y, W, L, W, Y, L, W];
+      return towerRing(n, k, 5.2, function (t) { return cols[t % cols.length]; }, 2);
+    },
+    // From Idea to Creation: loose ideas on one side, a purposeful build on the other
+    creation: function (n) {
+      var R = rng(n * 13 + 5), out = [], loose = Math.max(3, Math.round(n * 0.35)), built = n - loose, w = 1;
+      while (w * (w + 1) / 2 < built) w++;
+      for (var i = 0; i < loose; i++) out.push({ x: -9 + R() * 5, y: 0, z: -3 + R() * 6, r: R() * TAU, c: i % 2 ? L : W });
+      var left = built, layer = 0;
+      for (var row = w; row > 0 && left > 0; row--, layer++) {
+        for (var b = 0; b < row && left > 0; b++, left--) out.push({ x: 3 + (b - (row - 1) / 2) * 2.04, y: layer, z: 0, r: 0, c: layer % 2 ? Y : W });
+      }
+      return out;
+    },
+    // Thinker: the ten attributes of the IB Learner Profile as ten towers; Thinker in yellow
+    profile: function (n) {
+      return towerRing(n, 10, 6.2, function (t) { return t === 0 ? Y : (t % 2 ? W : L); }, 1);
+    },
+    // R(AI)sing Awareness: prompt frameworks as steps that raise the work one level at a time
+    stairs: function (n) {
+      var out = [], col = 0, left = n;
+      while (left > 0) {
+        for (var h = 0; h <= col && left > 0; h++) for (var d = 0; d < 2 && left > 0; d++, left--) {
+          out.push({ x: col * 2.04, y: h, z: d ? 0.52 : -0.52, r: 0, c: h === col ? Y : (h % 2 ? L : W) });
+        }
+        col++;
+      }
+      return out;
+    },
+    // The Thinking Journey: nine thematic stations of LEGOciation, visited in turn
+    stations: function (n) {
+      var cols = [Y, W, L, W, Y, L, W, L, Y];
+      return towerRing(n, 9, 6.4, function (t) { return cols[t]; }, 2);
+    },
+    // Creative Mindset: growth; every layer wider than the one below
+    growth: function (n) {
+      var out = [], layer = 0, left = n, cols = [N, L, W, Y, Y];
+      while (left > 0) {
+        var row = Math.min(layer + 1, left);
+        for (var b = 0; b < row; b++, left--) out.push({ x: (b - (row - 1) / 2) * 2.04, y: layer, z: 0, r: 0, c: cols[Math.min(layer, cols.length - 1)] });
+        layer++;
+      }
+      return out;
+    },
+    // Human Rights & the Brain: a bridge between past (navy) and future (yellow)
+    bridge: function (n) {
+      var out = [], pier = Math.max(2, Math.floor(n * 0.2)), deck = n - 2 * pier, span = deck * 2.04;
+      for (var i = 0; i < pier; i++) { out.push({ x: -span / 2 + 3, y: i, z: 0, r: Math.PI / 2, c: N }); out.push({ x: span / 2 - 3, y: i, z: 0, r: Math.PI / 2, c: L }); }
+      for (var j = 0; j < deck; j++) { var t = j / Math.max(1, deck - 1); out.push({ x: -span / 2 + 1 + j * 2.04, y: pier, z: 0, r: 0, c: t < 0.34 ? N : t < 0.67 ? W : Y }); }
+      return out;
+    },
+    // The Creative Mindset Journey: a winding road that climbs as it goes
+    path: function (n) {
+      var out = [];
+      for (var i = 0; i < n; i++) {
+        var t = n > 1 ? i / (n - 1) : 0, x = (t - 0.5) * n * 1.5, z = Math.sin(t * TAU) * 3.2;
+        var dz = Math.cos(t * TAU) * 3.2 * TAU / (n * 1.5);
+        out.push({ x: x, y: Math.floor(i / 4), z: z, r: Math.atan2(dz, 1), c: t < 0.5 ? (i % 2 ? L : W) : (i % 2 ? Y : W) });
+      }
+      return out;
+    }
+  };
+  // long models are seen side-on, round ones from the corner: [yaw, pitch, zoom]
+  var VIEW = { arch: [0.22, 0.42, 1.1], bridge: [0.2, 0.42, 1.15], path: [0.3, 0.55, 1.15], deck: [0.3, 0.45, 1], creation: [0.35, 0.5, 1.15], spiral: [0.6, 0.45, 1.15], growth: [0.45, 0.45, 1.05] };
+  function viewFor(w) { return VIEW[w.model] || [0.7, 0.55, 0.95]; }
+  function modelFor(w, i) { return (MODELS[w.model] || MODELS.ring)(Math.max(1, w.count || 1)); }
 
   /* ---------- the brick renderer (canvas 2D, own projection) ---------- */
   function BrickField(canvas, opts) {
@@ -65,25 +190,28 @@
     }
   }
   BrickField.prototype.set = function (groups, seed) {
-    // groups: [{n, color}] stacked bottom to top
-    var R = rng(seed || 7); var bricks = []; var y = 0; var total = 0;
-    groups.forEach(function (g) { total += g.n; });
-    var spread = 7 + Math.cbrt(total) * 1.6;
-    groups.forEach(function (g, gi) {
-      var pos = slab(g.n);
-      pos.forEach(function (p) {
-        var th = R() * Math.PI * 2, ph = Math.acos(2 * R() - 1), rr = spread * Math.cbrt(R());
-        bricks.push({
-          cx: p[0], cy: y, cz: p[1],
-          dx: rr * Math.sin(ph) * Math.cos(th), dy: rr * Math.cos(ph) * 0.8 + (groups.length * 1.2) / 2, dz: rr * Math.sin(ph) * Math.sin(th),
-          dr: R() * Math.PI * 2, delay: R() * 0.35, col: hexToRgb(g.color), g: gi
-        });
+    // groups: [{n, color}] stacked bottom to top, one storey each
+    var list = [];
+    groups.forEach(function (g, gi) { slab(g.n).forEach(function (p) { list.push({ x: p[0], y: gi, z: p[1], r: 0, c: g.color }); }); });
+    this.setBricks(list, seed);
+  };
+  // list: [{x, y (layer), z, r (turn about the vertical), c}] in brick units (a brick is 2 x 1, a layer 1.2 high)
+  BrickField.prototype.setBricks = function (list, seed) {
+    var R = rng(seed || 7), bricks = [], minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, top = 0;
+    list.forEach(function (b) { minX = Math.min(minX, b.x); maxX = Math.max(maxX, b.x); minZ = Math.min(minZ, b.z); maxZ = Math.max(maxZ, b.z); top = Math.max(top, b.y + 1); });
+    var mx = (minX + maxX) / 2, mz = (minZ + maxZ) / 2, height = top * 1.2;
+    var spread = 7 + Math.cbrt(list.length) * 1.6;
+    list.forEach(function (b) {
+      var th = R() * Math.PI * 2, ph = Math.acos(2 * R() - 1), rr = spread * Math.cbrt(R());
+      bricks.push({
+        cx: b.x - mx, cy: b.y * 1.2, cz: b.z - mz, tr: b.r || 0,
+        dx: rr * Math.sin(ph) * Math.cos(th), dy: rr * Math.cos(ph) * 0.8 + height / 2, dz: rr * Math.sin(ph) * Math.sin(th),
+        dr: R() * Math.PI * 2, delay: R() * 0.35, col: hexToRgb(b.c)
       });
-      y += 1.2;
     });
-    this.height = y; this.bricks = bricks; this.dirty = true;
-    var maxR = 0; bricks.forEach(function (b) { maxR = Math.max(maxR, Math.abs(b.cx) + 1, Math.abs(b.cz) + 1); });
-    this.radius = Math.max(maxR, y * 0.62, 4);
+    this.height = height; this.bricks = bricks; this.dirty = true;
+    var maxR = 0; bricks.forEach(function (b) { maxR = Math.max(maxR, Math.hypot(b.cx, b.cz) + 1.2); });
+    this.radius = Math.max(maxR, height * 0.62, 4);
   };
   BrickField.prototype.go = function (mode) {
     if (mode === this.mode) return;
@@ -123,7 +251,7 @@
       var k = Math.max(0, Math.min(1, (T * 1.35) - b.delay));
       k = ease(k);
       var x = b.dx + (b.cx - b.dx) * k, y = b.dy + (b.cy - b.dy) * k, z = b.dz + (b.cz - b.dz) * k;
-      var r = b.dr * (1 - k);
+      var r = b.tr + b.dr * (1 - k);
       var pc = proj(x, y, z);
       list.push({ b: b, x: x, y: y, z: z, r: r, d: pc[2] - y * 0.02 });
     }
@@ -194,7 +322,7 @@
       var cap = document.getElementById('field-state');
       if (cap) cap.textContent = m === 'converge'
         ? 'Converged: each storey is one workshop, oldest at the base.'
-        : 'Diverged: 349 bricks, one for every seat in eleven workshops.';
+        : 'Diverged: ' + DATA.seats + ' bricks, one for every seat in ' + DATA.countedWords + ' workshops.';
     }
     btns.forEach(function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); });
     setMode('diverge');
@@ -214,10 +342,10 @@
       var w = DATA.workshops[i];
       var n = w.count || 0;
       // without a headcount, show the empty baseplate as a single white plate
-      var FRAME_COLORS = ['#1537C7', '#FFC21A', '#0B1B4D'];
-      ff.set([{ n: n || 1, color: n ? FRAME_COLORS[i % 3] : '#9DB1F5' }], 100 + i * 37);
+      var v = viewFor(w); ff.yaw = v[0]; ff.pitch = v[1]; ff.zoom = v[2] * 0.95;
+      ff.setBricks(modelFor(w, i), 100 + i * 37);
       ff.t = 0; ff.mode = 'diverge'; ff.go('converge');
-      if (facts.left) facts.left.textContent = w.venueShort;
+      if (facts.left) facts.left.textContent = w.place;
       if (facts.right) facts.right.textContent = w.when + ', ' + w.audience.toLowerCase();
       names.forEach(function (el, k) { el.classList.toggle('is-current', k === i); });
     }
@@ -231,30 +359,76 @@
     names.forEach(function (n) { n.addEventListener('focus', function () { show(+n.getAttribute('data-i')); }); });
   }
 
+  /* ---------- maps: Natural Earth land, equirectangular with a cos(latitude) squeeze ---------- */
+  function mapFrame(canvas, box, pad) {
+    var r = canvas.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, r.width * dpr); canvas.height = Math.max(1, r.height * dpr);
+    var ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+    var kx = Math.cos((box[1] + box[3]) / 2 * Math.PI / 180);
+    var s = Math.min((r.width - pad * 2) / ((box[2] - box[0]) * kx), (r.height - pad * 2) / (box[3] - box[1]));
+    var offx = (r.width - (box[2] - box[0]) * kx * s) / 2, offy = (r.height - (box[3] - box[1]) * s) / 2;
+    return { ctx: ctx, w: r.width, h: r.height, P: function (lon, lat) { return [offx + (lon - box[0]) * kx * s, offy + (box[3] - lat) * s]; } };
+  }
+  function drawLand(f, fill) {
+    var land = DATA.land; if (!land) return;
+    f.ctx.fillStyle = fill; f.ctx.beginPath();
+    for (var i = 0; i < land.length; i++) {
+      var r = land[i];
+      for (var j = 0; j < r.length; j += 2) { var p = f.P(r[j], r[j + 1]); if (j) f.ctx.lineTo(p[0], p[1]); else f.ctx.moveTo(p[0], p[1]); }
+      f.ctx.closePath();
+    }
+    f.ctx.fill('evenodd');
+  }
+  var cities = DATA.cities;
+  function cityLabel(k) { return cities[k].country ? cities[k].name + ', ' + cities[k].country : cities[k].name; }
+
+  /* ---------- places: every city where Rocco has given a talk or a workshop ---------- */
+  var placesCanvas = document.getElementById('places-map');
+  if (placesCanvas && placesCanvas.getContext && DATA.places) {
+    var hot = null;
+    var placeItems = Array.prototype.slice.call(document.querySelectorAll('[data-place]'));
+    function drawPlaces() {
+      var f = mapFrame(placesCanvas, [-26, 37.5, 25, 66.5], 24), ctx = f.ctx;
+      drawLand(f, 'rgba(255,255,255,0.16)');
+      var small = f.w < 560;
+      DATA.places.forEach(function (pl) {
+        var c = cities[pl.city], p = f.P(c.lon, c.lat), on = pl.city === hot;
+        var rad = (small ? 3 : 4) + Math.sqrt(pl.n) * (small ? 2.2 : 3.2);
+        ctx.fillStyle = on ? '#FFFFFF' : '#FFD43B';
+        ctx.beginPath(); ctx.arc(p[0], p[1], rad + (on ? 3 : 0), 0, TAU); ctx.fill();
+        ctx.fillStyle = '#0B1B4D'; ctx.font = '700 ' + (small ? 11 : 13) + 'px "Libre Franklin", system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(pl.n), p[0], p[1] + 0.5);
+        if (small && !on && pl.n < 2 && c.lab === 'l') return;
+        ctx.fillStyle = '#FFFFFF'; ctx.font = (on ? '800 ' : '600 ') + (small ? 12 : 15) + 'px "Libre Franklin", system-ui, sans-serif';
+        var gap = rad + 7;
+        if (c.lab === 'l') { ctx.textAlign = 'right'; ctx.fillText(c.name, p[0] - gap, p[1]); }
+        else if (c.lab === 'b') { ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(c.name, p[0], p[1] + gap - 3); }
+        else { ctx.textAlign = 'left'; ctx.fillText(c.name, p[0] + gap, p[1]); }
+      });
+    }
+    drawPlaces(); window.addEventListener('resize', drawPlaces);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawPlaces);
+    placeItems.forEach(function (li) {
+      function on() { hot = li.getAttribute('data-place'); placeItems.forEach(function (o) { o.classList.toggle('is-active', o === li); }); drawPlaces(); }
+      function off() { hot = null; li.classList.remove('is-active'); drawPlaces(); }
+      li.addEventListener('mouseenter', on); li.addEventListener('focus', on);
+      li.addEventListener('mouseleave', off); li.addEventListener('blur', off);
+    });
+  }
+
   /* ---------- talks and conferences: the travel map ---------- */
   var map = document.getElementById('map');
   if (map && map.getContext) {
-    var mctx = map.getContext('2d');
-    var cities = DATA.cities; var active = 'milan';
+    var active = 'milan';
     var mapLabel = document.getElementById('map-label');
     function drawMap() {
-      var r = map.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
-      map.width = r.width * dpr; map.height = r.height * dpr;
-      mctx.setTransform(dpr, 0, 0, dpr, 0, 0); mctx.clearRect(0, 0, r.width, r.height);
-      var lon0 = -26, lon1 = 38, lat0 = 25, lat1 = 67, pad = 28;
-      var kx = Math.cos(48 * Math.PI / 180);
-      var sx = (r.width - pad * 2) / ((lon1 - lon0) * kx), syy = (r.height - pad * 2) / (lat1 - lat0);
-      var s = Math.min(sx, syy);
-      var offx = (r.width - (lon1 - lon0) * kx * s) / 2, offy = (r.height - (lat1 - lat0) * s) / 2;
-      function P(c) { return [offx + (c.lon - lon0) * kx * s, offy + (lat1 - c.lat) * s]; }
-      // graticule of dots, drawn as a field of small points
-      mctx.fillStyle = 'rgba(255,255,255,0.18)';
-      for (var lo = -25; lo <= 37; lo += 2) for (var la = 26; la <= 66; la += 2) { var p = P({ lon: lo, lat: la }); mctx.fillRect(p[0] - 0.75, p[1] - 0.75, 1.5, 1.5); }
-      var home = P(cities.milan);
+      var f = mapFrame(map, [-26, 25, 38, 67], 28), mctx = f.ctx;
+      drawLand(f, 'rgba(255,255,255,0.16)');
+      var home = f.P(cities.milan.lon, cities.milan.lat);
       Object.keys(cities).forEach(function (k) {
         var c = cities[k]; if (c.lat == null || k === 'milan') return;
-        var p = P(c);
-        mctx.strokeStyle = k === active ? '#FFD43B' : 'rgba(255,255,255,0.35)';
+        var p = f.P(c.lon, c.lat);
+        mctx.strokeStyle = k === active ? '#FFD43B' : 'rgba(255,255,255,0.4)';
         mctx.lineWidth = k === active ? 3 : 1.25;
         mctx.beginPath(); mctx.moveTo(home[0], home[1]);
         var mx = (home[0] + p[0]) / 2, my = (home[1] + p[1]) / 2 - Math.hypot(p[0] - home[0], p[1] - home[1]) * 0.22;
@@ -262,11 +436,11 @@
       });
       Object.keys(cities).forEach(function (k) {
         var c = cities[k]; if (c.lat == null) return;
-        var p = P(c), on = k === active || (active === 'milan' && k === 'milan');
+        var p = f.P(c.lon, c.lat), on = k === active || (active === 'milan' && k === 'milan');
         mctx.fillStyle = on ? '#FFD43B' : '#FFFFFF';
-        mctx.beginPath(); mctx.arc(p[0], p[1], on ? 9 : (k === 'milan' ? 6 : 4.5), 0, Math.PI * 2); mctx.fill();
+        mctx.beginPath(); mctx.arc(p[0], p[1], on ? 9 : (k === 'milan' ? 6 : 4.5), 0, TAU); mctx.fill();
       });
-      if (mapLabel) mapLabel.textContent = active === 'online' ? 'Online' : cities[active].name;
+      if (mapLabel) mapLabel.textContent = cityLabel(active);
     }
     drawMap(); window.addEventListener('resize', drawMap);
     var rows = Array.prototype.slice.call(document.querySelectorAll('[data-city]'));
@@ -284,9 +458,24 @@
     }
   }
 
+  /* ---------- a workshop's own page: its model, large ---------- */
+  var modelCanvas = document.getElementById('model');
+  if (modelCanvas && modelCanvas.getContext) {
+    var wi = +modelCanvas.getAttribute('data-i'), ww = DATA.workshops[wi];
+    var mv = viewFor(ww);
+    var mf = new BrickField(modelCanvas, { yaw: mv[0], pitch: mv[1], zoom: mv[2], animDur: 1800 });
+    mf.setBricks(modelFor(ww, wi), 300 + wi * 41);
+    fields.push(mf);
+    var mbtns = document.querySelectorAll('[data-mode]');
+    function setM(m) { mf.go(m); mbtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); }); }
+    mbtns.forEach(function (b) { b.addEventListener('click', function () { setM(b.getAttribute('data-mode')); }); });
+    setM('diverge');
+    if (!reduce) setTimeout(function () { setM('converge'); }, 900); else setM('converge');
+  }
+
   /* ---------- the email address is stored encrypted and decrypted on request ---------- */
   var reveal = document.getElementById('reveal');
-  if (reveal) {
+  if (reveal && DATA.lock) {
     reveal.addEventListener('click', function () {
       var box = document.getElementById('email');
       function b64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
