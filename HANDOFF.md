@@ -49,10 +49,16 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 - One page per workshop (`dist/<slug>.html`): its own 3D brick model built from the workshop's idea (one brick per seat; models in `MODELS` in `app.js`, captions in `modelNotes` in `data.mjs`), facts, abstract, previous/next. The main page's held frame shows the same models.
 - Display size bounded so ACOCELLA always fits the cobalt column; inactive workshop names are a solid, readable blue-grey instead of faded.
 
+## Done in session 4
+- Talk: "Layers of Complexity" is the title, C.R.E.A.T.E. the event.
+- LinkedIn link under the name in the footer (and in Contact); the cookies/map line removed from the footer.
+- Full abstracts on each workshop page; Chromasoma lists Barbara Doran as co-host and 1.5 hours.
+- The workshop frame is scrubbed by the scroll: the model assembles as its name nears the middle of the screen and scatters as it leaves.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
-2. **Full abstracts**: the CV PDF is not in the repo. The workshop pages use the texts in `data.mjs`; paste the PDF's full abstracts into each workshop's `text`.
-3. **LinkedIn URL**: set `linkedin` in `src/data.mjs` (not in the PDF).
+2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.
+3. **LinkedIn**: done (footer and contact).
 4. **Deploy**: connect the repo to Netlify (it reads `netlify.toml`) or Cloudflare Pages (build `node src/build.mjs`, output `dist`). Then check the headers at securityheaders.com. Remove `noindex` (meta + `X-Robots-Tag`) when Rocco wants the page found.
 
 ## CV inconsistencies to confirm with Rocco

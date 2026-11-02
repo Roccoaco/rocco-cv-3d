@@ -123,9 +123,8 @@ const nav = (prefix) => `<nav class="bar" aria-label="Main">
 </nav>`;
 const footer = (prefix) => `<footer class="foot">
   <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
-  <p>Curriculum vitae, ${new Date().getFullYear()}</p>
+  <p class="foot-li">${D.linkedin ? ext(esc(D.linkedin), 'LinkedIn') : 'On LinkedIn as Rocco Acocella'}</p>
   <nav aria-label="Footer"><a href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a href="${prefix}#contact">Contact</a></nav>
-  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted. Map: Natural Earth.</p>
 </footer>`;
 
 const pubs = D.publications.map((p) => `<li><p>${esc(p.cite)}</p>${p.href ? `<p>${ext(p.href, p.link)}</p>` : ''}</li>`).join('');
@@ -340,7 +339,8 @@ ${nav('index.html')}
     <dl class="w-facts">
       <div><dt>When</dt><dd>${esc(w.when)}</dd></div>
       <div><dt>Where</dt><dd>${esc(place(w.city))}</dd></div>
-      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>
+      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>${w.cohost ? `
+      <div><dt>Co-host</dt><dd>${esc(w.cohost)}</dd></div>` : ''}
       <div><dt>Length</dt><dd>${esc(cap(w.length))}</dd></div>
       <div><dt>Participants</dt><dd>${esc(w.audience)}</dd></div>
     </dl>
@@ -361,7 +361,7 @@ ${nav('index.html')}
     <h2 id="abs-h">Abstract</h2>
     <div class="w-text" data-rise>
       <p class="w-lead">${esc(w.title)}</p>
-      <p>${esc(w.text)}</p>
+      ${(D.abstracts[w.id] || [w.text]).map((t) => `<p>${esc(t)}</p>`).join('\n      ')}
     </div>
   </section>
   <nav class="w-next" aria-label="Other workshops" data-rise>

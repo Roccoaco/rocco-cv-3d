@@ -32,7 +32,7 @@ export const workshops = [
   {
     id: 'w-chromasoma', slug: 'chromasoma', model: 'spiral', short: 'Chromasoma', city: 'online', count: 25, sortDate: '2026-06-19',
     title: 'Chromasoma: Minds, Memories, Morphing, and Surfacing Collective Intuition',
-    venue: 'Possibility Studies Network', when: '19 June 2026', length: 'Online', audience: '25 attendees',
+    venue: 'Possibility Studies Network', cohost: 'Barbara Doran', when: '19 June 2026', length: '1.5 hours, online', audience: '25 attendees',
     text: 'An experimental collaborative workshop combining body mapping, visual scoring, quantum-inspired tools and AI-assisted creation. Colour became a rhizomatic space for surfacing memories, sensations, intuitions and rhythms, which were turned into a shared animated visual field: a collective prelude to the conference.'
   },
   {
@@ -104,7 +104,7 @@ export const workshops = [
 ];
 
 export const talks = [
-  { city: 'online', title: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', kind: 'Online keynote', conf: 'Layers of Complexity', when: 'October 2026' },
+  { city: 'online', title: 'Layers of Complexity', kind: 'Online keynote', conf: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', when: 'October 2026' },
   { city: 'brighton', title: 'Mission Possible: Hub Creation', kind: 'Poster', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'brighton', title: 'Life and its synergistic interplay: a possibility for the network', kind: 'Symposium', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'maynooth', title: 'Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy', kind: 'Paper', conf: 'Communities of Possibilities, 5th International Possibility Studies Conference, Maynooth University', when: 'July 2025' },
@@ -186,7 +186,7 @@ export const publications = [
 ];
 
 // LinkedIn profile URL (not in the PDF). Leave empty to show the plain "On LinkedIn as Rocco Acocella" line.
-export const linkedin = '';
+export const linkedin = 'https://www.linkedin.com/in/rocco-acocella-3b4897203/';
 
 // Rocco's own photographs. Put the files in src/photos/ and list them here; the build copies them and places each
 // as a full-width band in its slot. Slots: 'teaching', 'workshops', 'talks', 'contact'. Empty list = no photos shown.
@@ -207,4 +207,48 @@ export const modelNotes = {
   growth: (n) => `${n} bricks, one per future teacher: a growth mindset, every layer wider than the one below.`,
   bridge: (n) => `${n} bricks, one per student: a bridge from the past (navy) to the future (yellow).`,
   path: (n) => `${n} bricks, one per future teacher: a winding road that climbs as it goes.`
+};
+
+// Full abstracts from Rocco's ABSTRACTS document, one array of paragraphs per workshop (Idea Bouncing's serves both editions).
+export const abstracts = {
+  "w-vienna": [
+    "The workshop invites participants to explore how multilingualism and attention alternation can deepen student learning and collective creativity. Bridging creative divergence with structured convergence, the workshop demonstrates how experience, challenge, and intentional shifts in attention expand perception, enrich meaning-making, and support collaborative knowledge building. Participants engage multilingualism not as a barrier, but as a creative methodology through which languages, gestures, symbols, and cultural perspectives interact to generate, refine, and implement ideas. This practice strengthens student engagement, perspective-taking, metacognitive awareness, and confidence in contributing diverse insights to shared work. By moving between divergent and convergent modes, participants experience how collaborative energy can transform abstract ideas into tangible, inclusive outcomes. Key takeaways include enhanced creative thinking, intentional attention shifting, and practical strategies for using multilingual and collaborative practices to foster innovation, participation, and deeper learning."
+  ],
+  "w-chromasoma": [
+    "PSN conferences bring all kinds of minds, memories and imaginations together. These are times where we mutually inspire, ignite, expand and collaborate. To tap into this collective creative wellspring as a primer, we have developed a creative collaboration session. We have adapted body mapping and merged it with scoring and quantum tools to surface personal and collective stories, intuitions, sensations and associations as a collective creative palette of possibilities. In this session, we share the background and experiments related to these tools and invite you to collaborate in a creative process that begins with colour as a rhizomic space evoking memories, rhythms, shapes and images. From here, we will work with our collective repertoire of associations as a ‘material’ that can be morphed through AI tools into a shared animated visual field, revealing unexpected patterns, resonances and rhythms across the PSN minds as a kind of visual symphony and prelude to the conference."
+  ],
+  "w-turin": [
+    "Participants engaged in a simulation of an alternate scenario that explored the intersection of applied creative cognition, play, sense-making, and collaboration. Teachers immersed themselves in the core essence of the workshop, which was found to be the exchange of energy with teammates. A series of experiential activities was designed to enhance creative process exploration through transdisciplinary socio-materiality, interaction, and systemic thinking. The session emphasized the intentional application of attention-shifting and metacognitive awareness to cultivate cognitive and temporal flexibility, cross-network interactivity, and spatiotemporal diversity through a facilitating card deck."
+  ],
+  "w-mita": [
+    "Through space observation and collaborative LEGO-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
+  ],
+  "w-friction": [
+    "In times of heightened tension, it is common to seek a sense of community that is open to creative thought and bonds of shared ideology. This community happens once a year at the Possibility Studies Network conference, where this hunger/desire to be together is activated. But what happens when we depart to our own spaces and thoughts? The subsequent bonds with our internal consciousness, one another, our creative pursuits, and our environments become a way to embody the essence of connectedness. By activating PSN hubs that vary by location and context, we can create microdosing events that replicate the larger PSN entity. To foster deeper connections and relationships with and among communities, we require innovative approaches and learning environments; waves of possibilities. Through an experience-based, academic, and experiential journey, we invite you to consider elements that can generate a hub experience that works for you in your environment and locale. Join us on that journey, and share in future visions of how hubs can alleviate tensions in our everyday lives and bring to life our creative potentials that mirror the larger PSN experience."
+  ],
+  "w-basel": [
+    "The proposed practice aims to provide awareness about creativity and its non-linear essence. Through creative thinking strategies that involve alternating attention, teachers could enhance their ideation skills in terms of ideational process, lesson planning & designing, assessments, projects, planning, and problem-solving. Once internalised, these skillsets could be transferred to students with the goal of strengthening their imagination, remote association techniques, abstract-to-concrete action, divergent and convergent thinking skills, and making them aware of their own unique creative process.",
+    "Key takeaways include using communication and language to foster enhanced creative thinking strategies, an intentional ability and awareness of how to shift attention, and a deeper understanding of how collaboration can help students transform abstract ideas and possibilities into tangible outcomes."
+  ],
+  "w-rome": [
+    "A two-hour professional development workshop examining the IB Learner Profile – Thinker through a creative and cognitive-neuroscientific lens. The session engaged educators in a range of individual and collaborative activities designed to foster reflection and self-awareness regarding their pedagogical approaches, creative processes, and cognitive styles. Participants explored innovative instructional strategies that integrate creative thinking within the framework of the IB Learner Profile. The workshop also incorporated a component on brain-based learning, highlighting the pedagogical value of understanding neurological processes to enhance teaching effectiveness and support learner engagement."
+  ],
+  "w-ai": [
+    "A 4.5-hour in-person workshop, divided into three sessions, for school staff members to enhance their awareness regarding artificial intelligence (AI), its functionalities, and associated tools. Practical strategies, such as prompt frameworks, were explored and implemented using ChatGPT 5.0 to train teachers in effectively utilizing AI for generating lesson plans, assessments, reports, and creative tasks such as podcasts, learning apps & games, worksheets, infographics. Additionally, other tools like Notebook LM, Napkin AI, Gemini Canvas, Gemini Storybook, Gamma, Revoldiv, and Note GPT were investigated and contextualized for the purpose of designing teaching content."
+  ],
+  "w-journey": [
+    "A two-hour workshop was designed to actively engage participants in experiential learning activities that explore the functioning of the human brain while fostering the development of critical thinking skills. One key component, “Shape Your Brain,” invited participants to visualize neural growth as a metaphor for cognitive development in response to academic challenges. Another central activity, “LEGOciation at the Station,” employed a collaborative, multi-phase structure combining group dialogue with creative LEGO-based construction across nine thematic stations. The session concluded with reflective feedback and a discussion centered on the importance of cultivating high-quality thinking. Collectively, the workshop materials outlined a practical, research-informed approach to understanding and applying critical thinking processes in educational contexts."
+  ],
+  "w-iceland24": [
+    "A two-hour online workshop session was conducted, integrating principles of a growth mindset with creative thinking methodologies to foster the mindset of pre-service language teachers. The sessions encompassed theoretical insights into creativity, neuroplasticity, and a diverse range of brainstorming techniques, including Random Word, Random Picture, Reverse Brainstorming, and 6 Thinking Hats. Participants were afforded the opportunity to explore the creative dimension from a practical standpoint. Engaging in hands-on activities, they collaborated on projects that required innovative solutions and out-of-the-box thinking. These exercises not only allowed them to apply the theories discussed but also encouraged them to reflect on their personal teaching philosophies and approaches. By the end of the workshop, participants had developed personalized action plans to incorporate creative thinking in their future classrooms, ensuring that their teaching methods remain dynamic and responsive to the needs of diverse learners. The session concluded with a reflective discussion, where participants shared their insights and experiences, building a supportive community committed to ongoing professional growth and creative exploration in language education."
+  ],
+  "w-rights": [
+    "A workshop series was conducted where key concepts such as creativity development, change, and perspective have been investigated within the global contexts of personal and cultural expression, as well as fairness and development. The sessions also covered short-term and long-term memory, thinking strategies, the emotional spectrum, and brain functions, encouraging students to consider the interrelation of these elements. Learning activities will involve both individual and group work, utilizing digital, paper-based resources, and games such as Memory, LEGO, and Jigsaw puzzles. Ultimately, students have analyzed, organized, produced, and utilized language to present on topics such as human rights, memory, emotional intelligence, and divergent thinking."
+  ],
+  "w-iceland23": [
+    "Conducted a series of eight-hour in-person workshop sessions integrating principles of growth mindset with creative thinking methodologies to cultivate pre-service teachers’ creative dispositions. The sessions engaged participants in a range of interactive and collaborative activities designed to promote reflection, experimentation, and the development of innovative pedagogical approaches. Through these experiences, participants explored how fostering a growth-oriented mindset can enhance creativity and adaptability in educational contexts. Feedback from attendees underscored the transformative nature of the workshops, noting increased confidence, engagement, and enthusiasm in applying creative strategies within their emerging teaching practices."
+  ],
+  "w-csm26": [
+    "Through space observation and collaborative LEGO-based construction, participants will delve into the profound influence of colors, forms, and perceptions on the cultural fabric of learning. By employing sensory design and visual metaphors, we can foster emotional inclusivity and purposeful learning experiences. These adaptable strategies cater to students’ cognitive and emotional development, enabling educators to design environments that transcend perception, bridging the gap between creativity, connection, and well-being."
+  ]
 };

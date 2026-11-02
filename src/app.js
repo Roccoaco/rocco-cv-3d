@@ -340,23 +340,33 @@
     function show(i) {
       if (i === current) return; current = i;
       var w = DATA.workshops[i];
-      var n = w.count || 0;
-      // without a headcount, show the empty baseplate as a single white plate
       var v = viewFor(w); ff.yaw = v[0]; ff.pitch = v[1]; ff.zoom = v[2] * 0.95;
       ff.setBricks(modelFor(w, i), 100 + i * 37);
-      ff.t = 0; ff.mode = 'diverge'; ff.go('converge');
+      ff.anim = 0; ff.mode = 'converge';
       if (facts.left) facts.left.textContent = w.place;
       if (facts.right) facts.right.textContent = w.when + ', ' + w.audience.toLowerCase();
       names.forEach(function (el, k) { el.classList.toggle('is-current', k === i); });
     }
-    show(0);
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) show(+e.target.getAttribute('data-i')); });
-      }, { rootMargin: '-49% 0px -49% 0px' });
-      names.forEach(function (n) { io.observe(n); });
+    // the model is tied to the scroll: the name nearest the middle of the screen owns the frame, and its bricks
+    // assemble as the name approaches the middle, hold while it is there, and scatter as it moves on
+    var ticking = false;
+    function sync() {
+      ticking = false;
+      var mid = window.innerHeight / 2, best = 0, bestD = Infinity, centres = [];
+      names.forEach(function (el, k) {
+        var r = el.getBoundingClientRect(), c = r.top + r.height / 2; centres.push(c);
+        var d = Math.abs(c - mid); if (d < bestD) { bestD = d; best = k; }
+      });
+      var gap = names.length > 1 ? Math.abs(centres[Math.min(best + 1, names.length - 1)] - centres[Math.max(best - 1, 0)]) / (best > 0 && best < names.length - 1 ? 2 : 1) : window.innerHeight;
+      show(best);
+      var t = reduce ? 1 : Math.max(0, Math.min(1, (1 - bestD / (gap * 0.5)) * 1.6));
+      if (Math.abs(ff.t - t) > 0.001) { ff.t = t; ff.dirty = true; }
     }
-    names.forEach(function (n) { n.addEventListener('focus', function () { show(+n.getAttribute('data-i')); }); });
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(sync); } }
+    show(0); ff.t = 1; sync();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    names.forEach(function (n) { n.addEventListener('focus', function () { show(+n.getAttribute('data-i')); ff.t = 1; ff.dirty = true; }); });
   }
 
   /* ---------- maps: Natural Earth land, equirectangular with a cos(latitude) squeeze ---------- */

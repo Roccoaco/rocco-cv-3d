@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-ZaLtgpRr8qwZ8F5mmqgyg0SRCAYlNvvG1EsTKeazMy0='; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-IQ+w1OHugWw17H4gDlSRAa4em8m7PCaT+QfUoMwWKw0='; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Idea to Creation, a workshop by Rocco Acocella</title>
@@ -318,9 +318,11 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .contact .photo figcaption{color:var(--on-field)}
 
 /* ---------- footer ---------- */
-.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:24px var(--g);padding:clamp(48px,6vw,96px) var(--m) 30px;font-size:var(--s-small);color:var(--muted)}
+.foot{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:24px var(--g);padding:clamp(48px,6vw,96px) var(--m) 30px;font-size:var(--s-small);color:var(--muted)}
 .foot-name{grid-column:1/-1;font-weight:800;text-transform:uppercase;font-size:var(--s-display);line-height:.85;letter-spacing:-.04em;color:var(--ink);margin-bottom:clamp(24px,3vw,48px)}
 .foot nav{display:flex;gap:24px}
+.foot-li a{color:var(--ink);font-family:var(--f-display);font-weight:700;text-underline-offset:4px;text-decoration-thickness:2px}
+.foot-li a:hover{color:var(--field)}
 .foot nav a{color:var(--ink);font-weight:600}
 .foot-r{text-align:right}
 
@@ -475,7 +477,8 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
     <h2 id="abs-h">Abstract</h2>
     <div class="w-text" data-rise>
       <p class="w-lead">From Idea to Creation: A Creative-Cerebral Perspective for Language Education</p>
-      <p>Experiential activities for language teachers on how communication and language act as mediators of creativity, using structured collaboration and metacognitive awareness to turn ideas into purposeful learning design.</p>
+      <p>The proposed practice aims to provide awareness about creativity and its non-linear essence. Through creative thinking strategies that involve alternating attention, teachers could enhance their ideation skills in terms of ideational process, lesson planning &amp; designing, assessments, projects, planning, and problem-solving. Once internalised, these skillsets could be transferred to students with the goal of strengthening their imagination, remote association techniques, abstract-to-concrete action, divergent and convergent thinking skills, and making them aware of their own unique creative process.</p>
+      <p>Key takeaways include using communication and language to foster enhanced creative thinking strategies, an intentional ability and awareness of how to shift attention, and a deeper understanding of how collaboration can help students transform abstract ideas and possibilities into tangible outcomes.</p>
     </div>
   </section>
   <nav class="w-next" aria-label="Other workshops" data-rise>
@@ -486,12 +489,11 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 
 <footer class="foot">
   <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
-  <p>Curriculum vitae, 2026</p>
+  <p class="foot-li"><a href="https://www.linkedin.com/in/rocco-acocella-3b4897203/" rel="noopener noreferrer" target="_blank">LinkedIn</a></p>
   <nav aria-label="Footer"><a href="index.html#work">Teaching</a><a href="index.html#places">Places</a><a href="index.html#workshops">Workshops</a><a href="index.html#talks">Talks</a><a href="index.html#contact">Contact</a></nav>
-  <p class="foot-r">No cookies, no tracking; the email address is stored encrypted. Map: Natural Earth.</p>
 </footer>
 
 <script type="application/json" id="cv-data">{"cities":{"milan":{"name":"Milan","country":"Italy","lat":45.46,"lon":9.19,"lab":"r"},"chieri":{"name":"Chieri (Turin)","country":"Italy","lat":45.01,"lon":7.82,"lab":"l"},"rome":{"name":"Rome","country":"Italy","lat":41.9,"lon":12.5,"lab":"r"},"basel":{"name":"Basel","country":"Switzerland","lat":47.56,"lon":7.59,"lab":"l"},"vienna":{"name":"Vienna","country":"Austria","lat":48.21,"lon":16.37,"lab":"r"},"brighton":{"name":"Brighton","country":"United Kingdom","lat":50.82,"lon":-0.14,"lab":"b"},"cambridge":{"name":"Cambridge","country":"United Kingdom","lat":52.21,"lon":0.12,"lab":"r"},"maynooth":{"name":"Maynooth","country":"Ireland","lat":53.38,"lon":-6.59,"lab":"l"},"dublin":{"name":"Dublin","country":"Ireland","lat":53.35,"lon":-6.26,"lab":"r"},"brussels":{"name":"Brussels","country":"Belgium","lat":50.85,"lon":4.35,"lab":"r"},"reykjavik":{"name":"Reykjavík","country":"Iceland","lat":64.15,"lon":-21.94,"lab":"r"},"athens":{"name":"Athens","country":"Greece","lat":37.98,"lon":23.73,"lab":"r"},"sharm":{"name":"Sharm El-Sheikh","country":"Egypt","lat":27.92,"lon":34.33,"lab":"l"},"malta":{"name":"Msida","country":"Malta","lat":35.9,"lon":14.48,"lab":"r"},"venice":{"name":"Venice","country":"Italy","lat":45.44,"lon":12.33,"lab":"r"},"como":{"name":"Como","country":"Italy","lat":45.81,"lon":9.09,"lab":"l"},"online":{"name":"Online","country":"","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","slug":"multilingualism","model":"ring","count":8,"when":"23 October 2026","audience":"8 language teachers","place":"Vienna, Austria"},{"id":"w-chromasoma","slug":"chromasoma","model":"spiral","count":25,"when":"19 June 2026","audience":"25 attendees","place":"Online"},{"id":"w-turin","slug":"alternating-attention","model":"deck","count":48,"when":"8 May 2026","audience":"48 IB teachers","place":"Chieri (Turin), Italy"},{"id":"w-mita","slug":"idea-bouncing","model":"arch","count":14,"when":"21 March 2026","audience":"14 teachers","place":"Milan, Italy"},{"id":"w-friction","slug":"productive-friction","model":"hubs","count":30,"when":"19 January 2026","audience":"30 participants","place":"Online"},{"id":"w-csm26","slug":"legociation","model":"arch","count":25,"when":"7 January 2026","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-basel","slug":"idea-to-creation","model":"creation","count":15,"when":"24 October 2025","audience":"15 teachers","place":"Basel, Switzerland"},{"id":"w-rome","slug":"thinker","model":"profile","count":70,"when":"6 June 2025","audience":"70 IB teachers","place":"Rome, Italy"},{"id":"w-ai","slug":"raising-awareness","model":"stairs","count":25,"when":"January to February 2025","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-journey","slug":"thinking-journey","model":"stations","count":80,"when":"October 2024","audience":"80 MYP students","place":"Milan, Italy"},{"id":"w-iceland24","slug":"creative-mindset","model":"growth","count":14,"when":"October 2024","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"},{"id":"w-rights","slug":"human-rights-and-the-brain","model":"bridge","count":14,"when":"February to April 2024","audience":"14 MYP3 students","place":"Milan, Italy"},{"id":"w-iceland23","slug":"mindset-journey","model":"path","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"}]}</script>
-<script src="app.js" integrity="sha384-cAOPhozjwFo4QxwIAlnCWEUX4wsEcNwLJW5CGKu/1jUk5lgUzMaMVSW+hV7tB0YV" defer></script>
+<script src="app.js" integrity="sha384-3xvnO6sRNZ3Z1uv+XxyBpc8KL4jyCCdaErNGl8H3Lf709HWSL//xVjiHW76Vkt1P" defer></script>
 </body>
 </html>
