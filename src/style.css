@@ -199,7 +199,7 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .w-stage canvas{top:96px;bottom:120px;height:calc(100% - 216px)}
 .w-stage figcaption{top:auto;bottom:28px;right:var(--m);max-width:40ch}
 .w-abstract{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
-.w-abstract h2{grid-column:1/5;font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em}
+
 .w-text{grid-column:5/12;display:grid;gap:24px;max-width:68ch}
 .w-lead{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25}
 .w-next{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);padding:clamp(96px,12vw,160px) var(--m) 0}
@@ -209,6 +209,23 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .w-next a:active{transform:translateY(2px)}
 .w-dir{font-size:var(--s-small);color:var(--muted)}
 .w-to{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);line-height:1.05;letter-spacing:-.02em}
+
+/* ---------- pictures on workshop and talk pages ---------- */
+.w-photo{padding:clamp(72px,9vw,128px) var(--m) 0}
+.w-fig img{display:block;width:100%;height:auto}
+.w-fig figcaption,.w-pic figcaption{font-size:var(--s-small);margin-top:12px;color:var(--muted);max-width:70ch}
+.w-side{grid-column:1/5;display:flex;flex-direction:column;gap:32px;align-items:flex-start}
+.w-side h2{font-size:var(--s-head);line-height:1.1;letter-spacing:-.02em}
+.bodymap{display:grid;gap:12px;width:min(100%,200px);text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:var(--s-small);color:var(--ink)}
+.bodymap img{display:block;width:100%;aspect-ratio:1/2;object-fit:cover;background:#111;transition:transform .3s var(--ease)}
+.bodymap span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.bodymap:hover img{transform:translateY(-4px)}
+.bodymap:hover span{color:var(--field)}
+.t-hero{grid-template-columns:5fr 7fr;align-items:center}
+.t-hero .w-pic{margin:0;padding:clamp(24px,4vw,64px) var(--m) clamp(24px,4vw,64px) 0}
+.t-hero .w-pic img{display:block;width:100%;height:auto}
+.row-title a{text-decoration:none}
+.row-title a:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* ---------- Rocco's own photographs (optional) ---------- */
 .photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--g);margin-top:clamp(48px,6vw,96px);grid-column:1/-1}
@@ -231,6 +248,9 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .w-paper>:nth-child(2){animation-delay:.08s}
   .w-paper>:nth-child(3){animation-delay:.16s}
   .w-paper>:nth-child(4){animation-delay:.24s}
+  .w-facts>div{animation:rise .7s var(--ease) both}
+  .w-facts>div:nth-child(2n){animation-delay:.06s}
+  .w-pic{animation:rise .9s var(--ease) .12s both}
 }
 
 /* ---------- entrances: scroll-driven, no fill, so content is visible before and after, and without support ---------- */
@@ -289,6 +309,9 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .w-stage figcaption{bottom:20px}
   .w-abstract,.w-next{display:block}
   .w-text{margin-top:24px}
+  .w-photo{padding-top:64px}
+  .bodymap{width:120px}
+  .t-hero .w-pic{padding:0 var(--m) 24px}
   .w-next a{margin-bottom:12px}
   .w-next a:last-child{text-align:left}
   .corners{position:relative;padding:20px var(--m) 0}

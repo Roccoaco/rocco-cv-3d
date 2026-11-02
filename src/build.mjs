@@ -71,6 +71,10 @@ for (const ph of D.photos || []) {
   fs.copyFileSync(srcFile, out + 'photos/' + ph.file);
   (photoSlot[ph.slot] ||= []).push(`<figure class="photo"><img src="photos/${esc(ph.file)}" alt="${esc(ph.alt)}" loading="lazy" decoding="async">${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`);
 }
+for (const f of fs.existsSync(here + 'photos') ? fs.readdirSync(here + 'photos') : []) {
+  if (/\.(jpe?g|png|webp)$/i.test(f)) { fs.mkdirSync(out + 'photos', { recursive: true }); fs.copyFileSync(here + 'photos/' + f, out + 'photos/' + f); }
+}
+const figure = (im, cls) => im ? `<figure class="${cls}"><img src="photos/${esc(im.file)}" alt="${esc(im.alt)}" decoding="async"${cls === 'w-pic' ? '' : ' loading="lazy"'}>${im.caption ? `<figcaption>${esc(im.caption)}</figcaption>` : ''}</figure>` : '';
 const photos = (slot) => photoSlot[slot] ? `<div class="photos">${photoSlot[slot].join('')}</div>` : '';
 
 const ext = (href, text) => `<a href="${href}" rel="noopener noreferrer" target="_blank">${text}</a>`;
@@ -101,7 +105,7 @@ const archive = D.workshops.map((w) => `
 
 const talkRows = D.talks.map((t) => `
           <li class="row" tabindex="0" data-city="${t.city}">
-            <div class="row-top"><span class="row-title">${esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
+            <div class="row-top"><span class="row-title">${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
             <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
           </li>`).join('');
 
@@ -340,7 +344,8 @@ ${nav('index.html')}
       <div><dt>When</dt><dd>${esc(w.when)}</dd></div>
       <div><dt>Where</dt><dd>${esc(place(w.city))}</dd></div>
       <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>${w.cohost ? `
-      <div><dt>Co-host</dt><dd>${esc(w.cohost)}</dd></div>` : ''}
+      <div><dt>Co-host</dt><dd>${esc(w.cohost)}</dd></div>` : ''}${w.copresenter ? `
+      <div><dt>Presented with</dt><dd>${esc(w.copresenter)}</dd></div>` : ''}
       <div><dt>Length</dt><dd>${esc(cap(w.length))}</dd></div>
       <div><dt>Participants</dt><dd>${esc(w.audience)}</dd></div>
     </dl>
@@ -357,8 +362,15 @@ ${nav('index.html')}
 </header>
 
 <main>
+  ${w.image ? `<div class="w-photo">${figure(w.image, 'w-fig')}</div>` : ''}
   <section id="abstract" class="w-abstract" aria-labelledby="abs-h">
-    <h2 id="abs-h">Abstract</h2>
+    <div class="w-side">
+      <h2 id="abs-h">Abstract</h2>${w.bodymap ? `
+      <a class="bodymap" href="${esc(w.bodymap.href)}" target="_blank" rel="noopener noreferrer">
+        <img src="photos/${esc(w.bodymap.file)}" alt="${esc(w.bodymap.alt)}" loading="lazy" decoding="async">
+        <span>${esc(w.bodymap.label)}</span>
+      </a>` : ''}
+    </div>
     <div class="w-text" data-rise>
       <p class="w-lead">${esc(w.title)}</p>
       ${(D.abstracts[w.id] || [w.text]).map((t) => `<p>${esc(t)}</p>`).join('\n      ')}
@@ -379,6 +391,47 @@ ${footer('index.html')}
 `;
   fs.writeFileSync(out + pageOf(w), page);
 });
+
+// --- a page for a talk that has its own picture ---
+for (const t of D.talks.filter((t) => t.slug)) {
+  const page = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="${csp}">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>${esc(t.title)}, a talk by Rocco Acocella</title>
+<meta name="description" content="${esc(t.title)}. ${esc(t.kind)}, ${esc(t.conf)}, ${esc(t.when)}.">
+<link rel="preload" href="fonts/libre-franklin-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>${css}</style>
+</head>
+<body id="top" class="wpage">
+<a class="skip" href="#talk">Skip to the talk</a>
+${nav('index.html')}
+
+<header class="w-hero t-hero" id="talk">
+  <div class="w-paper">
+    <h1 class="w-name">${esc(t.title)}</h1>
+    <p class="w-title">${esc(t.kind)} at ${esc(t.conf)}.</p>
+    <dl class="w-facts">
+      <div><dt>When</dt><dd>${esc(t.when)}</dd></div>
+      <div><dt>Where</dt><dd>${t.city === 'online' ? 'Online' : esc(place(t.city))}</dd></div>
+      <div><dt>Format</dt><dd>${esc(t.kind)}</dd></div>
+      <div><dt>Event</dt><dd>${esc(t.conf)}</dd></div>
+    </dl>
+    <div class="actions"><a class="btn" href="index.html#talks">All talks</a><a class="link" href="index.html#contact">Write to Rocco</a></div>
+  </div>
+  ${figure(t.image, 'w-pic')}
+</header>
+
+${footer('index.html')}
+</body>
+</html>
+`;
+  fs.writeFileSync(out + t.slug + '.html', page);
+}
 
 // Real HTTP headers for hosts that read a _headers file (Netlify, Cloudflare Pages). frame-ancestors only works as a header.
 const headers = `/*

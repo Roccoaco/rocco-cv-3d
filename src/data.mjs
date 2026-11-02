@@ -25,14 +25,17 @@ export const workshops = [
   {
     id: 'w-vienna', slug: 'multilingualism', model: 'ring', short: 'Multilingualism', city: 'vienna', count: 8, sortDate: '2026-10-23',
     title: 'Multilingualism and Attention Alternation: Creative-Cerebral Strategies',
-    venue: 'World Languages Conference 2026, American International School of Vienna',
+    venue: 'World Languages Conference 2026, American International School of Vienna', copresenter: 'Bridget Bova',
+    image: { file: 'multilingualism-vienna.jpg', alt: 'Title slide: Multilingualism and Attention Alternation: Creative-Cerebral Strategies, 3rd Annual World Language Conference, Voices United: Cultivating Our Multilingual Future, American International School of Vienna, 23 October 2026', caption: 'Title slide, 3rd Annual World Language Conference “Voices United: Cultivating Our Multilingual Future”, with Ms Bridget Bova' },
     when: '23 October 2026', length: 'In person', audience: '8 language teachers',
     text: 'How multilingualism and switching attention lift learning and group creativity. Participants used languages, gestures and cultural perspectives as a creative method, moving between divergent and convergent modes, and left with practical strategies for innovation and collaborative learning.'
   },
   {
     id: 'w-chromasoma', slug: 'chromasoma', model: 'spiral', short: 'Chromasoma', city: 'online', count: 25, sortDate: '2026-06-19',
     title: 'Chromasoma: Minds, Memories, Morphing, and Surfacing Collective Intuition',
-    venue: 'Possibility Studies Network', cohost: 'Barbara Doran', when: '19 June 2026', length: '1.5 hours, online', audience: '25 attendees',
+    venue: 'Possibility Studies Network', cohost: 'Barbara Doran',
+    image: { file: 'chromasoma-body-maps.jpg', alt: 'Two body maps on black: outlined figures marked with colour, linked by a web of circles, triangles and lines', caption: 'Body maps from the Chromasoma session' },
+    bodymap: { href: 'https://claude.ai/artifact/Tva5ugQwfsfv2WjLeJf6bL', file: 'chromasoma-body-map.jpg', label: 'Open the collective body field', alt: 'A single body map: an outlined figure marked in magenta, with coloured shapes around it' }, when: '19 June 2026', length: '1.5 hours, online', audience: '25 attendees',
     text: 'An experimental collaborative workshop combining body mapping, visual scoring, quantum-inspired tools and AI-assisted creation. Colour became a rhizomatic space for surfacing memories, sensations, intuitions and rhythms, which were turned into a shared animated visual field: a collective prelude to the conference.'
   },
   {
@@ -104,7 +107,8 @@ export const workshops = [
 ];
 
 export const talks = [
-  { city: 'online', title: 'Layers of Complexity', kind: 'Online keynote', conf: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', when: 'October 2026' },
+  { city: 'online', slug: 'layers-of-complexity', title: 'Layers of Complexity', kind: 'Online keynote', conf: 'C.R.E.A.T.E. (Creative Risk-Taking to Engage Authentic Transformation and Expression)', when: '6 October 2026',
+    image: { file: 'layers-of-complexity.jpg', alt: 'Title frame of the Layers of Complexity keynote: a glass sphere holding a mountain range, among glass prisms, in black and white', caption: 'Layers of Complexity, Mr Acocella x C.R.E.A.T.E., 6 October 2026' } },
   { city: 'brighton', title: 'Mission Possible: Hub Creation', kind: 'Poster', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'brighton', title: 'Life and its synergistic interplay: a possibility for the network', kind: 'Symposium', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'maynooth', title: 'Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy', kind: 'Paper', conf: 'Communities of Possibilities, 5th International Possibility Studies Conference, Maynooth University', when: 'July 2025' },
