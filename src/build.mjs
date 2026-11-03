@@ -533,7 +533,7 @@ ${nav('index.html')}
 </header>
 
 <main>
-  ${w.image || w.scene ? `<div class="w-photo${w.image && w.scene ? ' is-pair' : ''}">${figure(w.image, 'w-fig')}${figure(w.scene, 'w-fig w-scene')}</div>` : ''}
+  ${w.image ? `<div class="w-photo">${figure(w.image, 'w-fig')}</div>` : ''}
   <section id="abstract" class="w-abstract" aria-labelledby="abs-h">
     <div class="w-side">
       <h2 id="abs-h">Abstract</h2>${w.bodymap ? `
@@ -600,11 +600,7 @@ ${nav('index.html')}
   </div>
   ${figure(t.image, 'w-pic')}
 </header>
-${t.scene ? `
-<main>
-  <div class="w-photo">${figure(t.scene, 'w-fig w-scene')}</div>
-</main>
-` : ''}
+
 ${footer('index.html')}
 </body>
 </html>
