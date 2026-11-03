@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const opentype = require('opentype.js');
 
-const PHRASES = ['Book a workshop', 'Have a conversation', 'Curious?', 'Pose a question', 'Ask for information'];
+const PHRASES = ['Curious?'];
 const chars = [...new Set(PHRASES.join(''))];
 const fontFile = new URL('../node_modules/@fontsource/libre-franklin/files/libre-franklin-latin-800-normal.woff', import.meta.url);
 const buf = fs.readFileSync(fontFile);

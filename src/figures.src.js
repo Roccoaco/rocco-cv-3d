@@ -9,6 +9,10 @@
 // 4. The galaxy, opened by the floating clicker: one brick per participant in a spiral galaxy, with every page of
 //    the site as a labelled star. Drag to turn it any way (360 degrees, with inertia), zoom, adjust and edit it;
 //    Converge builds a different structure each time (tower, bridge, temple, pyramid, dome, lighthouse).
+//    It sits in a quantum universe: a deep starfield, nebulae, a glowing spiral disc, a bright core with light
+//    streaks and magnetic field loops, wavy quantum orbits and a planet lit by the core. The observer matters, as in
+//    the measurement problem: what the visitor looks at (the pointer) settles into definite places, what nobody
+//    watches stays a blur of possibilities, and the whole universe slowly tunes its rhythm to the visitor's own.
 // 3. The unalome by the contact details: a thin 3D line that draws itself and sways; clicking it opens a small
 //    bubble to choose its colour (kept in the visitor's browser).
 // 5. The education playground: a brick-built playground (slide, two small houses, a sandbox, two bicycles) where
@@ -21,7 +25,8 @@ import {
   BoxGeometry, CylinderGeometry, InstancedMesh, MeshStandardMaterial, MeshBasicMaterial, Object3D, Vector3, SRGBColorSpace,
   Curve, TubeGeometry, Mesh, OrthographicCamera, ExtrudeGeometry, SphereGeometry, CatmullRomCurve3, Quaternion,
   Raycaster, Vector2, CanvasTexture, PlaneGeometry, ConeGeometry, TorusGeometry, CapsuleGeometry, DodecahedronGeometry,
-  IcosahedronGeometry, AdditiveBlending, DoubleSide, PointLight, Plane
+  IcosahedronGeometry, AdditiveBlending, DoubleSide, PointLight, Plane, Points, BufferGeometry, Float32BufferAttribute,
+  ShaderMaterial, Sprite, SpriteMaterial
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { Font } from 'three/addons/loaders/FontLoader.js';
@@ -416,6 +421,177 @@ function resample(list, n) {
   return out;
 }
 
+// ---------- the quantum universe around the galaxy ----------
+const cloudTex = (cols, seed) => { // a soft nebula: many faint coloured blobs
+  const c = document.createElement('canvas'); c.width = c.height = 512; const x = c.getContext('2d');
+  let r = seed * 9301 + 49297; const rnd = () => ((r = (r * 16807) % 2147483647) / 2147483647);
+  for (let k = 0; k < 90; k++) {
+    const a = rnd() * Math.PI * 2, d = Math.pow(rnd(), 0.7) * 170, px = 256 + Math.cos(a) * d, py = 256 + Math.sin(a) * d * 0.7, rad = 40 + rnd() * 110;
+    const g = x.createRadialGradient(px, py, 0, px, py, rad), col = cols[k % cols.length];
+    g.addColorStop(0, col + '2a'); g.addColorStop(1, col + '00');
+    x.fillStyle = g; x.fillRect(0, 0, 512, 512);
+  }
+  for (let k = 0; k < 160; k++) { x.fillStyle = 'rgba(255,255,255,' + (rnd() * 0.5) + ')'; x.fillRect(rnd() * 512, rnd() * 512, 1.5, 1.5); }
+  const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; return t;
+};
+const glowTex = (stops) => {
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+  const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); stops.forEach(([o, col]) => g.addColorStop(o, col));
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; return t;
+};
+const streakTex = () => {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 16; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 512, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.5, 'rgba(255,255,255,1)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0, 6, 512, 4);
+  const v = x.createLinearGradient(0, 0, 0, 16); v.addColorStop(0, 'rgba(255,255,255,0)'); v.addColorStop(0.5, 'rgba(255,255,255,.35)'); v.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = v; x.globalCompositeOperation = 'destination-in'; x.fillRect(0, 0, 512, 16);
+  return new CanvasTexture(c);
+};
+const planetTex = () => {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 512; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 512); g.addColorStop(0, '#16325c'); g.addColorStop(0.5, '#1d4f7a'); g.addColorStop(1, '#122a4d');
+  x.fillStyle = g; x.fillRect(0, 0, 1024, 512);
+  let r = 11; const rnd = () => ((r = (r * 16807) % 2147483647) / 2147483647);
+  for (let k = 0; k < 260; k++) { // land masses and seas of shade
+    const px = rnd() * 1024, py = 80 + rnd() * 352, rad = 8 + rnd() * 60;
+    x.fillStyle = rnd() < 0.55 ? 'rgba(52,96,110,.35)' : 'rgba(10,26,52,.35)';
+    x.beginPath(); x.ellipse(px, py, rad * 1.6, rad, rnd() * 3, 0, Math.PI * 2); x.fill();
+  }
+  for (let k = 0; k < 120; k++) { x.fillStyle = 'rgba(230,240,255,' + (0.05 + rnd() * 0.12) + ')'; x.beginPath(); x.ellipse(rnd() * 1024, rnd() * 512, 20 + rnd() * 90, 3 + rnd() * 8, 0, 0, Math.PI * 2); x.fill(); }
+  const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; return t;
+};
+// round, soft, twinkling points; uFuzz shakes them about (unobserved); uRes is the rhythm they keep
+const POINT_VS = `
+uniform float uPhase, uPix, uFuzz, uSpread;
+attribute float aSize, aPh;
+attribute vec3 aCol;
+varying vec3 vCol; varying float vTw;
+void main() {
+  vec3 p = position * uSpread;
+  p += vec3(sin(uPhase * (0.8 + aPh) + aPh * 40.0), sin(uPhase * (1.1 + aPh) + aPh * 23.0), cos(uPhase * (0.9 + aPh) + aPh * 31.0)) * uFuzz;
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  gl_PointSize = aSize * uPix * (220.0 / max(1.0, -mv.z));
+  gl_Position = projectionMatrix * mv;
+  vCol = aCol; vTw = 0.62 + 0.38 * sin(uPhase * (0.5 + aPh * 1.5) + aPh * 60.0);
+}`;
+const POINT_FS = `
+uniform float uOpacity;
+varying vec3 vCol; varying float vTw;
+void main() {
+  vec2 q = gl_PointCoord - 0.5; float d = length(q);
+  float a = smoothstep(0.5, 0.0, d); a *= a;
+  float spike = max(0.0, 1.0 - abs(q.x) * 14.0) * max(0.0, 1.0 - abs(q.y) * 2.2) + max(0.0, 1.0 - abs(q.y) * 14.0) * max(0.0, 1.0 - abs(q.x) * 2.2);
+  gl_FragColor = vec4(vCol * vTw, (a + spike * 0.25) * uOpacity);
+}`;
+function pointCloud(n, fill, pix) {
+  const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), size = new Float32Array(n), ph = new Float32Array(n), c = new Color();
+  for (let i = 0; i < n; i++) { const v = fill(i, c); pos.set(v.p, i * 3); col.set([c.r, c.g, c.b], i * 3); size[i] = v.s; ph[i] = Math.random(); }
+  const g = new BufferGeometry();
+  g.setAttribute('position', new Float32BufferAttribute(pos, 3)); g.setAttribute('aCol', new Float32BufferAttribute(col, 3));
+  g.setAttribute('aSize', new Float32BufferAttribute(size, 1)); g.setAttribute('aPh', new Float32BufferAttribute(ph, 1));
+  const m = new ShaderMaterial({
+    uniforms: { uPhase: { value: 0 }, uPix: { value: pix }, uFuzz: { value: 0 }, uSpread: { value: 1 }, uOpacity: { value: 1 } },
+    vertexShader: POINT_VS, fragmentShader: POINT_FS, transparent: true, depthWrite: false, blending: AdditiveBlending
+  });
+  return new Points(g, m);
+}
+function buildCosmos(scene, group, pix) {
+  const add = (o) => { group.add(o); return o; };
+  const R = Math.random;
+  // 1. the deep sky: thousands of stars in every direction
+  const sky = add(pointCloud(7000, (i, c) => {
+    const u = R() * 2 - 1, a = R() * Math.PI * 2, r = 70 + R() * 70, s = Math.sqrt(1 - u * u);
+    const pick = R(); c.set(pick < 0.6 ? 0xFFFFFF : pick < 0.8 ? 0xBFD3FF : pick < 0.93 ? 0xFFD9A8 : 0xFF9AA8);
+    return { p: [Math.cos(a) * s * r, u * r, Math.sin(a) * s * r], s: R() < 0.03 ? 5 + R() * 4 : 1 + R() * 2.2 };
+  }, pix));
+  // 2. nebulae: soft coloured clouds far out
+  const NEB = [['#2EC5D3', '#3B5BDB'], ['#FF8A3D', '#E0479E'], ['#8B5CF6', '#3B5BDB'], ['#FFB35C', '#C2410C'], ['#2EC5D3', '#8B5CF6'], ['#E0479E', '#FF8A3D'], ['#3B5BDB', '#2EC5D3']]; // taste-skill-ignore: nebula colours from the references
+  const nebulae = NEB.map((cols, i) => {
+    const sp = new Sprite(new SpriteMaterial({ map: cloudTex(cols, i + 1), transparent: true, opacity: 0.55, blending: AdditiveBlending, depthWrite: false }));
+    const a = (i / NEB.length) * Math.PI * 2 + 0.4, u = (i % 3 - 1) * 0.45, r = 48 + (i % 2) * 14;
+    sp.position.set(Math.cos(a) * r, u * r, Math.sin(a) * r); sp.scale.setScalar(46 + (i % 3) * 14);
+    return add(sp);
+  });
+  // 3. the disc: dust and starlight on the same three arms as the bricks, warm at the core, blue at the rim
+  const cWarm = new Color(0xFFF1D6), cOrange = new Color(0xFFA24C), cRust = new Color(0xC2410C), cBlue = new Color(0x8FB0FF), cViolet = new Color(0xB48CFF);
+  const disc = add(pointCloud(15000, (i, c) => {
+    const arm = i % 3, t = Math.pow(R(), 0.8), r = 0.3 + t * 11.5;
+    const a = arm * (Math.PI * 2 / 3) + t * 3.6 + (R() - 0.5) * (0.35 + t * 0.6);
+    const off = (R() - 0.5) * (0.4 + t * 1.3);
+    if (t < 0.18) c.copy(cWarm).lerp(cOrange, t / 0.18); else if (t < 0.55) c.copy(cOrange).lerp(R() < 0.3 ? cRust : cWarm, R() * 0.6); else c.copy(cBlue).lerp(R() < 0.4 ? cViolet : cOrange, R() * 0.5);
+    return { p: [Math.cos(a) * r + Math.cos(a + 1.57) * off, (R() - 0.5) * 0.4 * (1.1 - t), Math.sin(a) * r + Math.sin(a + 1.57) * off], s: t < 0.15 ? 1.4 + R() * 1.2 : 0.7 + R() * 1.4 };
+  }, pix));
+  disc.material.uniforms.uOpacity.value = 0.9;
+  // 4. the core: a white-hot heart in a violet haze, with light streaks through it
+  const core = add(new Sprite(new SpriteMaterial({ map: glowTex([[0, 'rgba(255,255,255,1)'], [0.12, 'rgba(255,240,210,.95)'], [0.35, 'rgba(255,170,90,.35)'], [0.7, 'rgba(180,120,255,.08)'], [1, 'rgba(0,0,0,0)']]), transparent: true, blending: AdditiveBlending, depthWrite: false })));
+  core.scale.setScalar(6);
+  const haze = add(new Sprite(new SpriteMaterial({ map: glowTex([[0, 'rgba(224,71,158,.45)'], [0.4, 'rgba(46,197,211,.12)'], [1, 'rgba(0,0,0,0)']]), transparent: true, opacity: 0.6, blending: AdditiveBlending, depthWrite: false })));
+  haze.scale.setScalar(20);
+  const sTex = streakTex(), STREAK = [0xFFFFFF, 0xFFD43B, 0x7FE7FF, 0xE0479E, 0xFF8A3D, 0x8FB0FF];
+  const streaks = Array.from({ length: 14 }, (_, i) => {
+    const sp = new Sprite(new SpriteMaterial({ map: sTex, color: STREAK[i % STREAK.length], transparent: true, opacity: 0.25, blending: AdditiveBlending, depthWrite: false }));
+    sp.material.rotation = (i / 14) * Math.PI + (R() - 0.5) * 0.3; sp.scale.set(18 + R() * 22, 0.5 + R() * 0.5, 1);
+    sp.userData.ph = R() * 6.3; return add(sp);
+  });
+  // 5. magnetic field loops round the core (dipole lines: r = L sin^2 theta)
+  const loops = new Group(); add(loops);
+  [3.2, 4.8, 6.6].forEach((L, li) => { for (let k = 0; k < 6; k++) {
+    const ph = (k / 6) * Math.PI * 2 + li * 0.3, pts = [];
+    for (let s2 = 0; s2 <= 40; s2++) { const th = 0.12 * Math.PI + (s2 / 40) * 0.76 * Math.PI, r = L * Math.sin(th) * Math.sin(th); pts.push(new Vector3(r * Math.sin(th) * Math.cos(ph), r * Math.cos(th), r * Math.sin(th) * Math.sin(ph))); }
+    loops.add(new Mesh(new TubeGeometry(new CatmullRomCurve3(pts), 60, 0.03, 6, false), new MeshBasicMaterial({ color: (k + li) % 2 ? 0x7FE7FF : 0xFFD27A, transparent: true, opacity: 0.2, blending: AdditiveBlending, depthWrite: false })));
+  } });
+  // 6. quantum orbits: wavy rings, each with electrons that smear into a cloud of possible places when unobserved
+  const orbits = [2.3, 3.0, 3.8].map((rad, i) => {
+    const g = new Group(); g.rotation.set(0.9 + i * 0.7, i * 1.3, 0.4 * i); add(g);
+    const pts = []; for (let k = 0; k < 160; k++) { const a = (k / 160) * Math.PI * 2; pts.push(new Vector3(Math.cos(a) * rad, Math.sin(a * 18) * 0.12, Math.sin(a) * rad)); }
+    g.add(new Mesh(new TubeGeometry(new CatmullRomCurve3(pts, true), 320, 0.035, 6, true), new MeshBasicMaterial({ color: 0x6FA8FF, transparent: true, opacity: 0.35, blending: AdditiveBlending, depthWrite: false })));
+    const eMat = new MeshBasicMaterial({ color: 0xDDF3FF, transparent: true, opacity: 0.9, blending: AdditiveBlending, depthWrite: false });
+    const ghosts = []; for (let e = 0; e < 2; e++) for (let k = 0; k < 6; k++) { const m = new Mesh(new SphereGeometry(0.11, 12, 8), eMat.clone()); g.add(m); ghosts.push({ m, e, k }); }
+    return { g, rad, ghosts, speed: 0.5 + i * 0.25, dir: i % 2 ? -1 : 1 };
+  });
+  // 7. a planet, lit by the core, with a thin bright atmosphere
+  const planet = new Group(); planet.position.set(25, 7, -32); scene.add(planet); // a backdrop: it stays put while the galaxy turns
+  const ball = new Mesh(new SphereGeometry(3.2, 64, 48), new MeshStandardMaterial({ map: planetTex(), roughness: 0.85, metalness: 0 }));
+  planet.add(ball);
+  planet.add(new Mesh(new SphereGeometry(3.42, 64, 48), new ShaderMaterial({
+    vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1.0 - max(0.0, dot(vN, vV)), 2.6); gl_FragColor = vec4(vec3(0.5, 0.8, 1.0) * f * 1.4, f); }',
+    transparent: true, blending: AdditiveBlending, depthWrite: false
+  })));
+  const coreLight = new PointLight(0xFFC78A, 3.2, 0, 0); add(coreLight);
+
+  const pointMats = [sky.material, disc.material];
+  return {
+    update(o) { // o: phase, res, obs, lock, k (converged 0..1), spread, t
+      const fuzz = (1 - o.obs) * 0.22 * (1 - o.k);
+      pointMats.forEach((m) => { m.uniforms.uPhase.value = o.phase; });
+      sky.material.uniforms.uFuzz.value = 0;
+      disc.material.uniforms.uFuzz.value = fuzz; disc.material.uniforms.uSpread.value = o.spread;
+      disc.material.uniforms.uOpacity.value = 0.9 * (1 - 0.75 * o.k);
+      const beat = Math.sin(o.phase * 1.0);
+      core.scale.setScalar(6 * (1 + 0.05 * beat + 0.12 * o.lock));
+      core.material.opacity = 0.85 + 0.15 * o.lock;
+      haze.material.opacity = 0.5 + 0.25 * o.lock + 0.08 * beat;
+      streaks.forEach((sp, i) => { sp.material.opacity = (0.12 + 0.18 * (0.5 + 0.5 * Math.sin(o.phase * 0.6 + sp.userData.ph)) + 0.15 * o.lock) * (1 - 0.6 * o.k); sp.material.rotation += 0.0004 * (i % 2 ? 1 : -1); });
+      loops.rotation.y = o.phase * 0.05;
+      loops.children.forEach((m, i) => { m.material.opacity = 0.12 + 0.12 * (0.5 + 0.5 * Math.sin(o.phase * 0.8 + i * 0.5)) + 0.12 * o.lock; });
+      orbits.forEach((ob) => {
+        ob.g.rotation.y += 0.002 * ob.dir;
+        ob.ghosts.forEach((gh) => {
+          // observed: the electron sits in one place; unobserved: it spreads into a cloud of where it might be
+          const smear = (1 - o.obs) * 0.9, a = o.phase * ob.speed * ob.dir + gh.e * Math.PI + (gh.k - 2.5) * 0.22 * smear;
+          gh.m.position.set(Math.cos(a) * ob.rad, Math.sin(a * 18) * 0.12, Math.sin(a) * ob.rad);
+          gh.m.material.opacity = gh.k === 2 || gh.k === 3 ? 0.9 - 0.5 * smear : 0.55 * smear;
+          gh.m.scale.setScalar(1 + 0.6 * smear * (gh.k % 2));
+        });
+      });
+      ball.rotation.y = o.t * 0.02;
+      nebulae.forEach((n, i) => { n.material.opacity = 0.42 + 0.12 * Math.sin(o.phase * 0.15 + i); });
+    }
+  };
+}
+
 function startGalaxy() {
   const clicker = document.getElementById('gx-clicker'), box = document.getElementById('galaxy'), cv = document.getElementById('gx-canvas');
   if (!clicker || !box || !cv) return;
@@ -440,16 +616,21 @@ function startGalaxy() {
   const easeIO = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const PAL = [0xFFFFFF, 0xFFD43B, 0x9DB1F5, 0xC9D4FF];
   let rnd = 7; const R = () => ((rnd = (rnd * 16807) % 2147483647) / 2147483647);
+  // the observer (the measurement problem, kept quiet): obs is how present the visitor is, res the rhythm the
+  // universe has tuned itself to, lock how well it resonates with the visitor's own rhythm
+  let cosmos = null, obs = 0, res = 0.6, lock = 0, phase = 0, speedS = 0, lastAct = 0, ptrIn = false, baseCols = [];
+  const ptrN = new Vector2(), tmpC = new Color(), pv = new Vector3();
 
   function build() {
     renderer = makeRenderer(cv);
     if (!renderer) { clicker.hidden = true; return false; }
     scene = new Scene();
-    cam = new PerspectiveCamera(45, 1, 0.1, 200);
+    cam = new PerspectiveCamera(45, 1, 0.1, 500);
     scene.add(new HemisphereLight(0xffffff, 0x0b1b4d, 1.6));
     const key = new DirectionalLight(0xffffff, 2); key.position.set(-5, 9, 7); scene.add(key);
     group = new Group(); scene.add(group);
     group.quaternion.setFromAxisAngle(AY, 0.5);
+    cosmos = buildCosmos(scene, group, Math.min(window.devicePixelRatio || 1, 2));
     bricks = new InstancedMesh(brick(1, 1), new MeshStandardMaterial({ roughness: 0.5, metalness: 0.05 }), N);
     stars = new InstancedMesh(brick(2, 1), new MeshStandardMaterial({ roughness: 0.4, emissive: 0xffffff, emissiveIntensity: 0.25 }), M);
     group.add(bricks); group.add(stars);
@@ -482,6 +663,17 @@ function startGalaxy() {
     });
     const up = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = 0; if (!pts.size) drag = null; };
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    // the observer: where the visitor points, and how fast, is what the universe listens to
+    let lastP = null;
+    cv.addEventListener('pointermove', (e) => {
+      const r = cv.getBoundingClientRect(), now = performance.now();
+      ptrN.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ptrIn = true;
+      if (lastP) { const d = Math.hypot(e.clientX - lastP[0], e.clientY - lastP[1]), ms = Math.max(8, now - lastP[2]); speedS = speedS * 0.85 + (d / ms * 1000) * 0.15; }
+      lastP = [e.clientX, e.clientY, now]; lastAct = now;
+    });
+    cv.addEventListener('pointerleave', () => { ptrIn = false; lastP = null; });
+    cv.addEventListener('pointerdown', () => { lastAct = performance.now(); });
+    cv.addEventListener('wheel', () => { lastAct = performance.now(); }, { passive: true });
     cv.addEventListener('wheel', (e) => { e.preventDefault(); setZoom(zoom * (1 + Math.sign(e.deltaY) * 0.08)); }, { passive: false });
     window.addEventListener('resize', () => { if (open) layout(); });
     return true;
@@ -499,7 +691,7 @@ function startGalaxy() {
       if (target && targetCol && k > 0.5) c = new Color(targetCol[i]);
       else c = new Color(PAL[(i * 7) % PAL.length]);
       if (hue !== 'mix') { const hsl = {}; c.getHSL(hsl); c.setHSL(+hue / 360, 0.75, Math.max(0.45, Math.min(0.8, hsl.l))); }
-      bricks.setColorAt(i, c);
+      bricks.setColorAt(i, c); baseCols[i] = c;
     }
     bricks.instanceColor.needsUpdate = true;
   }
@@ -546,6 +738,18 @@ function startGalaxy() {
     if (!reduce && !upright) { vx *= 0.93; vy *= 0.93; if (Math.abs(vx) + Math.abs(vy) > 0.0005) turn(vx, vy); }
     if (!reduce && set.spin && !upright) { q.setFromAxisAngle(v3.set(0, 1, 0), dt * set.spin * 0.006); if (k > 0.5) group.quaternion.premultiply(q); else group.quaternion.multiply(q); }
     const spread = set.spread / 100, size = 0.16 * set.size / 100;
+    // calibrate: presence rises with any touch of the pointer and fades after a few quiet seconds; the rhythm drifts
+    // towards the visitor's (fast pointer, quick rhythm; stillness, the slow ground state) and locks when they agree
+    const idle = (time - lastAct) / 1000, now01 = lastAct ? (idle < 2.5 ? 1 : Math.max(0, 1 - (idle - 2.5) / 3)) : 0;
+    obs += (now01 - obs) * Math.min(1, dt * 2.5);
+    speedS *= 0.97;
+    const userF = 0.35 + Math.min(1, speedS / 1600) * 1.9;
+    res += ((obs > 0.2 ? userF : 0.6) - res) * Math.min(1, dt * 0.6);
+    lock = clamp01(lock + (Math.abs(userF - res) < 0.15 && obs > 0.5 ? dt * 0.25 : -dt * 0.35));
+    if (!reduce) phase += dt * res * Math.PI;
+    cam.position.set(0, 0, zoom); cam.lookAt(0, 0, 0); cam.updateMatrixWorld(); group.updateMatrixWorld();
+    if (cosmos) cosmos.update({ phase, res, obs, lock, k: easeIO(clamp01(k)), spread, t: time / 1000 });
+    const aspect = cam.aspect, jitter = !reduce;
     for (let i = 0; i < N; i++) {
       const g = galaxyPos[i];
       // each brick leaves at its own moment (lower ones first) and travels a curved path
@@ -564,9 +768,23 @@ function startGalaxy() {
         const gr = galaxyRot[i]; dummy.rotation.set(gr[0] + time * 0.0003, gr[1], gr[2]);
         dummy.scale.setScalar(size);
       }
+      // superposition: a brick nobody is looking at hovers between places; under the pointer it settles
+      let seen = 0;
+      if (jitter) {
+        pv.copy(dummy.position).applyMatrix4(group.matrixWorld).project(cam);
+        const ddx = (pv.x - ptrN.x) * aspect, ddy = pv.y - ptrN.y;
+        seen = ptrIn ? Math.exp(-(ddx * ddx + ddy * ddy) / 0.06) * obs : 0;
+        const amp = 0.42 * (1 - Math.max(seen, obs * 0.4)) * (1 - e) * spread, f = 0.7 + (i % 7) * 0.13;
+        dummy.position.x += Math.sin(phase * f + i * 1.7) * amp;
+        dummy.position.y += Math.sin(phase * f * 1.3 + i * 2.3) * amp * 0.6;
+        dummy.position.z += Math.cos(phase * f * 0.9 + i * 0.9) * amp;
+        dummy.scale.multiplyScalar(1 + 0.22 * (1 - Math.max(seen, obs * 0.4)) * (1 - e) * Math.sin(phase * f * 1.7 + i));
+      }
+      if (baseCols[i]) { tmpC.copy(baseCols[i]).multiplyScalar(0.8 + 0.6 * seen); bricks.setColorAt(i, tmpC); }
       dummy.updateMatrix(); bricks.setMatrixAt(i, dummy.matrix);
     }
     bricks.instanceMatrix.needsUpdate = true;
+    if (bricks.instanceColor) bricks.instanceColor.needsUpdate = true;
     // the stars: on the arms in the galaxy, on a ring around the structure when it converges
     const ke = easeIO(clamp01(k));
     const w = cv.clientWidth, h = cv.clientHeight;

@@ -619,7 +619,7 @@ html.tl-locked{overflow:hidden}
 .gx-orbit i:nth-child(2){background:var(--accent);animation-duration:4.4s;animation-direction:reverse}
 .gx-orbit i:nth-child(3){background:#9DB1F5;animation-duration:6s}
 @keyframes gx-orbit{from{transform:rotate(0) translateX(11px) rotate(0)}to{transform:rotate(360deg) translateX(11px) rotate(-360deg)}}
-.gx{position:fixed;top:0;right:0;bottom:0;left:0;z-index:70;background:var(--night);color:#FFFFFF;opacity:0;transition:opacity .3s var(--ease)}
+.gx{position:fixed;top:0;right:0;bottom:0;left:0;z-index:70;background:#03050F;background:radial-gradient(ellipse at 50% 46%,#101845 0%,#060A1F 50%,#020309 100%); /* taste-skill-ignore: deep space behind the galaxy */color:#FFFFFF;opacity:0;transition:opacity .3s var(--ease)}
 .gx.is-open{opacity:1}
 .gx[hidden]{display:none}
 #gx-canvas{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;cursor:grab;touch-action:none}
@@ -668,40 +668,6 @@ html.tl-locked{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.gx-orbit i{animation:none}.gx-orbit i:nth-child(1){transform:translateX(11px)}.gx-orbit i:nth-child(2){transform:rotate(130deg) translateX(11px)}.gx-orbit i:nth-child(3){transform:rotate(250deg) translateX(11px)}}
 .gx-clicker.is-left{right:auto;left:var(--m)}
 
-/* ---------- page and story modes: story turns the CV into chapters, one lit at a time, the rest faded back;
-   switching between the modes fades the page out and in ---------- */
-body{transition:opacity .38s var(--ease)}
-html.is-fading body{opacity:0}
-.bar-mode{position:relative;display:inline-flex;flex:none;align-items:center;min-height:36px;padding:3px;border:2px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:.875rem;cursor:pointer}
-.bm-opt{position:relative;z-index:1;padding:4px 12px;border-radius:999px;transition:background-color .3s var(--ease),color .3s var(--ease)}
-.bar-mode[aria-pressed="false"] .bm-page,.bar-mode[aria-pressed="true"] .bm-story{background:var(--ink);color:var(--bg)}
-html.is-story .lead,html.is-story main>section{opacity:.1;transition:opacity .9s var(--ease)}
-html.is-story .lead.is-now,html.is-story main>section.is-now{opacity:1}
-html.is-story main>section{min-height:100vh;min-height:100svh;padding-bottom:clamp(48px,6vw,96px)} /* taste-skill-ignore: vh is the older-Safari fallback for svh */
-.story-pill{position:fixed;left:var(--m);bottom:var(--m);z-index:25;display:flex;align-items:center;gap:4px;padding:4px;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--f-display);font-size:var(--s-small)}
-.story-pill[hidden]{display:none}
-html.is-story .gx-clicker.is-left{left:auto;right:var(--m)}
-.st-step{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:inherit;font-size:1.125rem;font-weight:700;cursor:pointer;transition:background-color .2s}
-.st-step:hover,.st-step:focus-visible{background:var(--field)}
-.st-step:disabled{opacity:.35;cursor:default;background:transparent}
-.st-where{display:flex;align-items:baseline;gap:6px;min-width:11em;justify-content:center;margin:0;padding:0 6px;white-space:nowrap}
-.st-n{font-weight:800}
-.st-of{opacity:.7}
-.st-name{font-weight:700;color:var(--accent)}
-@media (max-width:1100px){
-  .bar-mode{min-height:32px;padding:2px}
-  .bm-opt{padding:3px 10px}
-  .bar-mode[aria-pressed="false"] .bm-page,.bar-mode[aria-pressed="true"] .bm-story{display:none}
-  .bar-mode .bm-opt{background:transparent;color:var(--ink)}
-}
-@media (max-width:700px){
-  .bar-mode{font-size:.875rem}
-  .bm-opt{padding:3px 8px}
-  .st-where{min-width:0;max-width:9.5em;overflow:hidden;text-overflow:ellipsis}
-  .st-of{display:none}
-  .st-step{width:40px;height:40px}
-}
-@media (prefers-reduced-motion:reduce){body,html.is-story .lead,html.is-story main>section{transition:none}}
 
 /* ---------- the education playground: a three.js scene under Education, on the same night band as the figures ---------- */
 :root{--sh-0:#FFD43B;--sh-1:#C9B8FF;--sh-2:#8FA6FF;--sh-3:#FF9F87}
@@ -726,4 +692,12 @@ html.is-story .gx-clicker.is-left{left:auto;right:var(--m)}
 .edu-mark.em-2{width:.9em;height:.5em;border-radius:1em;background:var(--sh-2)}
 .edu-mark.em-3{border-radius:1px;transform:rotate(45deg) scale(.85);background:var(--sh-3)}
 @media (max-width:700px){#play-canvas{height:360px}}
-@media (min-width:701px) and (max-width:900px){.bar{gap:12px}.bar-links{gap:12px;font-size:.875rem}.bar-mark{font-size:.875rem}}
+
+/* ---------- "page" fades into "story" and back; every change takes the next hue pair round the colour wheel ---------- */
+.ps{display:inline-grid;vertical-align:baseline;justify-items:start;white-space:nowrap}
+.ps.is-cycling{overflow:visible;transition:width .9s var(--ease)}
+.ps-w{grid-area:1/1}
+.ps-w+.ps-w{visibility:hidden}
+.ps.is-cycling .ps-w{opacity:0;visibility:hidden;transition:opacity 1.1s var(--ease),visibility 0s 1.1s}
+.ps.is-cycling .ps-w.is-on{opacity:1;visibility:visible;transition:opacity 1.1s var(--ease),visibility 0s}
+.ps.is-cycling .ps-w{-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent} /* taste-skill-ignore: the colour-wheel gradient on one word is the feature */

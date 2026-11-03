@@ -255,8 +255,7 @@ const placesLede = `Talks and workshops in ${word(places.length)} cities across 
 
 const nav = (prefix) => `<nav class="bar" aria-label="Main">
   <a class="bar-mark" href="${prefix}#top">Rocco Acocella</a>
-  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#appearances">Appearances</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>${prefix ? '' : `
-  <button type="button" class="bar-mode" id="mode-btn" aria-pressed="false" hidden><span class="bm-opt bm-page">Page</span><span class="bm-opt bm-story">Story</span><span class="sr-only"> mode</span></button>`}
+  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#appearances">Appearances</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>
 </nav>`;
 const footer = (prefix) => `<footer class="foot">
   <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
@@ -390,7 +389,7 @@ ${nav('')}
   <section class="archive" aria-labelledby="arch-h">
     <div class="arch-head" data-rise>
       <h2 id="arch-h">Non-Linear Shapeshifting</h2>
-      <p class="lede">Each workshop has its own page, with its model and the full abstract.</p>
+      <p class="lede">Each workshop has its own <span class="ps" id="ps"><span class="ps-w is-on">page</span><span class="ps-w" aria-hidden="true">story</span></span>, with its model and the full abstract.</p>
     </div>
     <div class="figures" id="figures">
       <p class="sr-only">${cap(word(D.workshops.length))} workshops since 2023, for ${seats} participants: teachers, pre-service teachers, students and educators.</p>
@@ -467,13 +466,13 @@ ${nav('')}
     <div class="contact-top">
       <h2 id="contact-h">Connect. Collaborate.<br> <span class="nowrap">Cross-pollinate.</span></h2>
       <div class="say" id="say">
-        <p class="sr-only">Book a workshop, have a conversation, pose a question or ask for information. Curious?</p>
+        <p class="sr-only">Curious?</p>
         <canvas id="say-canvas" aria-hidden="true"></canvas>
-        <p class="say-ws" aria-hidden="true"><span class="say-w">Book a workshop</span><span class="say-w">Have a conversation</span><span class="say-w">Curious?</span><span class="say-w">Pose a question</span><span class="say-w">Ask for information</span></p>
+        <p class="say-ws" aria-hidden="true"><span class="say-w">Curious?</span></p>
       </div>
     </div>
     <div id="email" class="email">
-      <button type="button" id="reveal" class="reveal">Show email address</button>
+      <button type="button" id="reveal" class="reveal">Contact me</button>
       <noscript><p class="nos">Turn on JavaScript to show the address, or find Rocco Acocella on LinkedIn.</p></noscript>
     </div>
     <div class="contact-foot">
@@ -494,11 +493,6 @@ ${footer('')}
 
 ${timelinePanel}
 ${galaxyPanel}
-<div class="story-pill" id="story-pill" hidden>
-  <button type="button" class="st-step" id="st-prev" aria-label="Previous chapter"><span aria-hidden="true">↑</span></button>
-  <p class="st-where" aria-live="polite"><span class="st-n" id="st-n">1</span><span class="st-of" id="st-of"></span><span class="st-name" id="st-name"></span></p>
-  <button type="button" class="st-step" id="st-next" aria-label="Next chapter"><span aria-hidden="true">↓</span></button>
-</div>
 
 <dialog class="al-dialog" id="al-dialog" aria-label="The Alchemy Cycle">
   <button type="button" class="al-close" id="al-close">Close</button>

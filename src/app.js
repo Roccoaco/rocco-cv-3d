@@ -845,58 +845,26 @@
     qFrame();
   }
 
-  /* ---------- page and story modes. Story: each part of the CV is a chapter; the one in the middle of the screen
-     is lit and the others fade back, with a small counter to step through them. Kept in this browser only. ---------- */
-  var modeBtn = document.getElementById('mode-btn'), pill = document.getElementById('story-pill');
-  if (modeBtn && pill && 'IntersectionObserver' in window) {
-    var chapters = [document.querySelector('.lead')].concat(Array.prototype.slice.call(document.querySelectorAll('main>section'))).filter(Boolean);
-    var chName = function (el) { var h = el.querySelector('h1') || el.querySelector('h2'); return h ? h.textContent.replace(/\s+/g, ' ').trim().split('. ')[0].replace(/\.$/, '') : 'Rocco Acocella'; };
-    var stN = document.getElementById('st-n'), stName = document.getElementById('st-name'), stPrev = document.getElementById('st-prev'), stNext = document.getElementById('st-next');
-    document.getElementById('st-of').textContent = 'of ' + chapters.length;
-    var now = 0;
-    var setNow = function (i) {
-      now = i;
-      chapters.forEach(function (c, k) { c.classList.toggle('is-now', k === i); });
-      stN.textContent = i + 1; stName.textContent = chName(chapters[i]);
-      stPrev.disabled = i === 0; stNext.disabled = i === chapters.length - 1;
+  /* ---------- "page" fades into "story" and back: each change is painted with the next stretch of the colour
+     wheel (a new hue pair every time, going round) ---------- */
+  var ps = document.getElementById('ps');
+  if (ps && !reduce && window.CSS && CSS.supports && (CSS.supports('background-clip', 'text') || CSS.supports('-webkit-background-clip', 'text'))) {
+    var psW = Array.prototype.slice.call(ps.children), psOn = 0, psHue = 210;
+    var paint = function (el) {
+      psHue = (psHue + 47) % 360;
+      var dark = getComputedStyle(document.body).backgroundColor.match(/\d+/g), lum = dark ? (+dark[0] + +dark[1] + +dark[2]) / 3 : 255;
+      var L = lum < 100 ? 70 : 40; // dark page: light gradients; light page: deep ones
+      el.style.backgroundImage = 'linear-gradient(100deg, hsl(' + psHue + ', 85%, ' + L + '%), hsl(' + ((psHue + 70) % 360) + ', 85%, ' + (L + 6) + '%))'; // taste-skill-ignore: the colour-wheel word
     };
-    var chIo = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) setNow(chapters.indexOf(e.target)); });
-    }, { rootMargin: '-45% 0px -54% 0px' });
-    chapters.forEach(function (c) { chIo.observe(c); });
-    var goTo = function (i, smooth) {
-      var el = chapters[Math.max(0, Math.min(chapters.length - 1, i))];
-      var bar = document.querySelector('.bar'), y = el === chapters[0] ? 0 : window.pageYOffset + el.getBoundingClientRect().top - (bar ? bar.offsetHeight : 0);
-      var html = document.documentElement, was = html.style.scrollBehavior;
-      if (!smooth || reduce) html.style.scrollBehavior = 'auto';
-      window.scrollTo(0, Math.max(0, y));
-      if (!smooth || reduce) html.style.scrollBehavior = was;
-    };
-    stPrev.addEventListener('click', function () { goTo(now - 1, true); });
-    stNext.addEventListener('click', function () { goTo(now + 1, true); });
-    var MKEY = 'view-mode';
-    var applyMode = function (story, fade) {
-      var keep = now;
-      var swap = function () {
-        doc.classList.toggle('is-story', story);
-        modeBtn.setAttribute('aria-pressed', String(story));
-        pill.hidden = !story;
-        if (fade) goTo(keep, false); // the layout changes height: stay on the same chapter
-      };
-      if (!fade || reduce) { swap(); return; }
-      doc.classList.add('is-fading');
-      setTimeout(function () { swap(); requestAnimationFrame(function () { doc.classList.remove('is-fading'); }); }, 380);
-    };
-    modeBtn.hidden = false;
-    modeBtn.addEventListener('click', function () {
-      var story = modeBtn.getAttribute('aria-pressed') !== 'true';
-      try { localStorage.setItem(MKEY, story ? 'story' : 'page'); } catch (e) {}
-      applyMode(story, true);
-    });
-    var savedMode = null;
-    try { savedMode = localStorage.getItem(MKEY); } catch (e) {}
-    setNow(0);
-    if (savedMode === 'story') applyMode(true, false);
+    var fit = function () { ps.style.width = psW[psOn].getBoundingClientRect().width + 'px'; }; // the gap follows the word
+    paint(psW[0]); ps.classList.add('is-cycling'); fit();
+    window.addEventListener('resize', fit);
+    setInterval(function () {
+      if (document.hidden) return;
+      psW[psOn].classList.remove('is-on');
+      psOn = 1 - psOn; paint(psW[psOn]);
+      psW[psOn].classList.add('is-on'); fit();
+    }, 3200);
   }
 
   requestAnimationFrame(loop);
