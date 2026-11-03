@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-e6zEDG51i5tgYPHD2aSx1lX0nMArc5tcxNU44PbnMCE='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-2Tcq52+NwlWlkgUr3IlErtut8lczOyTRl8caHnz6JBA='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>The SEC-Cr Dimensional Continuum: A Journey through Energy and Potential, a talk by Rocco Acocella</title>
@@ -317,14 +317,29 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 
 .w-text{grid-column:5/12;display:grid;gap:24px;max-width:68ch}
 .w-lead{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25}
-main>section.w-quotes{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);padding-top:clamp(72px,9vw,128px)}
-.w-qh{grid-column:1/5;font-family:var(--f-text);font-weight:400;font-size:var(--s-lead);line-height:1.35;color:var(--muted);max-width:18ch}
-.quotes{grid-column:5/13;list-style:none;margin:0;padding:0;display:grid;gap:clamp(20px,2.4vw,36px);quotes:"\201C" "\201D" "\2018" "\2019"}
-.quotes li{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.2;letter-spacing:-.01em;max-width:32ch}
-.quotes li.is-short{font-size:var(--s-head);letter-spacing:-.02em}
-.quotes li:nth-child(even){margin-left:clamp(0px,6vw,96px)}
-.quotes.slide li{opacity:0;transform:translateX(-14vw);transition:opacity .8s var(--ease),transform 1s var(--ease)}
-.quotes.slide li.is-in{opacity:1;transform:none}
+/* participant quotes: a blue band; the quotes zig-zag across the grid at their own sizes, joined by a looping
+   thread that draws itself with the scroll. Quotes stay at statement size (36px at most). */
+main>section.w-quotes{margin-top:clamp(72px,9vw,128px);padding:clamp(64px,8vw,120px) var(--m) clamp(72px,9vw,136px);background:var(--field);color:var(--on-field);overflow:hidden}
+.w-qh{font-family:var(--f-text);font-weight:400;font-size:var(--s-lead);line-height:1.35;color:var(--on-field-soft);max-width:22ch}
+.q-field{position:relative;margin-top:clamp(40px,5vw,72px)}
+.q-thread{position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.q-path{fill:none;stroke:var(--on-field-soft);stroke-width:1.5;stroke-linecap:round;opacity:.55}
+.quotes{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--g);row-gap:clamp(36px,3.6vw,56px);quotes:"\201C" "\201D" "\2018" "\2019"}
+.q{position:relative;padding-left:28px;font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.22;letter-spacing:-.01em;max-width:30ch}
+.q.is-short{font-size:var(--s-head);letter-spacing:-.025em}
+.q q::before,.q q::after{color:var(--accent)}
+.q em{font-style:normal;color:var(--accent)}
+.q-dot{position:absolute;left:0;top:.5em;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:var(--field);border:2px solid var(--on-field-soft);transition:background-color .6s var(--ease),border-color .6s var(--ease)}
+.q.is-in .q-dot{background:var(--accent);border-color:var(--accent)}
+.q1{grid-column:1/6;grid-row:1}
+.q2{grid-column:6/12;grid-row:2}
+.q3{grid-column:3/7;grid-row:3}
+.q4{grid-column:7/13;grid-row:4}
+.q5{grid-column:2/7;grid-row:5}
+.q6{grid-column:6/13;grid-row:6}
+.quotes.slide .q{opacity:0;transform:translateX(-14vw);transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
+.quotes.slide .q.is-in{opacity:1;transform:none}
+.quotes.slide .q.is-in q{display:inline-block;transform:translateY(var(--drift,0px))}
 .w-next{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);padding:clamp(96px,12vw,160px) var(--m) 0}
 .w-next a{display:grid;gap:8px;text-decoration:none;padding:28px;background:var(--surface);transition:background-color .2s,transform .2s var(--ease)}
 .w-next a:last-child{text-align:right}
@@ -432,9 +447,10 @@ main>section.w-quotes{display:grid;grid-template-columns:repeat(12,1fr);gap:var(
   .w-stage{height:80vh;height:80svh;min-height:0}
   .w-stage canvas{top:84px;bottom:110px;height:calc(100% - 194px)}
   .w-stage figcaption{bottom:20px}
-  .w-abstract,.w-next,main>section.w-quotes{display:block}
-  .quotes{margin-top:24px}
-  .quotes li:nth-child(even){margin-left:24px}
+  .w-abstract,.w-next{display:block}
+  .quotes{display:block}
+  .q{margin-bottom:40px}
+  .q:nth-child(even){margin-left:clamp(24px,10vw,64px)}
   .w-text{margin-top:24px}
   .w-photo{padding-top:64px}
   .bodymap{width:120px}

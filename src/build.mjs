@@ -549,7 +549,10 @@ ${nav('index.html')}
   </section>${w.quotes ? `
   <section class="w-quotes" aria-labelledby="q-h">
     <h2 id="q-h" class="w-qh">How participants described the session:</h2>
-    <ul class="quotes">${w.quotes.map((q) => `<li${q.length < 16 ? ' class="is-short"' : ''}><q>${esc(q)}</q></li>`).join('')}</ul>
+    <div class="q-field">
+      <svg class="q-thread" aria-hidden="true" focusable="false"><path class="q-path" d=""/></svg>
+      <ul class="quotes">${w.quotes.map((q, k) => `<li class="q q${k + 1}${q.length < 18 ? ' is-short' : ''}"><span class="q-dot" aria-hidden="true"></span><q>${esc(q).replace(/\*([^*]+)\*/g, '<em>$1</em>')}</q></li>`).join('')}</ul>
+    </div>
   </section>` : ''}
   <nav class="w-next" aria-label="Other workshops" data-rise>
     <a href="${pageOf(prev)}"><span class="w-dir">Previous workshop</span><span class="w-to">${esc(prev.short)}</span></a>

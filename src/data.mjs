@@ -80,7 +80,8 @@ export const workshops = [
   },
   {
     id: 'w-rome', slug: 'thinker', model: 'profile', short: 'Thinker', city: 'rome', count: 70, sortDate: '2025-06-06',
-    quotes: ['Electrifying', 'An instructive non-informative collaborative experience', 'Visualizing', 'Dedicating space and time to creative thinking can bring out ideas that amaze us', 'Guided and stimulated creative flow', 'It took me out of my comfort zone in the best possible way, leaving me with a real sense of fulfilment'],
+    // *word* marks the word each quote turns on; it is set in the accent colour.
+    quotes: ['*Electrifying*', 'An instructive non-informative *collaborative* experience', '*Visualizing*', 'Dedicating space and time to creative thinking can bring out ideas that *amaze* us', 'Guided and stimulated creative *flow*', 'It took me out of my comfort zone in the best possible way, leaving me with a real sense of *fulfilment*'],
     title: 'IB Learner Profile Thinker: Una prospettiva creativo-cerebrale per la didattica dell’italiano e oltre!',
     venue: 'Italian Summit 2025, Marymount International School Rome', when: '6 June 2025', length: '2 hours', audience: '70 IB teachers',
     text: 'The IB Learner Profile attribute Thinker seen through creativity and cognitive neuroscience. Educators reflected on their own teaching approaches and cognitive styles, and explored brain-based learning and strategies that bring creative thinking into the Learner Profile.'

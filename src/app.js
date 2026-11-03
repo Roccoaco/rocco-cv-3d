@@ -760,21 +760,76 @@
     });
   }
 
-  /* ---------- participant quotes: each slides in from the left as it enters the screen ---------- */
+  /* ---------- participant quotes: each slides in from the left as it enters the screen; a thread loops from
+     dot to dot and draws itself with the scroll; each quote drifts at its own rate. ---------- */
   var quoteList = document.querySelector('.quotes');
-  if (quoteList && !reduce && 'IntersectionObserver' in window) {
-    quoteList.classList.add('slide');
-    var qio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('is-in');
-        qio.unobserve(e.target);
+  if (quoteList) {
+    var qField = quoteList.parentNode, qPath = qField.querySelector('.q-path');
+    var qs = Array.prototype.slice.call(quoteList.children);
+    var DRIFT = [-26, 18, -14, 24, -20, 12];
+    var qLen = 0;
+    var threadD = function () {
+      var fr = qField.getBoundingClientRect(), f = function (n) { return n.toFixed(1); };
+      var pts = qs.map(function (li) {
+        var r = li.firstElementChild.getBoundingClientRect(), b = li.getBoundingClientRect();
+        return { x: r.left + r.width / 2 - fr.left, y: r.top + r.height / 2 - fr.top, top: b.top - fr.top, bottom: b.bottom - fr.top };
       });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    Array.prototype.forEach.call(quoteList.children, function (li, i) {
-      li.style.transitionDelay = (i % 2) * 90 + 'ms';
-      qio.observe(li);
-    });
+      // the thread never crosses a quote: it leaves each dot to the left, runs through the gap below the quote,
+      // curls once in that gap, and comes into the next dot from the left
+      var d = 'M' + f(pts[0].x - 60) + ' ' + f(pts[0].y) + ' L' + f(pts[0].x) + ' ' + f(pts[0].y);
+      for (var k = 1; k < pts.length; k++) {
+        var p = pts[k - 1], q = pts[k], my = (p.bottom + q.top) / 2, gap = q.top - p.bottom;
+        var r = Math.max(5, Math.min(13, gap / 2 - 8)), lx = (p.x + q.x) / 2, dir = q.x >= p.x ? 1 : -1;
+        var po = Math.min(36, Math.max(6, p.x - 4)), qo = Math.min(36, Math.max(6, q.x - 4));
+        d += ' C' + f(p.x - po) + ' ' + f(p.y + 10) + ' ' + f(p.x - po) + ' ' + f(my) + ' ' + f(p.x) + ' ' + f(my);
+        d += ' L' + f(lx - dir * r) + ' ' + f(my);
+        // the curl: a full turn that rises above the line and comes back to it
+        d += ' A' + f(r) + ' ' + f(r) + ' 0 1 ' + (dir > 0 ? 1 : 0) + ' ' + f(lx + dir * r) + ' ' + f(my);
+        d += ' A' + f(r) + ' ' + f(r) + ' 0 1 ' + (dir > 0 ? 1 : 0) + ' ' + f(lx - dir * r + dir * 0.5) + ' ' + f(my);
+        d += ' L' + f(q.x - qo) + ' ' + f(my) + ' C' + f(q.x - qo - 8) + ' ' + f(my) + ' ' + f(q.x - qo) + ' ' + f(q.y) + ' ' + f(q.x) + ' ' + f(q.y);
+      }
+      qPath.setAttribute('d', d);
+      qLen = qPath.getTotalLength ? qPath.getTotalLength() : 0;
+      qPath.style.strokeDasharray = qLen + ' ' + qLen;
+    };
+    var qVisible = false, qTick = 0;
+    var qFrame = function () {
+      qTick = 0;
+      var r = qField.getBoundingClientRect(), vh = window.innerHeight;
+      // 0 as the field's top reaches the bottom of the screen, 1 as its bottom passes the middle
+      var t = Math.min(1, Math.max(0, (vh - r.top) / (r.height + vh * 0.5)));
+      if (!reduce) {
+        qs.forEach(function (li, k) {
+          var c = li.getBoundingClientRect(), off = ((c.top + c.height / 2) - vh / 2) / vh;
+          li.style.setProperty('--drift', (DRIFT[k % DRIFT.length] * off).toFixed(1) + 'px');
+        });
+      }
+      threadD();
+      qPath.style.strokeDashoffset = reduce ? 0 : (qLen * (1 - t)).toFixed(1);
+    };
+    var qQueue = function () { if (qVisible && !qTick) qTick = requestAnimationFrame(qFrame); };
+    if (!reduce && 'IntersectionObserver' in window) {
+      quoteList.classList.add('slide');
+      var qio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-in');
+          qio.unobserve(e.target);
+          // the thread follows the quote while it slides into place
+          var until = Date.now() + 1300, follow = function () { qFrame(); if (Date.now() < until) requestAnimationFrame(follow); };
+          requestAnimationFrame(follow);
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      qs.forEach(function (li, k) { li.style.transitionDelay = (k % 2) * 90 + 'ms'; qio.observe(li); });
+      new IntersectionObserver(function (entries) { qVisible = entries[0].isIntersecting; qQueue(); }).observe(qField);
+    } else {
+      qs.forEach(function (li) { li.classList.add('is-in'); });
+      qVisible = true;
+    }
+    window.addEventListener('scroll', qQueue, { passive: true });
+    window.addEventListener('resize', function () { qVisible = true; qQueue(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(qFrame);
+    qFrame();
   }
 
   requestAnimationFrame(loop);
