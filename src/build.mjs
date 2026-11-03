@@ -151,6 +151,43 @@ const talkFilter = `
         <button type="button" class="tf-reset">Back to the defaults</button>
       </details>
       <p class="tf-status sr-only" aria-live="polite"></p>`;
+// ---- the timeline: every date on the site, newest first, grouped by year ----
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const dateKey = (txt) => { // the first date in "29 Jun – 2 Jul 2026", "Aug 2024 – Jun 2025", "January to February 2025" …
+  const y = (txt.match(/\b(19|20)\d{2}\b/) || [''])[0];
+  const m = txt.toLowerCase().match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/);
+  const mi = m ? MONTHS.indexOf(m[1]) + 1 : 0;
+  const d = m ? (txt.slice(0, m.index).match(/(\d{1,2})\D*$/) || [])[1] : '';
+  return `${y}-${String(mi).padStart(2, '0')}-${String(+d || 0).padStart(2, '0')}`;
+};
+const TL_KINDS = { workshop: 'Workshops', talk: 'Talks', conference: 'Conferences', role: 'Teaching', publication: 'Publications', video: 'Appearances' };
+const timeline = [
+  ...D.workshops.map((w) => ({ kind: 'workshop', key: w.sortDate, when: w.when, title: w.title, sub: `${w.venue}, ${place(w.city)}`, href: pageOf(w) })),
+  ...D.talks.map((t) => ({ kind: 'talk', key: dateKey(t.when), when: t.when, title: t.title, sub: `${t.kind}, ${t.conf}`, href: t.slug ? `${t.slug}.html` : '#talks' })),
+  ...D.conferences.map((c) => ({ kind: 'conference', key: dateKey(c.when), when: c.when, title: c.title, sub: [c.place, place(c.city)].filter(Boolean).join(', '), href: '#talks' })),
+  ...D.roles.map((r) => ({ kind: 'role', key: dateKey(r.when), when: r.when, title: r.role, sub: `${r.school}, ${place(r.city)}`, href: '#work' })),
+  ...D.publications.map((p) => ({ kind: 'publication', key: dateKey(p.cite), when: (p.cite.match(/\((\d{4})\)/) || [])[1], title: p.cite.replace(/^.*?\(\d{4}\)\.\s*/, '').split('. ')[0], sub: p.cite.split(' (')[0], href: '#training' })),
+  ...D.appearances.filter((a) => a.when).map((a) => ({ kind: 'video', key: dateKey(a.when), when: a.when, title: a.title, sub: 'Video', href: '#appearances' }))
+].sort((a, b) => (a.key < b.key ? 1 : a.key > b.key ? -1 : 0));
+const tlYears = [...new Set(timeline.map((e) => e.key.slice(0, 4)))];
+const tlCount = (k) => timeline.filter((e) => e.kind === k).length;
+const timelinePanel = `
+<div class="tl" id="timeline" role="dialog" aria-modal="true" aria-labelledby="tl-h" hidden>
+  <div class="tl-panel">
+    <div class="tl-top">
+      <h2 id="tl-h">Timeline</h2>
+      <p class="tl-sum">${timeline.length} dates, ${tlYears[tlYears.length - 1]} to ${tlYears[0]}</p>
+      <button type="button" class="tl-close" id="tl-close">Close</button>
+    </div>
+    <div class="tl-filters" role="group" aria-label="Show in the timeline">${Object.entries(TL_KINDS).map(([k, label]) => `<button type="button" class="tl-f tl-k-${k}" data-kind="${k}" aria-pressed="true"><span class="tl-dot" aria-hidden="true"></span>${label} <span class="tl-n">${tlCount(k)}</span></button>`).join('')}</div>
+    <nav class="tl-years" aria-label="Years">${tlYears.map((y) => `<a href="#tl-${y}" data-year="${y}">${y}</a>`).join('')}</nav>
+    <div class="tl-scroll" id="tl-scroll">
+      <div class="tl-rail" aria-hidden="true"><span class="tl-fill" id="tl-fill"></span></div>
+      ${tlYears.map((y) => `<section class="tl-year" id="tl-${y}" aria-labelledby="tl-y-${y}"><h3 id="tl-y-${y}" class="tl-y">${y}</h3><ol class="tl-list">${timeline.filter((e) => e.key.startsWith(y)).map((e) => `
+        <li class="tl-item tl-k-${e.kind}" data-kind="${e.kind}"><a href="${e.href}"><span class="tl-dot" aria-hidden="true"></span><span class="tl-when">${esc(e.when)}</span><span class="tl-kind">${TL_KINDS[e.kind].replace(/s$/, '')}</span><span class="tl-title">${esc(e.title)}</span><span class="tl-sub">${esc(e.sub)}</span></a></li>`).join('')}</ol></section>`).join('')}
+    </div>
+  </div>
+</div>`;
 const talkRows = D.talks.map((t) => `
           <li class="row" tabindex="0" data-city="${t.hub ? D.hubs[t.hub].city : t.city}" data-mode="${modeOf(t)}">
             <div class="row-top"><span class="row-title"><span class="mode-dot" aria-hidden="true"></span>${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
@@ -326,6 +363,7 @@ ${nav('')}
         <canvas id="map" role="img" aria-label="Map of the cities where Rocco has taught, presented and studied, linked to Milan."></canvas>
         <figcaption id="map-label">Milan</figcaption>
       </figure>
+      <button type="button" class="tl-open" id="tl-open" aria-haspopup="dialog" aria-controls="timeline"><span class="tl-open-l">Timeline</span><span class="tl-open-s">${timeline.length} dates, ${tlYears[tlYears.length - 1]}–${tlYears[0]}</span></button>
     </div>
     <div class="lists">
       <h2 id="talks-h">Talks</h2>${talkFilter}
@@ -393,6 +431,8 @@ ${nav('')}
 </main>
 
 ${footer('')}
+
+${timelinePanel}
 
 <dialog class="al-dialog" id="al-dialog" aria-label="The Alchemy Cycle">
   <button type="button" class="al-close" id="al-close">Close</button>

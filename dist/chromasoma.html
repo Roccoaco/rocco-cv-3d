@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-5nahRb7Fow2Wpg6zoTwNjkALmbFpGrWKQHhVjfqfjHM='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-t+N71DKwtyhc2lWTB0fAn3evNLAx1GWcXQUKuLVK1II='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Chromasoma, a workshop by Rocco Acocella</title>
@@ -617,6 +617,67 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .nowrap{white-space:nowrap}
 .w-name.is-long{font-size:clamp(2.25rem,1.4rem + 2.6vw,4rem);line-height:.98}
 .w-sub{margin-top:14px;font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25;letter-spacing:-.01em;max-width:30ch}
+
+/* ---------- session 11: the timeline pop-up (opened from under the talks map) ---------- */
+.tl-open{display:flex;align-items:baseline;justify-content:space-between;gap:16px;width:100%;min-height:56px;margin-top:12px;padding:12px 18px;border:0;background:var(--ink);color:var(--bg);font-family:var(--f-display);cursor:pointer;text-align:left;transition:transform .2s var(--ease),background-color .2s}
+.tl-open:hover{transform:translateY(-2px);background:var(--field);color:#FFFFFF}
+.tl-open:active{transform:translateY(1px)}
+.tl-open-l{font-weight:800;font-size:var(--s-lead);letter-spacing:-.01em}
+.tl-open-s{font-weight:600;font-size:var(--s-small);opacity:.8}
+html.tl-locked{overflow:hidden}
+.tl{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(11,27,77,0);transition:background-color .3s var(--ease)}
+.tl.is-open{background:rgba(11,27,77,.6)}
+.tl[hidden]{display:none}
+.tl-panel{display:flex;flex-direction:column;width:min(100%,820px);height:min(100%,920px);background:var(--bg);color:var(--ink);opacity:0;transform:translateY(28px) scale(.98);transition:opacity .3s var(--ease),transform .4s var(--ease)}
+.tl.is-open .tl-panel{opacity:1;transform:none}
+.tl-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:4px 16px;padding:clamp(20px,3vw,32px) clamp(20px,3vw,36px) 0}
+.tl-top h2{font-size:var(--s-display);line-height:.9;letter-spacing:-.04em}
+.tl-sum{grid-column:1;font-family:var(--f-display);font-weight:600;font-size:var(--s-small);color:var(--muted)}
+.tl-close{grid-column:2;grid-row:1/3;align-self:start;min-height:44px;padding:0 16px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:var(--s-small);cursor:pointer;transition:transform .18s var(--ease)}
+.tl-close:hover{transform:translateY(-2px)}
+.tl-filters{display:flex;flex-wrap:wrap;gap:6px;padding:18px clamp(20px,3vw,36px) 0}
+.tl-f{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--f-display);font-weight:700;font-size:.875rem;cursor:pointer;transition:background-color .18s,color .18s,transform .18s var(--ease)}
+.tl-f:hover{transform:translateY(-1px)}
+.tl-f[aria-pressed="false"]{background:transparent;color:var(--ink)}
+.tl-f .tl-n{margin-left:6px;font-weight:500;opacity:.75}
+.tl-years{display:flex;flex-wrap:wrap;gap:4px 18px;padding:14px clamp(20px,3vw,36px) 12px;font-family:var(--f-display);font-weight:800;font-size:var(--s-body)}
+.tl-years a{color:var(--muted);text-decoration:none;transition:color .2s}
+.tl-years a:hover,.tl-years a.is-here{color:var(--field)}
+.tl-years a[hidden]{display:none}
+.tl-scroll{position:relative;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:8px clamp(20px,3vw,36px) 48px clamp(44px,6vw,64px);background:var(--surface)}
+.tl-rail{position:absolute;top:0;bottom:0;left:clamp(26px,3.6vw,38px);width:2px;background:var(--bg)}
+.tl-fill{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--field);transform-origin:top;transform:scaleY(0)}
+.tl-year{padding-top:22px}
+.tl-year[hidden]{display:none}
+.tl-y{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);letter-spacing:-.02em;margin-bottom:6px}
+.tl-list{list-style:none;padding:0}
+.tl-item[hidden]{display:none}
+.tl-item a{position:relative;display:grid;grid-template-columns:minmax(7.5em,auto) 1fr;gap:2px 18px;padding:12px 0;color:var(--ink);text-decoration:none;opacity:0;transform:translateY(12px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.tl.is-open .tl-item a{opacity:1;transform:none}
+.tl-item a:hover .tl-title,.tl-item a:focus-visible .tl-title{color:var(--field)}
+.tl-item a:hover{transform:translateX(4px)}
+.tl-item .tl-dot{position:absolute;left:calc(-1 * clamp(44px,6vw,64px) + clamp(26px,3.6vw,38px) - 5px);top:19px}
+.tl-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--k);flex:none}
+.tl-f .tl-dot{margin-right:8px;border:2px solid var(--bg)}
+.tl-when{grid-column:1;font-family:var(--f-display);font-weight:700;font-size:var(--s-small)}
+.tl-kind{grid-column:1;font-family:var(--f-display);font-weight:600;font-size:.875rem;color:var(--muted)}
+.tl-title{grid-column:2;grid-row:1;font-family:var(--f-display);font-weight:700;font-size:var(--s-body);line-height:1.3;transition:color .2s}
+.tl-sub{grid-column:2;grid-row:2/4;font-size:var(--s-small);color:var(--muted);line-height:1.45}
+.tl-k-workshop{--k:#E0A800}
+.tl-k-talk{--k:var(--field)}
+.tl-k-conference{--k:#6E7AA6}
+.tl-k-role{--k:#0F8A5F}
+.tl-k-publication{--k:#C2255C}
+.tl-k-video{--k:#C2410C}
+@media (max-width:700px){
+  .tl{padding:0}
+  .tl-panel{width:100%;height:100%}
+  .tl-top h2{font-size:clamp(2.5rem,12vw,3.5rem)}
+  .tl-item a{grid-template-columns:1fr}
+  .tl-title,.tl-sub,.tl-kind,.tl-when{grid-column:1;grid-row:auto}
+  .tl-open{margin-top:0}
+}
+@media (prefers-reduced-motion:reduce){.tl,.tl-panel,.tl-item a{transition:none}}
 .sw-inperson-0{background:#1537C7}.sw-inperson-1{background:#0F8A5F}.sw-inperson-2{background:#7A3FD1}.sw-inperson-3{background:#0B1B4D}.sw-online-0{background:#C2410C}.sw-online-1{background:#C2255C}.sw-online-2{background:#9A6700}.sw-online-3{background:#0E7C86}</style>
 </head>
 <body id="top" class="wpage">
@@ -678,6 +739,6 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 </footer>
 
 <script type="application/json" id="cv-data">{"cities":{"milan":{"name":"Milan","country":"Italy","lat":45.46,"lon":9.19,"lab":"r"},"chieri":{"name":"Chieri (Turin)","country":"Italy","lat":45.01,"lon":7.82,"lab":"l"},"rome":{"name":"Rome","country":"Italy","lat":41.9,"lon":12.5,"lab":"r"},"basel":{"name":"Basel","country":"Switzerland","lat":47.56,"lon":7.59,"lab":"l"},"vienna":{"name":"Vienna","country":"Austria","lat":48.21,"lon":16.37,"lab":"r"},"brighton":{"name":"Brighton","country":"United Kingdom","lat":50.82,"lon":-0.14,"lab":"b"},"cambridge":{"name":"Cambridge","country":"United Kingdom","lat":52.21,"lon":0.12,"lab":"r"},"maynooth":{"name":"Maynooth","country":"Ireland","lat":53.38,"lon":-6.59,"lab":"l"},"dublin":{"name":"Dublin","country":"Ireland","lat":53.35,"lon":-6.26,"lab":"r"},"brussels":{"name":"Brussels","country":"Belgium","lat":50.85,"lon":4.35,"lab":"r"},"reykjavik":{"name":"Reykjavík","country":"Iceland","lat":64.15,"lon":-21.94,"lab":"r"},"athens":{"name":"Athens","country":"Greece","lat":37.98,"lon":23.73,"lab":"r"},"sharm":{"name":"Sharm El-Sheikh","country":"Egypt","lat":27.92,"lon":34.33,"lab":"l"},"malta":{"name":"Msida","country":"Malta","lat":35.9,"lon":14.48,"lab":"r"},"venice":{"name":"Venice","country":"Italy","lat":45.44,"lon":12.33,"lab":"r"},"como":{"name":"Como","country":"Italy","lat":45.81,"lon":9.09,"lab":"l"},"pasadena":{"name":"Pasadena","country":"United States","region":"California","lat":34.15,"lon":-118.14,"lab":"r","inset":true},"online":{"name":"Online","country":"","lat":null,"lon":null}},"workshops":[{"id":"w-vienna","slug":"multilingualism","model":"ring","count":8,"when":"23 October 2026","audience":"8 language teachers","place":"Vienna, Austria"},{"id":"w-chromasoma","slug":"chromasoma","model":"spiral","count":25,"when":"19 June 2026","audience":"25 attendees","place":"Online"},{"id":"w-turin","slug":"alternating-attention","model":"deck","count":48,"when":"8 May 2026","audience":"48 IB teachers","place":"Chieri (Turin), Italy"},{"id":"w-mita","slug":"idea-bouncing","model":"arch","count":14,"when":"21 March 2026","audience":"14 teachers","place":"Milan, Italy"},{"id":"w-friction","slug":"productive-friction","model":"hubs","count":30,"when":"19 January 2026","audience":"30 participants","place":"Online"},{"id":"w-csm26","slug":"legociation","model":"arch","count":25,"when":"7 January 2026","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-basel","slug":"idea-to-creation","model":"creation","count":15,"when":"24 October 2025","audience":"15 teachers","place":"Basel, Switzerland"},{"id":"w-rome","slug":"thinker","model":"profile","count":70,"when":"6 June 2025","audience":"70 IB teachers","place":"Rome, Italy"},{"id":"w-ai","slug":"raising-awareness","model":"stairs","count":25,"when":"January to February 2025","audience":"25 teachers","place":"Milan, Italy"},{"id":"w-journey","slug":"thinking-journey","model":"stations","count":80,"when":"October 2024","audience":"80 MYP students","place":"Milan, Italy"},{"id":"w-iceland24","slug":"creative-mindset","model":"growth","count":14,"when":"October 2024","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"},{"id":"w-rights","slug":"human-rights-and-the-brain","model":"bridge","count":14,"when":"February to April 2024","audience":"14 MYP3 students","place":"Milan, Italy"},{"id":"w-iceland23","slug":"mindset-journey","model":"path","count":14,"when":"March to April 2023","audience":"14 pre-service teachers","place":"Reykjavík, Iceland"}]}</script>
-<script src="app.js" integrity="sha384-8VesXvEGQDxJVjuvk+qwnViSbGG6TeNwJx2ePYgFPwxtOwPrkd4JYv4DVV5jA0Zv" defer></script>
+<script src="app.js" integrity="sha384-479Va9vvDIK6AL2lWzROWVcIzhTJw05hNubF6rRuBGcD+RDB5BCJ7rH+dRFu0GyG" defer></script>
 </body>
 </html>

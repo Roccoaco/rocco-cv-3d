@@ -689,5 +689,76 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
   }
 
+
+  /* ---------- the timeline pop-up: every date on the site, filters by kind, a year index, a filling rail ---------- */
+  var tl = document.getElementById('timeline'), tlOpen = document.getElementById('tl-open');
+  if (tl && tlOpen) {
+    var tlScroll = document.getElementById('tl-scroll'), tlFill = document.getElementById('tl-fill');
+    var tlItems = Array.prototype.slice.call(tl.querySelectorAll('.tl-item'));
+    var tlYearsSec = Array.prototype.slice.call(tl.querySelectorAll('.tl-year'));
+    var tlYearLinks = Array.prototype.slice.call(tl.querySelectorAll('.tl-years a'));
+    var tlFilters = Array.prototype.slice.call(tl.querySelectorAll('.tl-f'));
+    var tlLast = null;
+    tlItems.forEach(function (li, i) { li.firstElementChild.style.transitionDelay = (Math.min(i, 16) * 0.03) + 's'; });
+    function tlProgress() {
+      var max = tlScroll.scrollHeight - tlScroll.clientHeight;
+      tlFill.style.transform = 'scaleY(' + (max > 0 ? tlScroll.scrollTop / max : 1) + ')';
+      var here = null;
+      tlYearsSec.forEach(function (sec) { if (!sec.hidden && sec.offsetTop - tlScroll.scrollTop < 80) here = sec.id; });
+      if (!here && tlYearsSec.length) here = tlYearsSec[0].id;
+      tlYearLinks.forEach(function (a) { a.classList.toggle('is-here', 'tl-' + a.getAttribute('data-year') === here); });
+    }
+    function openTl() {
+      tlLast = document.activeElement;
+      tl.hidden = false; document.documentElement.classList.add('tl-locked');
+      tlScroll.scrollTop = 0; tlProgress();
+      requestAnimationFrame(function () { requestAnimationFrame(function () { tl.classList.add('is-open'); }); });
+      document.getElementById('tl-close').focus();
+    }
+    function closeTl(then) {
+      tl.classList.remove('is-open'); document.documentElement.classList.remove('tl-locked');
+      setTimeout(function () { tl.hidden = true; if (then) then(); else if (tlLast) tlLast.focus(); }, reduce ? 0 : 280);
+    }
+    tlOpen.addEventListener('click', openTl);
+    document.getElementById('tl-close').addEventListener('click', function () { closeTl(); });
+    tl.addEventListener('click', function (e) { if (e.target === tl) closeTl(); });
+    tl.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); closeTl(); return; }
+      if (e.key !== 'Tab') return;
+      var f = Array.prototype.filter.call(tl.querySelectorAll('button, a[href]'), function (el) { return el.offsetParent !== null; });
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    });
+    tlScroll.addEventListener('scroll', tlProgress, { passive: true });
+    tlFilters.forEach(function (b) {
+      b.addEventListener('click', function () {
+        b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
+        var on = {}; tlFilters.forEach(function (o) { on[o.getAttribute('data-kind')] = o.getAttribute('aria-pressed') === 'true'; });
+        tlItems.forEach(function (li) { li.hidden = !on[li.getAttribute('data-kind')]; });
+        tlYearsSec.forEach(function (sec, i) {
+          var any = Array.prototype.some.call(sec.querySelectorAll('.tl-item'), function (li) { return !li.hidden; });
+          sec.hidden = !any; tlYearLinks[i].hidden = !any;
+        });
+        tlProgress();
+      });
+    });
+    tlYearLinks.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var sec = document.getElementById('tl-' + a.getAttribute('data-year'));
+        if (sec) tlScroll.scrollTo ? tlScroll.scrollTo({ top: sec.offsetTop - 4, behavior: reduce ? 'auto' : 'smooth' }) : (tlScroll.scrollTop = sec.offsetTop - 4);
+      });
+    });
+    tlItems.forEach(function (li) {
+      var a = li.firstElementChild, h = a.getAttribute('href');
+      if (h.charAt(0) !== '#') return;
+      a.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        closeTl(function () { landOn(h.slice(1), true); if (history.pushState) history.pushState(null, '', h); });
+      });
+    });
+  }
+
   requestAnimationFrame(loop);
 })();

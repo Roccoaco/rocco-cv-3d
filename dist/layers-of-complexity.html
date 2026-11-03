@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-5nahRb7Fow2Wpg6zoTwNjkALmbFpGrWKQHhVjfqfjHM='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-t+N71DKwtyhc2lWTB0fAn3evNLAx1GWcXQUKuLVK1II='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Layers of Complexity, a talk by Rocco Acocella</title>
@@ -617,6 +617,67 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .nowrap{white-space:nowrap}
 .w-name.is-long{font-size:clamp(2.25rem,1.4rem + 2.6vw,4rem);line-height:.98}
 .w-sub{margin-top:14px;font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25;letter-spacing:-.01em;max-width:30ch}
+
+/* ---------- session 11: the timeline pop-up (opened from under the talks map) ---------- */
+.tl-open{display:flex;align-items:baseline;justify-content:space-between;gap:16px;width:100%;min-height:56px;margin-top:12px;padding:12px 18px;border:0;background:var(--ink);color:var(--bg);font-family:var(--f-display);cursor:pointer;text-align:left;transition:transform .2s var(--ease),background-color .2s}
+.tl-open:hover{transform:translateY(-2px);background:var(--field);color:#FFFFFF}
+.tl-open:active{transform:translateY(1px)}
+.tl-open-l{font-weight:800;font-size:var(--s-lead);letter-spacing:-.01em}
+.tl-open-s{font-weight:600;font-size:var(--s-small);opacity:.8}
+html.tl-locked{overflow:hidden}
+.tl{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(11,27,77,0);transition:background-color .3s var(--ease)}
+.tl.is-open{background:rgba(11,27,77,.6)}
+.tl[hidden]{display:none}
+.tl-panel{display:flex;flex-direction:column;width:min(100%,820px);height:min(100%,920px);background:var(--bg);color:var(--ink);opacity:0;transform:translateY(28px) scale(.98);transition:opacity .3s var(--ease),transform .4s var(--ease)}
+.tl.is-open .tl-panel{opacity:1;transform:none}
+.tl-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:4px 16px;padding:clamp(20px,3vw,32px) clamp(20px,3vw,36px) 0}
+.tl-top h2{font-size:var(--s-display);line-height:.9;letter-spacing:-.04em}
+.tl-sum{grid-column:1;font-family:var(--f-display);font-weight:600;font-size:var(--s-small);color:var(--muted)}
+.tl-close{grid-column:2;grid-row:1/3;align-self:start;min-height:44px;padding:0 16px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:var(--s-small);cursor:pointer;transition:transform .18s var(--ease)}
+.tl-close:hover{transform:translateY(-2px)}
+.tl-filters{display:flex;flex-wrap:wrap;gap:6px;padding:18px clamp(20px,3vw,36px) 0}
+.tl-f{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--f-display);font-weight:700;font-size:.875rem;cursor:pointer;transition:background-color .18s,color .18s,transform .18s var(--ease)}
+.tl-f:hover{transform:translateY(-1px)}
+.tl-f[aria-pressed="false"]{background:transparent;color:var(--ink)}
+.tl-f .tl-n{margin-left:6px;font-weight:500;opacity:.75}
+.tl-years{display:flex;flex-wrap:wrap;gap:4px 18px;padding:14px clamp(20px,3vw,36px) 12px;font-family:var(--f-display);font-weight:800;font-size:var(--s-body)}
+.tl-years a{color:var(--muted);text-decoration:none;transition:color .2s}
+.tl-years a:hover,.tl-years a.is-here{color:var(--field)}
+.tl-years a[hidden]{display:none}
+.tl-scroll{position:relative;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:8px clamp(20px,3vw,36px) 48px clamp(44px,6vw,64px);background:var(--surface)}
+.tl-rail{position:absolute;top:0;bottom:0;left:clamp(26px,3.6vw,38px);width:2px;background:var(--bg)}
+.tl-fill{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--field);transform-origin:top;transform:scaleY(0)}
+.tl-year{padding-top:22px}
+.tl-year[hidden]{display:none}
+.tl-y{font-family:var(--f-display);font-weight:800;font-size:var(--s-head);letter-spacing:-.02em;margin-bottom:6px}
+.tl-list{list-style:none;padding:0}
+.tl-item[hidden]{display:none}
+.tl-item a{position:relative;display:grid;grid-template-columns:minmax(7.5em,auto) 1fr;gap:2px 18px;padding:12px 0;color:var(--ink);text-decoration:none;opacity:0;transform:translateY(12px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.tl.is-open .tl-item a{opacity:1;transform:none}
+.tl-item a:hover .tl-title,.tl-item a:focus-visible .tl-title{color:var(--field)}
+.tl-item a:hover{transform:translateX(4px)}
+.tl-item .tl-dot{position:absolute;left:calc(-1 * clamp(44px,6vw,64px) + clamp(26px,3.6vw,38px) - 5px);top:19px}
+.tl-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--k);flex:none}
+.tl-f .tl-dot{margin-right:8px;border:2px solid var(--bg)}
+.tl-when{grid-column:1;font-family:var(--f-display);font-weight:700;font-size:var(--s-small)}
+.tl-kind{grid-column:1;font-family:var(--f-display);font-weight:600;font-size:.875rem;color:var(--muted)}
+.tl-title{grid-column:2;grid-row:1;font-family:var(--f-display);font-weight:700;font-size:var(--s-body);line-height:1.3;transition:color .2s}
+.tl-sub{grid-column:2;grid-row:2/4;font-size:var(--s-small);color:var(--muted);line-height:1.45}
+.tl-k-workshop{--k:#E0A800}
+.tl-k-talk{--k:var(--field)}
+.tl-k-conference{--k:#6E7AA6}
+.tl-k-role{--k:#0F8A5F}
+.tl-k-publication{--k:#C2255C}
+.tl-k-video{--k:#C2410C}
+@media (max-width:700px){
+  .tl{padding:0}
+  .tl-panel{width:100%;height:100%}
+  .tl-top h2{font-size:clamp(2.5rem,12vw,3.5rem)}
+  .tl-item a{grid-template-columns:1fr}
+  .tl-title,.tl-sub,.tl-kind,.tl-when{grid-column:1;grid-row:auto}
+  .tl-open{margin-top:0}
+}
+@media (prefers-reduced-motion:reduce){.tl,.tl-panel,.tl-item a{transition:none}}
 .sw-inperson-0{background:#1537C7}.sw-inperson-1{background:#0F8A5F}.sw-inperson-2{background:#7A3FD1}.sw-inperson-3{background:#0B1B4D}.sw-online-0{background:#C2410C}.sw-online-1{background:#C2255C}.sw-online-2{background:#9A6700}.sw-online-3{background:#0E7C86}</style>
 </head>
 <body id="top" class="wpage">

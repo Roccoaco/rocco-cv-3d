@@ -119,7 +119,7 @@ export const workshops = [
 // Appearances: videos Rocco appears in, embedded from youtube-nocookie.com (title: shown on the page).
 export const appearances = [
   { id: 'ZgZkhWetIQ8', title: 'Rocco Acocella on YouTube', note: '' },
-  { id: 'grIs0uHWAqw', title: 'Possibility Studies Conference 2026', note: 'Highlights from the Possibility Studies Network Conference 2026 at the University of Sussex, Brighton, United Kingdom.' }
+  { id: 'grIs0uHWAqw', title: 'Possibility Studies Conference 2026', when: 'July 2026', note: 'Highlights from the Possibility Studies Network Conference 2026 at the University of Sussex, Brighton, United Kingdom.' }
 ];
 
 export const talks = [
