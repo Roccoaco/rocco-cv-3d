@@ -760,5 +760,22 @@
     });
   }
 
+  /* ---------- participant quotes: each slides in from the left as it enters the screen ---------- */
+  var quoteList = document.querySelector('.quotes');
+  if (quoteList && !reduce && 'IntersectionObserver' in window) {
+    quoteList.classList.add('slide');
+    var qio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        qio.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px' });
+    Array.prototype.forEach.call(quoteList.children, function (li, i) {
+      li.style.transitionDelay = (i % 2) * 90 + 'ms';
+      qio.observe(li);
+    });
+  }
+
   requestAnimationFrame(loop);
 })();

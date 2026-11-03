@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-RKJWZHS2lYaqg+Je/pHSn9gccDS4GWEeamkMJ4PovwI='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-e6zEDG51i5tgYPHD2aSx1lX0nMArc5tcxNU44PbnMCE='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>The SEC-Cr Dimensional Continuum: A Journey through Energy and Potential, a talk by Rocco Acocella</title>
@@ -317,6 +317,14 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 
 .w-text{grid-column:5/12;display:grid;gap:24px;max-width:68ch}
 .w-lead{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25}
+main>section.w-quotes{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);padding-top:clamp(72px,9vw,128px)}
+.w-qh{grid-column:1/5;font-family:var(--f-text);font-weight:400;font-size:var(--s-lead);line-height:1.35;color:var(--muted);max-width:18ch}
+.quotes{grid-column:5/13;list-style:none;margin:0;padding:0;display:grid;gap:clamp(20px,2.4vw,36px);quotes:"\201C" "\201D" "\2018" "\2019"}
+.quotes li{font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.2;letter-spacing:-.01em;max-width:32ch}
+.quotes li.is-short{font-size:var(--s-head);letter-spacing:-.02em}
+.quotes li:nth-child(even){margin-left:clamp(0px,6vw,96px)}
+.quotes.slide li{opacity:0;transform:translateX(-14vw);transition:opacity .8s var(--ease),transform 1s var(--ease)}
+.quotes.slide li.is-in{opacity:1;transform:none}
 .w-next{display:grid;grid-template-columns:1fr 1fr;gap:var(--g);padding:clamp(96px,12vw,160px) var(--m) 0}
 .w-next a{display:grid;gap:8px;text-decoration:none;padding:28px;background:var(--surface);transition:background-color .2s,transform .2s var(--ease)}
 .w-next a:last-child{text-align:right}
@@ -424,7 +432,9 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
   .w-stage{height:80vh;height:80svh;min-height:0}
   .w-stage canvas{top:84px;bottom:110px;height:calc(100% - 194px)}
   .w-stage figcaption{bottom:20px}
-  .w-abstract,.w-next{display:block}
+  .w-abstract,.w-next,main>section.w-quotes{display:block}
+  .quotes{margin-top:24px}
+  .quotes li:nth-child(even){margin-left:24px}
   .w-text{margin-top:24px}
   .w-photo{padding-top:64px}
   .bodymap{width:120px}

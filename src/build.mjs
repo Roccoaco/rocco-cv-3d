@@ -546,7 +546,11 @@ ${nav('index.html')}
       <p class="w-lead">${esc(w.title)}</p>
       ${(D.abstracts[w.id] || [w.text]).map((t) => `<p>${esc(t)}</p>`).join('\n      ')}
     </div>
-  </section>
+  </section>${w.quotes ? `
+  <section class="w-quotes" aria-labelledby="q-h">
+    <h2 id="q-h" class="w-qh">How participants described the session:</h2>
+    <ul class="quotes">${w.quotes.map((q) => `<li${q.length < 16 ? ' class="is-short"' : ''}><q>${esc(q)}</q></li>`).join('')}</ul>
+  </section>` : ''}
   <nav class="w-next" aria-label="Other workshops" data-rise>
     <a href="${pageOf(prev)}"><span class="w-dir">Previous workshop</span><span class="w-to">${esc(prev.short)}</span></a>
     <a href="${pageOf(next)}"><span class="w-dir">Next workshop</span><span class="w-to">${esc(next.short)}</span></a>
