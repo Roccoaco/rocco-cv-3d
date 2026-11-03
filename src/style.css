@@ -514,3 +514,5 @@ main>section#work{padding-top:clamp(72px,9vw,128px)}
 .is-cycling .fig-w:not(.is-on),.say.is-cycling .say-w:not(.is-on){pointer-events:none}
 @media (max-width:700px){.contact-top h2{font-size:clamp(2.5rem,12vw,3.5rem)}}
 .nowrap{white-space:nowrap}
+.w-name.is-long{font-size:clamp(2.25rem,1.4rem + 2.6vw,4rem);line-height:.98}
+.w-sub{margin-top:14px;font-family:var(--f-display);font-weight:700;font-size:var(--s-lead);line-height:1.25;letter-spacing:-.01em;max-width:30ch}

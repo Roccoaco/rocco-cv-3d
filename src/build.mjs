@@ -489,6 +489,8 @@ ${footer('index.html')}
 
 // --- a page for a talk that has its own picture ---
 for (const t of D.talks.filter((t) => t.slug)) {
+  // a long title is split at its colon: the main title as the heading, the rest under it
+  const [tMain, tSub] = t.title.includes(': ') ? [t.title.slice(0, t.title.indexOf(': ')), t.title.slice(t.title.indexOf(': ') + 2)] : [t.title, ''];
   const page = `<!doctype html>
 <html lang="en">
 <head>
@@ -508,7 +510,8 @@ ${nav('index.html')}
 
 <header class="w-hero t-hero" id="talk">
   <div class="w-paper">
-    <h1 class="w-name">${esc(t.title)}</h1>
+    <h1 class="w-name${tMain.length > 24 ? ' is-long' : ''}">${esc(tMain)}</h1>${tSub ? `
+    <p class="w-sub">${esc(tSub)}</p>` : ''}
     <p class="w-title">${esc(t.kind)} at ${esc(t.conf)}.</p>
     <dl class="w-facts">
       <div><dt>When</dt><dd>${esc(t.when)}</dd></div>

@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'sha256-tPMOi8WatwIqyyM0DZNx7LVkwcevDXiUax+u2beECJw='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'sha256-5nahRb7Fow2Wpg6zoTwNjkALmbFpGrWKQHhVjfqfjHM='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

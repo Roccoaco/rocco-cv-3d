@@ -87,6 +87,11 @@ Palette: paper #F3F5FA, navy ink #0B1B4D, cobalt field #1537C7 (CV blue shifted 
 
 - Links to a section (top bar, buttons, "All workshops", "Read the abstract", links from other pages) land at the start of the section's content, just under the top bar, instead of the empty padding above it (`landOn` in `app.js`). Arrivals from another page re-land once fonts and layout have settled.
 
+## Done in session 10
+- Pictures (email lines and slide numbers cropped off): talk pages for The SEC-Cr Dimensional Continuum (`sec-cr-dimensional-continuum.html`) and Unlocking the Power of Vision (`unlocking-the-power-of-vision.html`), each with its title slide; the Ideas Bouncing image on the Idea Bouncing (MITA 2026) page; the From Idea to Creation title slide on its page. Talk pages split a long title at its colon (heading, then subtitle).
+- The Idea Bouncing image went to the MITA 2026 page (`idea-bouncing.html`); the LEGO™ciation page (Canadian School of Milan, same title) has no picture. Confirm.
+- Publications now run newest first: the 2021 article moved from first to last.
+
 ## Still to do
 1. **Photos (the one remaining inspector FAIL).** The page has no raster pictures. The open collections (Openverse, Wikimedia, AIC, the Met) are blocked by this environment's network policy, and found pictures could only show Rocco's world, not him. Best fix: Rocco's own photos of his workshops (four or more). Drop them in `src/photos/`, list them in `photos` in `src/data.mjs` with a slot (`teaching`, `workshops`, `talks`, `contact`), alt text and caption, and rebuild. A short muted clip of a workshop would also clear the no-footage warning.
 2. **Abstracts**: done in session 4 (`abstracts` in `data.mjs`, verbatim from Rocco's ABSTRACTS document). R(AI)sing Awareness says "ChatGPT 5.0" for Jan–Feb 2025, before GPT-5 existed; confirm.
