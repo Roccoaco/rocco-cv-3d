@@ -135,21 +135,22 @@ export const talks = [
   { city: 'brussels', title: 'How Experience, Creativity and Multiple Intelligence influence Language Teaching', kind: 'Online paper', conf: '2nd World Conference on Future of Education', when: 'September 2020' }
 ];
 
+// attended: true marks a conference Rocco attended without presenting; every other one he presented at.
 export const conferences = [
   { city: 'vienna', title: '3rd World Languages Conference', place: 'American International School of Vienna', when: '23–24 Oct 2026' },
   { city: 'brighton', title: 'Waves of Possibilities, 6th International Possibility Studies Conference', place: 'University of Sussex', when: '29 Jun – 2 Jul 2026' },
   { city: 'chieri', title: 'Italian Summit 2026', place: 'International School of Turin', when: 'May 2026' },
   { city: 'milan', title: 'MITA 2026, Milan International Teacher Association', place: 'American School of Milan', when: '21 Mar 2026' },
   { city: 'basel', title: '2nd World Languages Conference', place: 'International School of Basel', when: '23–24 Oct 2025' },
-  { city: 'milan', title: 'Learning Festival', place: 'Museo Nazionale della Scienza e della Tecnologia Leonardo da Vinci', when: '10–11 Oct 2025' },
+  { city: 'milan', title: 'Learning Festival', attended: true, place: 'Museo Nazionale della Scienza e della Tecnologia Leonardo da Vinci', when: '10–11 Oct 2025' },
   { city: 'maynooth', title: 'Communities of Possibilities, 5th International Possibility Studies Conference', place: '', when: '30 Jun – 4 Jul 2025' },
   { city: 'rome', title: 'Italian Summit 2025', place: 'Marymount International School Rome', when: '6 Jun 2025' },
-  { city: 'milan', title: 'MITA 2025', place: '', when: '22 Mar 2025' },
+  { city: 'milan', title: 'MITA 2025, Milan International Teacher Association', attended: true, place: '', when: '22 Mar 2025' },
   { city: 'cambridge', title: 'Expanding Research on Possibilities, 4th International Possibility Studies Conference', place: '', when: '8–12 Jul 2024' },
-  { city: 'milan', title: 'MITA 2024', place: '', when: '22 Mar 2024' },
+  { city: 'milan', title: 'MITA 2024, Milan International Teacher Association', attended: true, place: '', when: '22 Mar 2024' },
   { city: 'dublin', title: 'Cultivating the Possible, 3rd International Possibility Studies Conference', place: '', when: '17–21 Jul 2023' },
   { city: 'brussels', title: '2nd World Conference on Future of Education', place: '', when: '11–13 Sep 2020' },
-  { city: 'sharm', title: '3rd World Youth Forum', place: '', when: '11–18 Dec 2019' }
+  { city: 'sharm', title: '3rd World Youth Forum (WYF 2019)', attended: true, place: '', when: '11–18 Dec 2019' }
 ];
 
 export const roles = [
@@ -187,8 +188,8 @@ export const projects = [
 ];
 
 export const skills = [
-  'Creative, critical, lateral and non-linear thinking', 'workshop design and leadership', 'team dynamics', 'personalised learning',
-  'mental imagery', 'visual conceptualisation', 'AI tools in practice', 'public speaking', 'classroom management', 'problem solving', 'lesson planning'
+  'Creative, critical, lateral and non-linear thinking', 'workshop leadership', 'team dynamics', 'personalised learning',
+  'mental imagery', 'visual conceptualisation', 'AI tools in practice', 'public speaking', 'classroom management', 'problem solving', 'lesson design'
 ];
 
 export const education = [

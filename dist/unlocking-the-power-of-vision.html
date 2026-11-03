@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-2Tcq52+NwlWlkgUr3IlErtut8lczOyTRl8caHnz6JBA='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-/VwYmYYf57wkwJiYLTRusaRWvRV94LlGt1KpzvP9hGY='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy, a talk by Rocco Acocella</title>
@@ -510,7 +510,7 @@ main>section.w-quotes{margin-top:clamp(72px,9vw,128px);padding:clamp(64px,8vw,12
 }
 
 /* ---------- session 7: the workshop figures, the talk filter, appearances ---------- */
-:root{--night:#0B1B4D;--c-inperson:#1537C7;--c-online:#C2410C;--who-2:#FFD43B;--who-3:#8FA6FF}
+:root{--c-conf:#7A3FD1;--night:#0B1B4D;--c-inperson:#1537C7;--c-online:#C2410C;--who-2:#FFD43B;--who-3:#8FA6FF}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-inperson:#8FA6FF;--c-online:#FF8A5B}}
 :root[data-theme="dark"]{--c-inperson:#8FA6FF;--c-online:#FF8A5B}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
@@ -544,6 +544,10 @@ main>section.w-quotes{margin-top:clamp(72px,9vw,128px);padding:clamp(64px,8vw,12
 .talk-rows .row[data-mode="online"] .row-title{color:var(--c-online)}
 .talk-rows .row.is-active .row-title{font-weight:800}
 .talk-rows .row[hidden]{display:none}
+/* conferences: violet; a full dot where Rocco presented, a ring where he attended */
+.conf-dot{display:inline-block;flex:none;width:.62em;height:.62em;border-radius:50%;margin-right:.5em;vertical-align:.06em;background:var(--c-conf);border:2px solid var(--c-conf)}
+.conf-dot.is-attended{background:transparent}
+.cf{margin-top:20px}
 .tf-colours{margin:4px 0 8px;font-size:var(--s-small)}
 .tf-colours summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;font-family:var(--f-display);font-weight:600;text-decoration:underline;text-underline-offset:4px}
 .tf-pick{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px}
@@ -691,7 +695,7 @@ html.tl-locked{overflow:hidden}
 .tl-sub{grid-column:2;grid-row:2/4;font-size:var(--s-small);color:var(--muted);line-height:1.45}
 .tl-k-workshop{--k:#E0A800}
 .tl-k-talk{--k:var(--field)}
-.tl-k-conference{--k:#6E7AA6}
+.tl-k-conference{--k:var(--c-conf)}
 .tl-k-role{--k:#0F8A5F}
 .tl-k-publication{--k:#C2255C}
 .tl-k-video{--k:#C2410C}
@@ -764,6 +768,37 @@ html.tl-locked{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){.gx-orbit i{animation:none}.gx-orbit i:nth-child(1){transform:translateX(11px)}.gx-orbit i:nth-child(2){transform:rotate(130deg) translateX(11px)}.gx-orbit i:nth-child(3){transform:rotate(250deg) translateX(11px)}}
 .gx-clicker.is-left{right:auto;left:var(--m)}
+
+/* ---------- page and story modes: story turns the CV into chapters, one lit at a time, the rest faded back;
+   switching between the modes fades the page out and in ---------- */
+body{transition:opacity .38s var(--ease)}
+html.is-fading body{opacity:0}
+.bar-mode{position:relative;display:inline-flex;flex:none;align-items:center;min-height:36px;padding:3px;border:2px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:.875rem;cursor:pointer}
+.bm-opt{position:relative;z-index:1;padding:4px 12px;border-radius:999px;transition:background-color .3s var(--ease),color .3s var(--ease)}
+.bar-mode[aria-pressed="false"] .bm-page,.bar-mode[aria-pressed="true"] .bm-story{background:var(--ink);color:var(--bg)}
+html.is-story .lead,html.is-story main>section{opacity:.1;transition:opacity .9s var(--ease)}
+html.is-story .lead.is-now,html.is-story main>section.is-now{opacity:1}
+html.is-story main>section{min-height:100vh;min-height:100svh;padding-bottom:clamp(48px,6vw,96px)} /* taste-skill-ignore: vh is the older-Safari fallback for svh */
+.story-pill{position:fixed;left:var(--m);bottom:var(--m);z-index:25;display:flex;align-items:center;gap:4px;padding:4px;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--f-display);font-size:var(--s-small)}
+.story-pill[hidden]{display:none}
+html.is-story .gx-clicker.is-left{left:auto;right:var(--m)}
+.st-step{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:inherit;font-size:1.125rem;font-weight:700;cursor:pointer;transition:background-color .2s}
+.st-step:hover,.st-step:focus-visible{background:var(--field)}
+.st-step:disabled{opacity:.35;cursor:default;background:transparent}
+.st-where{display:flex;align-items:baseline;gap:6px;min-width:11em;justify-content:center;margin:0;padding:0 6px;white-space:nowrap}
+.st-n{font-weight:800}
+.st-of{opacity:.7}
+.st-name{font-weight:700;color:var(--accent)}
+@media (max-width:700px){
+  .bar-mode{font-size:.75rem;min-height:32px;padding:2px}
+  .bm-opt{padding:3px 8px}
+  .bar-mode[aria-pressed="false"] .bm-story,.bar-mode[aria-pressed="true"] .bm-page{display:none}
+  .bar-mode .bm-opt{background:transparent;color:var(--ink)}
+  .st-where{min-width:0;max-width:9.5em;overflow:hidden;text-overflow:ellipsis}
+  .st-of{display:none}
+  .st-step{width:40px;height:40px}
+}
+@media (prefers-reduced-motion:reduce){body,html.is-story .lead,html.is-story main>section{transition:none}}
 .sw-inperson-0{background:#1537C7}.sw-inperson-1{background:#0F8A5F}.sw-inperson-2{background:#7A3FD1}.sw-inperson-3{background:#0B1B4D}.sw-online-0{background:#C2410C}.sw-online-1{background:#C2255C}.sw-online-2{background:#9A6700}.sw-online-3{background:#0E7C86}</style>
 </head>
 <body id="top" class="wpage">

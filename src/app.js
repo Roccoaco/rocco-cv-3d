@@ -611,8 +611,21 @@
   }
 
 
+  /* ---------- conferences: presented at, or attended only ---------- */
+  var cfBtns = Array.prototype.slice.call(document.querySelectorAll('.cf-btn'));
+  var confRowsEl = Array.prototype.slice.call(document.querySelectorAll('.conf-rows .row'));
+  var cfStatus = document.querySelector('.cf-status');
+  cfBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var show = b.getAttribute('data-show'), n = 0;
+      cfBtns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      confRowsEl.forEach(function (r) { var on = show === 'all' || r.getAttribute('data-conf') === show; r.hidden = !on; if (on) n++; });
+      if (cfStatus) cfStatus.textContent = 'Showing ' + n + ' conference' + (n === 1 ? '' : 's') + (show === 'all' ? '' : show === 'attended' ? ' attended only' : ' presented at') + '.';
+    });
+  });
+
   /* ---------- talks: show in person or online, in colours the reader picks (kept in this browser only) ---------- */
-  var tfBtns = Array.prototype.slice.call(document.querySelectorAll('.tf-btn'));
+  var tfBtns = Array.prototype.slice.call(document.querySelectorAll('.tf-btn:not(.cf-btn)'));
   var talkRowsEl = Array.prototype.slice.call(document.querySelectorAll('.talk-rows .row'));
   var tfStatus = document.querySelector('.tf-status');
   if (tfBtns.length && talkRowsEl.length) {
@@ -830,6 +843,60 @@
     window.addEventListener('resize', function () { qVisible = true; qQueue(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(qFrame);
     qFrame();
+  }
+
+  /* ---------- page and story modes. Story: each part of the CV is a chapter; the one in the middle of the screen
+     is lit and the others fade back, with a small counter to step through them. Kept in this browser only. ---------- */
+  var modeBtn = document.getElementById('mode-btn'), pill = document.getElementById('story-pill');
+  if (modeBtn && pill && 'IntersectionObserver' in window) {
+    var chapters = [document.querySelector('.lead')].concat(Array.prototype.slice.call(document.querySelectorAll('main>section'))).filter(Boolean);
+    var chName = function (el) { var h = el.querySelector('h1') || el.querySelector('h2'); return h ? h.textContent.replace(/\s+/g, ' ').trim().split('. ')[0].replace(/\.$/, '') : 'Rocco Acocella'; };
+    var stN = document.getElementById('st-n'), stName = document.getElementById('st-name'), stPrev = document.getElementById('st-prev'), stNext = document.getElementById('st-next');
+    document.getElementById('st-of').textContent = 'of ' + chapters.length;
+    var now = 0;
+    var setNow = function (i) {
+      now = i;
+      chapters.forEach(function (c, k) { c.classList.toggle('is-now', k === i); });
+      stN.textContent = i + 1; stName.textContent = chName(chapters[i]);
+      stPrev.disabled = i === 0; stNext.disabled = i === chapters.length - 1;
+    };
+    var chIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) setNow(chapters.indexOf(e.target)); });
+    }, { rootMargin: '-45% 0px -54% 0px' });
+    chapters.forEach(function (c) { chIo.observe(c); });
+    var goTo = function (i, smooth) {
+      var el = chapters[Math.max(0, Math.min(chapters.length - 1, i))];
+      var bar = document.querySelector('.bar'), y = el === chapters[0] ? 0 : window.pageYOffset + el.getBoundingClientRect().top - (bar ? bar.offsetHeight : 0);
+      var html = document.documentElement, was = html.style.scrollBehavior;
+      if (!smooth || reduce) html.style.scrollBehavior = 'auto';
+      window.scrollTo(0, Math.max(0, y));
+      if (!smooth || reduce) html.style.scrollBehavior = was;
+    };
+    stPrev.addEventListener('click', function () { goTo(now - 1, true); });
+    stNext.addEventListener('click', function () { goTo(now + 1, true); });
+    var MKEY = 'view-mode';
+    var applyMode = function (story, fade) {
+      var keep = now;
+      var swap = function () {
+        doc.classList.toggle('is-story', story);
+        modeBtn.setAttribute('aria-pressed', String(story));
+        pill.hidden = !story;
+        if (fade) goTo(keep, false); // the layout changes height: stay on the same chapter
+      };
+      if (!fade || reduce) { swap(); return; }
+      doc.classList.add('is-fading');
+      setTimeout(function () { swap(); requestAnimationFrame(function () { doc.classList.remove('is-fading'); }); }, 380);
+    };
+    modeBtn.hidden = false;
+    modeBtn.addEventListener('click', function () {
+      var story = modeBtn.getAttribute('aria-pressed') !== 'true';
+      try { localStorage.setItem(MKEY, story ? 'story' : 'page'); } catch (e) {}
+      applyMode(story, true);
+    });
+    var savedMode = null;
+    try { savedMode = localStorage.getItem(MKEY); } catch (e) {}
+    setNow(0);
+    if (savedMode === 'story') applyMode(true, false);
   }
 
   requestAnimationFrame(loop);

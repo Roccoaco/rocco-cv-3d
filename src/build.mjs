@@ -170,20 +170,22 @@ const timeline = [
   ...D.appearances.filter((a) => a.when).map((a) => ({ kind: 'video', key: dateKey(a.when), when: a.when, title: a.title, sub: 'Video', href: '#appearances' }))
 ].sort((a, b) => (a.key < b.key ? 1 : a.key > b.key ? -1 : 0));
 const tlYears = [...new Set(timeline.map((e) => e.key.slice(0, 4)))];
+// the newest year reads as the present
+const tlYearName = (y) => (y === tlYears[0] ? 'Present' : y);
 const tlCount = (k) => timeline.filter((e) => e.kind === k).length;
 const timelinePanel = `
 <div class="tl" id="timeline" role="dialog" aria-modal="true" aria-labelledby="tl-h" hidden>
   <div class="tl-panel">
     <div class="tl-top">
       <h2 id="tl-h">Timeline</h2>
-      <p class="tl-sum">${timeline.length} dates, ${tlYears[tlYears.length - 1]} to ${tlYears[0]}</p>
+      <p class="tl-sum">${timeline.length} dates, ${tlYears[tlYears.length - 1]} to present</p>
       <button type="button" class="tl-close" id="tl-close">Close</button>
     </div>
     <div class="tl-filters" role="group" aria-label="Show in the timeline">${Object.entries(TL_KINDS).map(([k, label]) => `<button type="button" class="tl-f tl-k-${k}" data-kind="${k}" aria-pressed="true"><span class="tl-dot" aria-hidden="true"></span>${label} <span class="tl-n">${tlCount(k)}</span></button>`).join('')}</div>
-    <nav class="tl-years" aria-label="Years">${tlYears.map((y) => `<a href="#tl-${y}" data-year="${y}">${y}</a>`).join('')}</nav>
+    <nav class="tl-years" aria-label="Years">${tlYears.map((y) => `<a href="#tl-${y}" data-year="${y}">${tlYearName(y)}</a>`).join('')}</nav>
     <div class="tl-scroll" id="tl-scroll">
       <div class="tl-rail" aria-hidden="true"><span class="tl-fill" id="tl-fill"></span></div>
-      ${tlYears.map((y) => `<section class="tl-year" id="tl-${y}" aria-labelledby="tl-y-${y}"><h3 id="tl-y-${y}" class="tl-y">${y}</h3><ol class="tl-list">${timeline.filter((e) => e.key.startsWith(y)).map((e) => `
+      ${tlYears.map((y) => `<section class="tl-year" id="tl-${y}" aria-labelledby="tl-y-${y}"><h3 id="tl-y-${y}" class="tl-y">${tlYearName(y)}</h3><ol class="tl-list">${timeline.filter((e) => e.key.startsWith(y)).map((e) => `
         <li class="tl-item tl-k-${e.kind}" data-kind="${e.kind}"><a href="${e.href}"><span class="tl-dot" aria-hidden="true"></span><span class="tl-when">${esc(e.when)}</span><span class="tl-kind">${TL_KINDS[e.kind].replace(/s$/, '')}</span><span class="tl-title">${esc(e.title)}</span><span class="tl-sub">${esc(e.sub)}</span></a></li>`).join('')}</ol></section>`).join('')}
     </div>
   </div>
@@ -229,9 +231,18 @@ const talkRows = D.talks.map((t) => `
             <p class="row-sub">${esc(t.kind)}. ${esc(t.conf)}${t.hub ? ', ' + esc(t.conf.startsWith(D.hubs[t.hub].name) ? `a hub of ${D.hubs[t.hub].org}, ${D.hubs[t.hub].region}` : D.hubLine(t.hub)) : ''}${t.city === 'online' ? (/online/i.test(t.kind) ? '' : ', online') : ', ' + esc(place(t.city))}</p>
           </li>`).join('');
 
+const confMode = (c) => (c.attended ? 'attended' : 'presented');
+const nConf = { presented: D.conferences.filter((c) => !c.attended).length, attended: D.conferences.filter((c) => c.attended).length };
+const confFilter = `
+      <div class="tf cf" role="group" aria-label="Show conferences">
+        <button type="button" class="tf-btn cf-btn" data-show="all" aria-pressed="true">All <span class="tf-n">${D.conferences.length}</span></button>
+        <button type="button" class="tf-btn cf-btn" data-show="presented" aria-pressed="false"><span class="conf-dot is-presented" aria-hidden="true"></span>Presented at <span class="tf-n">${nConf.presented}</span></button>
+        <button type="button" class="tf-btn cf-btn" data-show="attended" aria-pressed="false"><span class="conf-dot is-attended" aria-hidden="true"></span>Attended only <span class="tf-n">${nConf.attended}</span></button>
+      </div>
+      <p class="cf-status sr-only" aria-live="polite"></p>`;
 const confRows = D.conferences.map((t) => `
-          <li class="row row-tight" tabindex="0" data-city="${t.city}">
-            <div class="row-top"><span class="row-title">${esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
+          <li class="row row-tight conf-row" tabindex="0" data-city="${t.city}" data-conf="${confMode(t)}">
+            <div class="row-top"><span class="row-title"><span class="conf-dot is-${confMode(t)}" aria-hidden="true"></span>${esc(t.title)}<span class="sr-only"> (${t.attended ? 'attended' : 'presented'})</span></span><span class="row-when">${esc(t.when)}</span></div>
             <p class="row-sub">${t.place ? esc(t.place) + ', ' : ''}${esc(place(t.city))}</p>
           </li>`).join('');
 
@@ -243,7 +254,8 @@ const placesLede = `Talks and workshops in ${word(places.length)} cities across 
 
 const nav = (prefix) => `<nav class="bar" aria-label="Main">
   <a class="bar-mark" href="${prefix}#top">Rocco Acocella</a>
-  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#appearances">Appearances</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>
+  <div class="bar-links"><a class="bar-opt" href="${prefix}#work">Teaching</a><a href="${prefix}#places">Places</a><a href="${prefix}#workshops">Workshops</a><a href="${prefix}#talks">Talks</a><a class="bar-opt" href="${prefix}#appearances">Appearances</a><a class="bar-opt" href="${prefix}#training">Training</a><a href="${prefix}#contact">Contact</a></div>${prefix ? '' : `
+  <button type="button" class="bar-mode" id="mode-btn" aria-pressed="false" hidden><span class="bm-opt bm-page">Page</span><span class="bm-opt bm-story">Story</span><span class="sr-only"> mode</span></button>`}
 </nav>`;
 const footer = (prefix) => `<footer class="foot">
   <p class="foot-name" aria-hidden="true">Rocco Acocella</p>
@@ -376,7 +388,7 @@ ${nav('')}
 
   <section class="archive" aria-labelledby="arch-h">
     <div class="arch-head" data-rise>
-      <h2 id="arch-h">Every workshop</h2>
+      <h2 id="arch-h">Non-Linear Shapeshifting</h2>
       <p class="lede">Each workshop has its own page, with its model and the full abstract.</p>
     </div>
     <div class="figures" id="figures">
@@ -398,14 +410,14 @@ ${nav('')}
         <canvas id="map" role="img" aria-label="Map of the cities where Rocco has taught, presented and studied, linked to Milan."></canvas>
         <figcaption id="map-label">Milan</figcaption>
       </figure>
-      <button type="button" class="tl-open" id="tl-open" aria-haspopup="dialog" aria-controls="timeline"><span class="tl-open-l">Timeline</span><span class="tl-open-s">${timeline.length} dates, ${tlYears[tlYears.length - 1]}–${tlYears[0]}</span></button>
+      <button type="button" class="tl-open" id="tl-open" aria-haspopup="dialog" aria-controls="timeline"><span class="tl-open-l">Timeline</span><span class="tl-open-s">${timeline.length} dates, ${tlYears[tlYears.length - 1]}–present</span></button>
     </div>
     <div class="lists">
       <h2 id="talks-h">Talks</h2>${talkFilter}
       <ol class="rows talk-rows">${talkRows}
       </ol>
-      <h2 class="conf-h">Conferences</h2>
-      <ol class="rows">${confRows}
+      <h2 class="conf-h">Conferences</h2>${confFilter}
+      <ol class="rows conf-rows">${confRows}
       </ol>
     </div>${photos('talks')}
   </section>
@@ -469,6 +481,11 @@ ${footer('')}
 
 ${timelinePanel}
 ${galaxyPanel}
+<div class="story-pill" id="story-pill" hidden>
+  <button type="button" class="st-step" id="st-prev" aria-label="Previous chapter"><span aria-hidden="true">↑</span></button>
+  <p class="st-where" aria-live="polite"><span class="st-n" id="st-n">1</span><span class="st-of" id="st-of"></span><span class="st-name" id="st-name"></span></p>
+  <button type="button" class="st-step" id="st-next" aria-label="Next chapter"><span aria-hidden="true">↓</span></button>
+</div>
 
 <dialog class="al-dialog" id="al-dialog" aria-label="The Alchemy Cycle">
   <button type="button" class="al-close" id="al-close">Close</button>
