@@ -188,6 +188,41 @@ const timelinePanel = `
     </div>
   </div>
 </div>`;
+// ---- the galaxy: every section and page of the site as a star, opened by the floating clicker ----
+const galaxyStops = [
+  ...[['top', 'Home'], ['work', 'Teaching'], ['places', 'Places'], ['workshops', 'Workshops'], ['talks', 'Talks'], ['appearances', 'Appearances'], ['training', 'Training'], ['contact', 'Contact']].map(([id, label]) => ({ kind: 'section', label, href: '#' + id })),
+  ...D.workshops.map((w) => ({ kind: 'workshop', label: w.short, href: pageOf(w) })),
+  ...D.talks.filter((t) => t.slug).map((t) => ({ kind: 'talk', label: t.title.split(': ')[0], href: `${t.slug}.html` }))
+];
+const galaxyPanel = `
+<button type="button" class="gx-clicker" id="gx-clicker" hidden aria-haspopup="dialog" aria-controls="galaxy"><span class="gx-orbit" aria-hidden="true"><i></i><i></i><i></i></span><span class="gx-cl">Galaxy</span></button>
+<div class="gx" id="galaxy" role="dialog" aria-modal="true" aria-labelledby="gx-h" hidden>
+  <canvas id="gx-canvas" aria-hidden="true"></canvas>
+  <div class="gx-top">
+    <h2 id="gx-h">Galaxy</h2>
+    <p class="gx-state" id="gx-state" aria-live="polite">Every page of the site is a star. Drag to turn it any way, scroll or pinch to zoom, pick a star to go there.</p>
+    <button type="button" class="gx-close" id="gx-close">Close</button>
+  </div>
+  <div class="gx-nodes" id="gx-nodes" role="group" aria-label="Stars: the pages and sections of the site">${galaxyStops.map((g, i) => `<button type="button" class="gx-node gx-${g.kind}" data-i="${i}" data-kind="${g.kind}" data-href="${g.href}">${esc(g.label)}</button>`).join('')}</div>
+  <div class="gx-panel">
+    <button type="button" class="gx-converge" id="gx-converge" aria-pressed="false">Converge</button>
+    <details class="gx-adjust" id="gx-adjust">
+      <summary>Adjust</summary>
+      <div class="gx-body">
+        <label class="gx-row"><span>Spin</span><input type="range" id="gx-spin" min="0" max="100" value="30"></label>
+        <label class="gx-row"><span>Spread</span><input type="range" id="gx-spread" min="60" max="160" value="100"></label>
+        <label class="gx-row"><span>Brick size</span><input type="range" id="gx-size" min="50" max="200" value="100"></label>
+        <fieldset class="gx-show"><legend>Stars</legend>
+          <label><input type="checkbox" data-show="section" checked> Sections</label>
+          <label><input type="checkbox" data-show="workshop" checked> Workshops</label>
+          <label><input type="checkbox" data-show="talk" checked> Talks</label>
+        </fieldset>
+        <div class="gx-hues" role="group" aria-label="Colour of the bricks">${[['Mixed', 'mix'], ['Sun', '48'], ['Sky', '220'], ['Coral', '12'], ['Mint', '150'], ['Violet', '265']].map(([n, h]) => `<button type="button" class="gx-hue gx-h-${h}" data-hue="${h}" aria-label="${n}" aria-pressed="${h === 'mix'}"></button>`).join('')}</div>
+        <button type="button" class="gx-reset" id="gx-reset">Back to the defaults</button>
+      </div>
+    </details>
+  </div>
+</div>`;
 const talkRows = D.talks.map((t) => `
           <li class="row" tabindex="0" data-city="${t.hub ? D.hubs[t.hub].city : t.city}" data-mode="${modeOf(t)}">
             <div class="row-top"><span class="row-title"><span class="mode-dot" aria-hidden="true"></span>${t.slug ? `<a href="${t.slug}.html">${esc(t.title)}</a>` : esc(t.title)}</span><span class="row-when">${esc(t.when)}</span></div>
@@ -433,6 +468,7 @@ ${nav('')}
 ${footer('')}
 
 ${timelinePanel}
+${galaxyPanel}
 
 <dialog class="al-dialog" id="al-dialog" aria-label="The Alchemy Cycle">
   <button type="button" class="al-close" id="al-close">Close</button>
