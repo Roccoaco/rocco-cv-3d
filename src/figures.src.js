@@ -11,10 +11,17 @@
 //    Converge builds a different structure each time (tower, bridge, temple, pyramid, dome, lighthouse).
 // 3. The unalome by the contact details: a thin 3D line that draws itself and sways; clicking it opens a small
 //    bubble to choose its colour (kept in the visitor's browser).
+// 5. The education playground: a brick-built playground (slide, two small houses, a sandbox, two bicycles) where
+//    four bubbly shapes (the degrees) hop about exploring, three pastel flags (the languages) wave at the back,
+//    and three playing cards (the certificates) float in a ring round a glowing core, part Stonehenge, part
+//    sunken Atlantis. A glowing branch climbs through three layers; marble ideas flow along each layer and
+//    jump between layers in quantum steps.
 import {
   WebGLRenderer, Scene, PerspectiveCamera, HemisphereLight, DirectionalLight, Group, Color,
   BoxGeometry, CylinderGeometry, InstancedMesh, MeshStandardMaterial, MeshBasicMaterial, Object3D, Vector3, SRGBColorSpace,
-  Curve, TubeGeometry, Mesh, OrthographicCamera, ExtrudeGeometry, SphereGeometry, CatmullRomCurve3, Quaternion
+  Curve, TubeGeometry, Mesh, OrthographicCamera, ExtrudeGeometry, SphereGeometry, CatmullRomCurve3, Quaternion,
+  Raycaster, Vector2, CanvasTexture, PlaneGeometry, ConeGeometry, TorusGeometry, CapsuleGeometry, DodecahedronGeometry,
+  IcosahedronGeometry, AdditiveBlending, DoubleSide, PointLight, Plane
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { Font } from 'three/addons/loaders/FontLoader.js';
@@ -647,3 +654,367 @@ function startGalaxy() {
   }
 }
 try { startGalaxy(); } catch (e) { const c = document.getElementById('gx-clicker'); if (c) c.hidden = true; }
+
+// ---------- 5. the education playground ----------
+function startPlayground() {
+  const box5 = document.getElementById('play'), cv = document.getElementById('play-canvas');
+  if (!box5 || !cv) return;
+  const renderer = makeRenderer(cv);
+  if (!renderer) { box5.classList.add('no-3d'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const note = document.getElementById('play-note');
+  const EDU = DATA.education || [], LANGS = DATA.languages || [], CERTS = DATA.certificates || [];
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(32, 1, 0.1, 300);
+  scene.add(new HemisphereLight(0xffffff, 0x0b1b4d, 1.7));
+  const sun = new DirectionalLight(0xffffff, 2.2); sun.position.set(-8, 14, 10); scene.add(sun);
+  const stage = new Group(); scene.add(stage);
+  const std = (hex, extra) => new MeshStandardMaterial(Object.assign({ color: new Color(hex), roughness: 0.45, metalness: 0.05 }, extra || {}));
+  const put = (geo, mat, x, y, z, parent) => { const m = new Mesh(geo, mat); m.position.set(x, y, z); (parent || stage).add(m); return m; };
+  const rod = (a, b, r, mat, parent) => { // a cylinder from point a to point b
+    const d = new Vector3().subVectors(b, a), m = new Mesh(new CylinderGeometry(r, r, d.length(), 10), mat);
+    m.position.copy(a).addScaledVector(d, 0.5);
+    m.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), d.normalize());
+    parent.add(m); return m;
+  };
+
+  // the ground: a rubber floor in the site's blue, with two soft pastel patches
+  put(new CylinderGeometry(13, 13, 0.4, 72), std(0x1537C7, { roughness: 0.9 }), 0, -0.2, 0);
+  const patch = (x, z, r, hex) => { const m = put(new CylinderGeometry(r, r, 0.02, 56), std(hex, { roughness: 0.95, transparent: true, opacity: 0.32 }), x, 0.01, z); m.scale.z = 0.72; };
+  patch(-6, 3.2, 4.2, 0x8FA6FF); patch(6, -2.5, 3.8, 0xC9B8FF);
+
+  // ---- the playground, built of bricks ----
+  const W = std(0xFFFFFF), Y = std(0xFFD43B), L = std(0xC9B8FF), P = std(0x8FA6FF), N = std(0x0B1B4D);
+  // slide: a ladder, a brick platform, a yellow chute with rails
+  const slide = new Group(); slide.position.set(-8.4, 0, -2.6); slide.rotation.y = 0.95; stage.add(slide);
+  [-0.6, 0.6].forEach((x) => put(new BoxGeometry(0.16, 3.4, 0.16), W, x, 1.7, 0, slide));
+  for (let i = 0; i < 5; i++) put(new BoxGeometry(1.2, 0.1, 0.1), W, 0, 0.5 + i * 0.6, 0, slide);
+  const plat = put(brick(2, 2), P, 0, 3.45, 0.8, slide); plat.scale.set(0.8, 0.3, 0.8);
+  const chute = put(new BoxGeometry(1.2, 0.12, 4.9), Y, 0, 1.85, 3.55, slide); chute.rotation.x = 0.71;
+  [-0.62, 0.62].forEach((x) => { const r = put(new BoxGeometry(0.1, 0.3, 4.9), Y, x, 2.0, 3.55, slide); r.rotation.x = 0.71; });
+  // two small houses
+  const house = (x, z, ry, body, roof) => {
+    const g = new Group(); g.position.set(x, 0, z); g.rotation.y = ry; stage.add(g);
+    [0.6, 1.8].forEach((y) => { const m = put(brick(2, 2), body, 0, y, 0, g); m.scale.set(1.2, 1, 1.2); });
+    const r = put(new ConeGeometry(2.0, 1.5, 4), roof, 0, 3.2, 0, g); r.rotation.y = Math.PI / 4;
+    put(new BoxGeometry(0.7, 1.1, 0.06), N, 0, 0.55, 1.22, g);
+    put(new BoxGeometry(0.5, 0.5, 0.06), N, 0, 1.85, 1.22, g);
+  };
+  house(8.7, -4.7, -0.9, W, Y); house(10.1, -0.9, -1.45, L, P);
+  // a sandbox with a few toy bricks in it
+  const sand = new Group(); sand.position.set(4.6, 0, 5.4); sand.rotation.y = -0.3; stage.add(sand);
+  [-2, 2].forEach((z) => { const m = put(brick(5, 1), Y, 0, 0.3, z, sand); m.scale.y = 0.5; });
+  [-2, 2].forEach((x) => { const m = put(brick(1, 3), Y, x, 0.3, 0, sand); m.scale.y = 0.5; });
+  put(new BoxGeometry(3, 0.3, 3), std(0xF3E3B5, { roughness: 1 }), 0, 0.2, 0, sand);
+  [[-0.8, 0.5, 0xFF9F87, 2], [0.7, -0.6, 0x8FA6FF, 1], [0.2, 0.9, 0xFFFFFF, 1], [-0.5, -0.8, 0xC9B8FF, 2]].forEach(([x, z, c, n]) => {
+    const m = put(brick(n, 1), std(c), x, 0.52, z, sand); m.scale.setScalar(0.42); m.rotation.y = x * 2;
+  });
+  // two bicycles that roll a little back and forth
+  const bikes = [];
+  const bike = (x, z, ry, hex) => {
+    const g = new Group(); g.position.set(x, 0, z); g.rotation.y = ry; stage.add(g);
+    const frame = std(hex), tyre = std(0x0B1B4D, { roughness: 0.8 });
+    const wheels = [-0.85, 0.85].map((wx) => put(new TorusGeometry(0.62, 0.07, 10, 30), tyre, wx, 0.62, 0, g));
+    const v = (a, b) => new Vector3(a, b, 0);
+    [[v(-0.85, 0.62), v(0, 0.55)], [v(0, 0.55), v(-0.25, 1.35)], [v(-0.25, 1.35), v(-0.85, 0.62)], [v(0, 0.55), v(0.6, 1.3)],
+      [v(-0.25, 1.3), v(0.6, 1.3)], [v(0.6, 1.3), v(0.85, 0.62)], [v(0.6, 1.3), v(0.55, 1.65)]].forEach(([a, b]) => rod(a, b, 0.05, frame, g));
+    rod(new Vector3(0.55, 1.65, -0.35), new Vector3(0.55, 1.65, 0.35), 0.04, frame, g);
+    put(new BoxGeometry(0.42, 0.08, 0.2), N, -0.28, 1.42, 0, g);
+    bikes.push({ g, wheels, x0: x, z0: z, ry, ph: bikes.length * 2.1 });
+  };
+  bike(-5.6, 6.2, 0.35, 0xFF9F87); bike(-3.0, 8.0, 0.15, 0xFFFFFF);
+
+  // ---- the languages: three pastel flags, quiet at the back ----
+  const flagTex = (kind) => {
+    const c = document.createElement('canvas'); c.width = 180; c.height = 116; const x = c.getContext('2d');
+    const G = '#B9E4C9', Wt = '#FBFBFF', R = '#F6B8B8', B = '#B8C7F0', Yw = '#FFE8A3';
+    if (kind === 0) { [G, Wt, R].forEach((col, i) => { x.fillStyle = col; x.fillRect(i * 60, 0, 60, 116); }); }
+    else if (kind === 1) {
+      x.fillStyle = B; x.fillRect(0, 0, 180, 116);
+      x.strokeStyle = Wt; x.lineWidth = 18; x.beginPath(); x.moveTo(0, 0); x.lineTo(180, 116); x.moveTo(180, 0); x.lineTo(0, 116); x.stroke();
+      x.strokeStyle = R; x.lineWidth = 6; x.stroke();
+      x.fillStyle = Wt; x.fillRect(74, 0, 32, 116); x.fillRect(0, 42, 180, 32);
+      x.fillStyle = R; x.fillRect(80, 0, 20, 116); x.fillRect(0, 48, 180, 20);
+    } else { x.fillStyle = R; x.fillRect(0, 0, 180, 116); x.fillStyle = Yw; x.fillRect(0, 29, 180, 58); }
+    const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; return t;
+  };
+  const flags = [[-3.3, -9.4], [0, -9.9], [3.3, -9.4]].slice(0, Math.max(3, LANGS.length)).map(([x, z], i) => {
+    const g = new Group(); g.position.set(x, 0, z); stage.add(g);
+    put(new CylinderGeometry(0.05, 0.05, 3.7, 8), std(0xFFFFFF, { transparent: true, opacity: 0.6 }), 0, 1.85, 0, g);
+    const geo = new PlaneGeometry(1.8, 1.16, 18, 8); geo.translate(0.9, 0, 0);
+    const m = put(geo, new MeshBasicMaterial({ map: flagTex(i), transparent: true, opacity: 0.5, side: DoubleSide }), 0.05, 3.05, 0, g);
+    m.userData = { kind: 'flag', i };
+    return { m, base: Float32Array.from(geo.attributes.position.array), ph: i * 1.7, gust: 0 };
+  });
+
+  // ---- the certificates: playing cards floating in a ring round a glowing core ----
+  const cardTex = (title, i, back) => {
+    const c = document.createElement('canvas'); c.width = 380; c.height = 540; const x = c.getContext('2d');
+    const draw = () => {
+      x.clearRect(0, 0, 380, 540);
+      x.fillStyle = '#0B1B4D'; x.fillRect(0, 0, 380, 540);
+      x.shadowColor = '#8FA6FF'; x.shadowBlur = 16; x.strokeStyle = '#9FE8FF'; x.lineCap = 'round';
+      x.lineWidth = 4; x.strokeRect(18, 18, 344, 504);
+      x.lineWidth = 2; x.strokeRect(30, 30, 320, 480);
+      // engraved glyphs, Atlantis style: a face of arcs and spirals, different on each card
+      x.lineWidth = 3;
+      const cx = 190, cy = back ? 270 : 200;
+      for (let k = 0; k < 4; k++) { x.beginPath(); x.arc(cx, cy, 30 + k * 22, Math.PI * (0.15 + k * 0.1 + i * 0.2), Math.PI * (0.85 + k * 0.25 + i * 0.2)); x.stroke(); }
+      x.beginPath(); for (let a = 0; a < 12; a += 0.1) { const r = 4 + a * 4.2; const px = cx + Math.cos(a + i) * r, py = cy + Math.sin(a + i) * r; if (a === 0) x.moveTo(px, py); else x.lineTo(px, py); } x.stroke();
+      x.fillStyle = '#9FE8FF'; [[-1, 1], [1, 1]].forEach(([sx]) => { x.beginPath(); x.arc(cx + sx * 26, cy - 10, 7, 0, Math.PI * 2); x.fill(); });
+      // corner pips
+      x.font = '800 30px "Libre Franklin", sans-serif'; x.textAlign = 'center';
+      const pip = ['◆', '●', '▲'][i % 3];
+      x.fillText(pip, 54, 74); x.save(); x.translate(326, 466); x.rotate(Math.PI); x.fillText(pip, 0, 0); x.restore();
+      if (!back) {
+        x.shadowBlur = 10; x.fillStyle = '#FFFFFF'; x.font = '800 30px "Libre Franklin", sans-serif';
+        const words = title.split(' '), lines = []; let line = '';
+        words.forEach((w) => { const t = line ? line + ' ' + w : w; if (x.measureText(t).width > 290 && line) { lines.push(line); line = w; } else line = t; });
+        lines.push(line);
+        lines.slice(0, 5).forEach((l, k) => x.fillText(l, 190, 352 + k * 36));
+      }
+      x.shadowBlur = 0;
+    };
+    draw();
+    const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; t.anisotropy = 4;
+    if (document.fonts && document.fonts.load) document.fonts.load('800 30px "Libre Franklin"').then(() => { draw(); t.needsUpdate = true; }).catch(() => {});
+    return t;
+  };
+  const ringY = 3.3, ringR = 2.75;
+  const ringG = new Group(); ringG.position.y = ringY; stage.add(ringG);
+  const edge = new MeshBasicMaterial({ color: 0x9FE8FF });
+  const cards = CERTS.map((title, i) => {
+    const a = (i / CERTS.length) * Math.PI * 2;
+    const front = cardTex(title, i, false), back = cardTex(title, i, true);
+    const faceMat = (map) => new MeshStandardMaterial({ map, emissiveMap: map, emissive: new Color(0xffffff), emissiveIntensity: 0.6, roughness: 0.6 });
+    const m = new Mesh(new BoxGeometry(1.9, 2.7, 0.07), [edge, edge, edge, edge, faceMat(front), faceMat(back)]);
+    const holder = new Group(); holder.position.set(Math.sin(a) * ringR, 0, Math.cos(a) * ringR); holder.rotation.y = a;
+    holder.add(m); ringG.add(holder);
+    m.userData = { kind: 'card', i };
+    return { m, holder, ph: i * 2.2, flip: 0 };
+  });
+  const core = put(new SphereGeometry(0.3, 24, 16), new MeshBasicMaterial({ color: 0xEAF6FF }), 0, ringY, 0);
+  const halo = put(new SphereGeometry(0.95, 24, 16), new MeshBasicMaterial({ color: 0x9FE8FF, transparent: true, opacity: 0.16, blending: AdditiveBlending, depthWrite: false }), 0, ringY, 0);
+  const coreLight = new PointLight(0x9FE8FF, 7, 9, 1.4); coreLight.position.set(0, ringY, 0); stage.add(coreLight);
+
+  // ---- the synesthetic branch: three layers of glowing tube, joined by branches ----
+  const LAYERS = [{ y: 0.85, r: 11.2, col: 0xFFD43B, ph: 0.3, dir: 1, speed: 0.15 }, { y: 2.15, r: 7.4, col: 0xC9B8FF, ph: 1.7, dir: -1, speed: 0.22 }, { y: 5.5, r: 4.0, col: 0x8FA6FF, ph: 2.9, dir: 1, speed: 0.32 }];
+  const layerPoint = (li, a, out = new Vector3()) => {
+    const Lr = LAYERS[li], r = Lr.r * (1 + 0.06 * Math.sin(3 * a + Lr.ph));
+    return out.set(Math.cos(a) * r, Lr.y + 0.32 * Math.sin(2 * a + Lr.ph), Math.sin(a) * r);
+  };
+  const glow = (curve, closed, r, col, op) => {
+    const n = closed ? 360 : 90;
+    put(new TubeGeometry(curve, n, r, 8, closed), new MeshBasicMaterial({ color: col, transparent: true, opacity: op }), 0, 0, 0);
+    put(new TubeGeometry(curve, n, r * 2.8, 8, closed), new MeshBasicMaterial({ color: col, transparent: true, opacity: op * 0.18, blending: AdditiveBlending, depthWrite: false }), 0, 0, 0);
+  };
+  LAYERS.forEach((Lr, li) => {
+    const pts = []; for (let k = 0; k < 64; k++) pts.push(layerPoint(li, (k / 64) * Math.PI * 2));
+    glow(new CatmullRomCurve3(pts, true, 'centripetal'), true, 0.07, Lr.col, 0.8);
+  });
+  const branch = (pts, col) => glow(new CatmullRomCurve3(pts), false, 0.05, col, 0.55);
+  for (let k = 0; k < 4; k++) { // layer 1 to layer 2
+    const a = k * Math.PI / 2 + Math.PI / 4, p0 = layerPoint(0, a), p1 = layerPoint(1, a + 0.45);
+    branch([p0, new Vector3().lerpVectors(p0, p1, 0.5).add(new Vector3(0, 0.9, 0)), p1], 0xE6DEFF);
+  }
+  for (let k = 0; k < 3; k++) { // layer 2 to layer 3
+    const a = k * Math.PI * 2 / 3 + 0.4, p0 = layerPoint(1, a), p1 = layerPoint(2, a + 0.5);
+    branch([p0, new Vector3().lerpVectors(p0, p1, 0.5).add(new Vector3(0, 1.4, 0)), p1], 0xC9D4FF);
+  }
+  branch([new Vector3(0, 0, 0), new Vector3(0.35, 1.0, 0.15), new Vector3(-0.25, 2.1, -0.2), new Vector3(0, ringY - 0.3, 0)], 0xFFD43B); // the trunk, up to the core
+  for (let k = 0; k < 3; k++) { // the core opens into the top layer
+    const a = k * Math.PI * 2 / 3 + 1.2, p1 = layerPoint(2, a);
+    branch([new Vector3(0, ringY + 0.3, 0), new Vector3(Math.cos(a) * 1.4, ringY + 1.5, Math.sin(a) * 1.4), p1], 0xBFD0FF);
+  }
+
+  // ---- the marbles: ideas flowing along the layers, jumping layer to layer in quantum steps ----
+  const marbleTex = (c1, c2) => {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 128; const x = c.getContext('2d');
+    const g = x.createLinearGradient(0, 0, 256, 128); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    x.fillStyle = g; x.fillRect(0, 0, 256, 128);
+    x.globalAlpha = 0.55; x.strokeStyle = '#FFFFFF'; x.lineCap = 'round';
+    for (let k = 0; k < 7; k++) {
+      x.lineWidth = 2 + (k % 3) * 2; x.beginPath();
+      for (let px = 0; px <= 256; px += 8) { const py = 64 + Math.sin(px / 256 * Math.PI * (2 + k) + k * 1.3) * (20 + k * 5) + (k - 3) * 9; if (px === 0) x.moveTo(px, py); else x.lineTo(px, py); }
+      x.stroke();
+    }
+    const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; return t;
+  };
+  const MARBLE = [['#FFD43B', '#FF9F87'], ['#C9B8FF', '#8FA6FF'], ['#8FA6FF', '#EAF0FF'], ['#FF9F87', '#C9B8FF'], ['#9FE3C5', '#8FA6FF']].map(([a, b]) => new MeshStandardMaterial({ map: marbleTex(a, b), roughness: 0.15, metalness: 0.1 }));
+  const mGeo = new SphereGeometry(0.27, 24, 16);
+  const marbles = [];
+  [7, 5, 3].forEach((n, li) => { for (let k = 0; k < n; k++) {
+    const m = new Mesh(mGeo, MARBLE[(li * 2 + k) % MARBLE.length]); stage.add(m);
+    marbles.push({ m, li, a: (k / n) * Math.PI * 2 + li, v: 0.85 + ((k * 37) % 10) / 30, s: 1, state: 0, t: 0, to: li });
+  } });
+  let nextJump = 2;
+
+  // ---- the degrees: four bubbly shapes that hop about, curious ----
+  const SHAPE_COL = [0xFFD43B, 0xC9B8FF, 0x8FA6FF, 0xFF9F87];
+  const shapeGeos = [new IcosahedronGeometry(0.72, 3), new TorusGeometry(0.52, 0.24, 18, 40), new CapsuleGeometry(0.4, 0.7, 8, 16), new DodecahedronGeometry(0.7)];
+  const blobBase = Float32Array.from(shapeGeos[0].attributes.position.array);
+  const SPOTS = [[-4.5, 1.5], [-2.2, 4.2], [1.6, 4.4], [4.4, 1.0], [5.6, -2.6], [-5.6, -1.8], [-2.6, -5.8], [2.6, -6.0], [0.4, 7.6], [6.8, 2.8], [4.6, 5.4, 0.35], [-7.2, 3.2], [-0.2, -7.2], [7.2, -6.6]];
+  const used = new Set();
+  const shapes = shapeGeos.map((geo, i) => {
+    const m = new Mesh(geo, std(SHAPE_COL[i], { roughness: 0.32, emissive: new Color(SHAPE_COL[i]), emissiveIntensity: 0.12 }));
+    const g = new Group(); g.add(m); stage.add(g);
+    const spot = [0, 3, 6, 9][i]; used.add(spot);
+    const p = new Vector3(SPOTS[spot][0], 0, SPOTS[spot][1]);
+    g.position.copy(p);
+    m.userData = { kind: 'shape', i };
+    return { g, m, spot, from: p.clone(), to: p.clone(), t: 1, dur: 1, h: 1.4, wait: 0.6 + i * 0.9, land: 0, yaw: 0, spin: 0, lift: SPOTS[spot][2] || 0 };
+  });
+  const hopTo = (s, big) => {
+    used.delete(s.spot);
+    let pick = s.spot, best = -1;
+    for (let k = 0; k < 6; k++) { // a nearby free spot, chosen with a little curiosity
+      const c = Math.floor(Math.random() * SPOTS.length); if (used.has(c) || c === s.spot) continue;
+      const d = Math.hypot(SPOTS[c][0] - s.g.position.x, SPOTS[c][1] - s.g.position.z);
+      const score = (big ? d : 10 - Math.abs(d - 4.5)) + Math.random() * 2;
+      if (score > best) { best = score; pick = c; }
+    }
+    used.add(pick); s.spot = pick;
+    s.from.copy(s.g.position); s.from.y = 0; s.to.set(SPOTS[pick][0], 0, SPOTS[pick][1]);
+    s.lift = SPOTS[pick][2] || 0;
+    const d = s.from.distanceTo(s.to);
+    s.dur = 0.7 + d * 0.12; s.h = (big ? 2.6 : 1.1) + d * 0.12; s.t = 0; s.spin = big ? 1 : 0;
+  };
+  const excite = (i) => { const s = shapes[i]; if (!s) return; if (s.t >= 1) hopTo(s, true); else s.spin = 1; if (note && EDU[i]) note.textContent = EDU[i]; };
+
+  // ---- view: drag to turn, a slow drift when left alone ----
+  let yaw = -0.35, vel = 0, dragging = false, downX = 0, lastX = 0, moved = 0;
+  const ray = new Raycaster(), ptr = new Vector2(), ground = new Plane(new Vector3(0, 1, 0), 0), lookPt = new Vector3(), hasLook = { on: false };
+  const pickables = [...shapes.map((s) => s.m), ...cards.map((c) => c.m), ...flags.map((f) => f.m)];
+  const setPtr = (e) => { const r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); };
+  const hit = () => { ray.setFromCamera(ptr, camera); const h = ray.intersectObjects(pickables, false)[0]; return h ? h.object.userData : null; };
+  cv.addEventListener('pointerdown', (e) => { downX = lastX = e.clientX; moved = 0; dragging = true; vel = 0; });
+  window.addEventListener('pointermove', (e) => {
+    if (dragging) {
+      const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
+      if (moved > 4) { cv.classList.add('is-dragging'); yaw += dx * 0.008; vel = dx * 0.008; }
+      return;
+    }
+    if (e.target !== cv) { hasLook.on = false; return; }
+    setPtr(e); ray.setFromCamera(ptr, camera);
+    const local = ray.ray.intersectPlane(ground, lookPt); hasLook.on = !!local;
+    if (local) stage.worldToLocal(lookPt);
+    cv.style.cursor = hit() ? 'pointer' : '';
+  }, { passive: true });
+  window.addEventListener('pointerup', (e) => {
+    if (!dragging) return;
+    dragging = false; cv.classList.remove('is-dragging');
+    if (moved > 4 || e.target !== cv) return;
+    setPtr(e); const h = hit(); if (!h) return;
+    if (h.kind === 'shape') excite(h.i);
+    else if (h.kind === 'card') { cards[h.i].flip = 1; if (note) note.textContent = CERTS[h.i]; }
+    else if (h.kind === 'flag') { flags[h.i].gust = 1; if (note) note.textContent = LANGS[h.i] || ''; }
+  });
+  document.querySelectorAll('.edu>li').forEach((li) => {
+    const i = +li.getAttribute('data-i');
+    li.addEventListener('mouseenter', () => excite(i)); li.addEventListener('focus', () => excite(i));
+  });
+
+  const resize = () => {
+    const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    const dist = Math.max(28, 41 / camera.aspect);
+    camera.position.set(0, dist * 0.4, dist); camera.lookAt(0, 1.2, 0); camera.updateProjectionMatrix();
+  };
+  window.addEventListener('resize', resize); resize();
+
+  const q = new Vector3();
+  let last = 0, clock = 0;
+  whileVisible(box5, (time) => {
+    const dt = Math.min(0.05, last ? (time - last) / 1000 : 0.016); last = time;
+    const live = !reduce;
+    if (live) clock += dt;
+    const t = clock;
+    if (!dragging) { if (Math.abs(vel) > 0.0001) { yaw += vel; vel *= 0.94; } else if (live) yaw += dt * 0.05; }
+    stage.rotation.y = yaw;
+
+    // shapes: wait, look about, hop
+    shapes.forEach((s, i) => {
+      if (s.t < 1) {
+        s.t = Math.min(1, s.t + dt / s.dur);
+        const e = smooth(s.t);
+        s.g.position.lerpVectors(s.from, s.to, e);
+        s.g.position.y = 4 * s.h * s.t * (1 - s.t) + s.lift * e;
+        const st = 1 + 0.22 * Math.sin(Math.PI * s.t);
+        s.m.scale.set(1 / Math.sqrt(st), st, 1 / Math.sqrt(st));
+        const dir = Math.atan2(s.to.x - s.from.x, s.to.z - s.from.z); s.yaw += (dir - s.yaw) * 0.15;
+        if (s.t >= 1) { s.land = 1; s.wait = 1.2 + Math.random() * 2.6; }
+      } else {
+        if (live) s.wait -= dt;
+        s.land = Math.max(0, s.land - dt * 3);
+        const sq = 1 - 0.28 * s.land * Math.sin(s.land * Math.PI), br = 1 + 0.035 * Math.sin(t * 2.4 + i);
+        s.m.scale.set(br / Math.sqrt(sq), br * sq, br / Math.sqrt(sq));
+        if (hasLook.on) { const want = Math.atan2(lookPt.x - s.g.position.x, lookPt.z - s.g.position.z); s.yaw += (want - s.yaw) * 0.06; }
+        if (s.wait <= 0 && live) hopTo(s, false);
+      }
+      s.g.rotation.y = s.yaw;
+      s.m.position.y = 0.72 * s.m.scale.y;
+      if (s.spin > 0) { s.spin = Math.max(0, s.spin - dt * 0.9); s.m.rotation.y = (1 - s.spin) * Math.PI * 2; }
+      if (i === 1) s.m.rotation.x = 0.4 + Math.sin(t * 0.8) * 0.2;
+      if (i === 3) s.m.rotation.z = t * 0.4;
+    });
+    // the blob breathes
+    if (live) {
+      const pos = shapeGeos[0].attributes.position;
+      for (let k = 0; k < pos.count; k++) {
+        const x = blobBase[k * 3], y = blobBase[k * 3 + 1], z = blobBase[k * 3 + 2];
+        const f = 1 + 0.07 * Math.sin(x * 4 + t * 2.1) * Math.sin(y * 4 + t * 1.6) + 0.04 * Math.sin(z * 5 + t * 2.7);
+        pos.setXYZ(k, x * f, y * f, z * f);
+      }
+      pos.needsUpdate = true; shapeGeos[0].computeVertexNormals();
+    }
+
+    // marbles: flow along their layer; now and then one leaves its layer and appears in the next
+    if (live) {
+      nextJump -= dt;
+      if (nextJump <= 0) {
+        nextJump = 1.6 + Math.random() * 2.4;
+        const free = marbles.filter((m) => m.state === 0); const m = free[Math.floor(Math.random() * free.length)];
+        if (m) { m.to = m.li === 0 ? 1 : m.li === 2 ? 1 : (Math.random() < 0.5 ? 0 : 2); m.state = 1; m.t = 0; }
+      }
+    }
+    marbles.forEach((m, k) => {
+      const Lr = LAYERS[m.li];
+      if (live) m.a += dt * Lr.speed * Lr.dir * m.v;
+      if (m.state === 1) { m.t += dt / 0.35; m.s = Math.max(0, 1 - m.t); if (m.t >= 1) { m.li = m.to; m.state = 2; m.t = 0; } }
+      else if (m.state === 2) { m.t += dt / 0.45; m.s = easeOutBack(Math.min(1, m.t)); if (m.t >= 1) { m.state = 0; m.s = 1; } }
+      layerPoint(m.li, m.a, q); m.m.position.copy(q); m.m.position.y += 0.3;
+      m.m.scale.setScalar(Math.max(0.001, m.s));
+      m.m.rotation.z -= dt * 2.4 * Lr.dir; m.m.rotation.y = -m.a;
+    });
+
+    // cards: float and turn slowly, Atlantis style; a picked card turns over once
+    ringG.rotation.y = t * 0.12;
+    cards.forEach((c) => {
+      c.holder.position.y = Math.sin(t * 0.9 + c.ph) * 0.18;
+      c.m.rotation.z = Math.sin(t * 0.6 + c.ph) * 0.05;
+      if (c.flip > 0) { c.flip = Math.max(0, c.flip - dt * 0.8); c.m.rotation.y = smooth(1 - c.flip) * Math.PI * 2; }
+    });
+    const pulse = 1 + 0.08 * Math.sin(t * 2.2);
+    halo.scale.setScalar(pulse); core.scale.setScalar(0.95 + 0.05 * Math.sin(t * 3.1));
+
+    // flags wave; a picked flag catches a gust
+    flags.forEach((f) => {
+      f.gust = Math.max(0, f.gust - dt * 0.6);
+      const pos = f.m.geometry.attributes.position, amp = 0.1 + f.gust * 0.25;
+      for (let k = 0; k < pos.count; k++) {
+        const x = f.base[k * 3];
+        pos.setZ(k, Math.sin(x * 2.4 - t * (2.6 + f.gust * 3) + f.ph) * amp * (x / 1.8));
+      }
+      pos.needsUpdate = true;
+    });
+    // bikes roll back and forth a little
+    bikes.forEach((b) => {
+      const off = Math.sin(t * 0.45 + b.ph) * 0.7;
+      b.g.position.set(b.x0 + Math.cos(b.ry) * off, 0, b.z0 - Math.sin(b.ry) * off);
+      b.wheels.forEach((w) => { w.rotation.z = -off / 0.62; });
+    });
+
+    renderer.render(scene, camera);
+  });
+}
+try { startPlayground(); } catch (e) { const p = document.getElementById('play'); if (p) p.classList.add('no-3d'); }

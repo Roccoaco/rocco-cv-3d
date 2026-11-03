@@ -59,6 +59,7 @@ const hubPlaces = [...new Set(hubEvents.map((e) => D.hubs[e.hub].city))].map((ci
 const data = {
   lock, alchemyKey: alKey.toString('base64'), seats, countedWords: word(counted.length), who,
   cities: D.cities, workshops: workshopsData,
+  education: D.education.map((e) => e.title), languages: D.languages.map(([l]) => l), certificates: D.certificates,
   places: places.map((p) => ({ city: p.city, n: p.n })), land,
   hubPlaces: hubPlaces.map((p) => ({ city: p.city, n: p.n, name: D.hubs[p.hub].name })), landCa
 };
@@ -264,7 +265,7 @@ const footer = (prefix) => `<footer class="foot">
 </footer>`;
 
 const pubs = D.publications.map((p) => `<li><p>${esc(p.cite)}</p>${p.href ? `<p>${ext(p.href, p.link)}</p>` : ''}${p.abstract ? `<details class="pub-abs"><summary>Read the abstract</summary><p>${esc(p.abstract)}</p></details>` : ''}</li>`).join('');
-const edu = D.education.map((e) => `<li><p class="strong">${esc(e.title)}</p><p class="muted">${esc(e.place)}, ${esc(place(e.city))}</p></li>`).join('');
+const edu = D.education.map((e, i) => `<li data-i="${i}" tabindex="0"><p class="strong"><span class="edu-mark em-${i}" aria-hidden="true"></span>${esc(e.title)}</p><p class="muted">${esc(e.place)}, ${esc(place(e.city))}</p></li>`).join('');
 const langs = D.languages.map(([l, v]) => `<li><span class="strong">${l}</span> ${v}</li>`).join('');
 const certs = D.certificates.map((c) => `<li>${esc(c)}</li>`).join('');
 
@@ -448,6 +449,18 @@ ${nav('')}
         <div><h3>Certificates</h3><ul class="plain">${certs}</ul></div>
       </div>
     </div>
+    <figure class="play" id="play">
+      <canvas id="play-canvas" aria-hidden="true"></canvas>
+      <figcaption class="play-cap">
+        <ul class="play-key">
+          <li><span class="pk pk-shape" aria-hidden="true"></span>${cap(word(D.education.length))} shapes, the degrees</li>
+          <li><span class="pk pk-flag" aria-hidden="true"></span>${cap(word(D.languages.length))} flags, the languages</li>
+          <li><span class="pk pk-card" aria-hidden="true"></span>${cap(word(D.certificates.length))} cards, the certificates</li>
+          <li><span class="pk pk-marble" aria-hidden="true"></span>Marbles, ideas flowing through the branch</li>
+        </ul>
+        <p class="play-note" id="play-note" aria-live="polite">Drag to turn the playground. Pick a shape, a card or a flag.</p>
+      </figcaption>
+    </figure>
   </section>
 
   <section id="contact" class="contact" aria-labelledby="contact-h">

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-/VwYmYYf57wkwJiYLTRusaRWvRV94LlGt1KpzvP9hGY='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-cgUqIhrcEcewmuygOpJlEADnhPeXsms+mC9ugcivYNg='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Chromasoma, a workshop by Rocco Acocella</title>
@@ -789,16 +789,45 @@ html.is-story .gx-clicker.is-left{left:auto;right:var(--m)}
 .st-n{font-weight:800}
 .st-of{opacity:.7}
 .st-name{font-weight:700;color:var(--accent)}
-@media (max-width:700px){
-  .bar-mode{font-size:.75rem;min-height:32px;padding:2px}
-  .bm-opt{padding:3px 8px}
-  .bar-mode[aria-pressed="false"] .bm-story,.bar-mode[aria-pressed="true"] .bm-page{display:none}
+@media (max-width:1100px){
+  .bar-mode{min-height:32px;padding:2px}
+  .bm-opt{padding:3px 10px}
+  .bar-mode[aria-pressed="false"] .bm-page,.bar-mode[aria-pressed="true"] .bm-story{display:none}
   .bar-mode .bm-opt{background:transparent;color:var(--ink)}
+}
+@media (max-width:700px){
+  .bar-mode{font-size:.875rem}
+  .bm-opt{padding:3px 8px}
   .st-where{min-width:0;max-width:9.5em;overflow:hidden;text-overflow:ellipsis}
   .st-of{display:none}
   .st-step{width:40px;height:40px}
 }
 @media (prefers-reduced-motion:reduce){body,html.is-story .lead,html.is-story main>section{transition:none}}
+
+/* ---------- the education playground: a three.js scene under Education, on the same night band as the figures ---------- */
+:root{--sh-0:#FFD43B;--sh-1:#C9B8FF;--sh-2:#8FA6FF;--sh-3:#FF9F87}
+.play{grid-column:1/13;position:relative;margin:clamp(48px,6vw,88px) calc(-1 * var(--m)) 0;padding:0 var(--m) clamp(28px,3vw,44px);background:var(--night);color:#FFFFFF}
+.play.no-3d{display:none}
+#play-canvas{display:block;width:100%;height:clamp(420px,46vw,640px);cursor:grab;touch-action:pan-y}
+#play-canvas.is-dragging{cursor:grabbing}
+.play-cap{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 32px}
+.play-key{display:flex;flex-wrap:wrap;gap:8px 24px;margin:0;padding:0;list-style:none;font-family:var(--f-display);font-weight:600;font-size:var(--s-small)}
+.play-key li{display:inline-flex;align-items:center;gap:8px}
+.pk{display:inline-block;flex:none;width:14px;height:14px}
+.pk-shape{border-radius:50%;background:var(--sh-0)}
+.pk-flag{width:16px;height:11px;background:#B9E4C9}
+.pk-card{width:10px;height:15px;border:2px solid #8FA6FF;border-radius:2px}
+.pk-marble{border-radius:50%;background:linear-gradient(135deg,#C9B8FF,#8FA6FF 55%,#FFD43B)} /* taste-skill-ignore: a marble is a gradient */
+.play-note{margin:0;color:#D5DDFA;font-size:var(--s-small);max-width:52ch}
+.edu>li{cursor:default;border-radius:2px}
+.edu>li:focus-visible{outline:2px solid var(--ink);outline-offset:6px}
+.edu-mark{display:inline-block;width:.62em;height:.62em;margin-right:.5em;vertical-align:.06em;background:var(--sh-0);border-radius:50%}
+.edu-mark.em-1{background:transparent;border:.16em solid var(--sh-1)}
+.edu-mark.em-1,.edu-mark.em-2,.edu-mark.em-3{filter:saturate(1.4) brightness(.85)}
+.edu-mark.em-2{width:.9em;height:.5em;border-radius:1em;background:var(--sh-2)}
+.edu-mark.em-3{border-radius:1px;transform:rotate(45deg) scale(.85);background:var(--sh-3)}
+@media (max-width:700px){#play-canvas{height:360px}}
+@media (min-width:701px) and (max-width:900px){.bar{gap:12px}.bar-links{gap:12px;font-size:.875rem}.bar-mark{font-size:.875rem}}
 .sw-inperson-0{background:#1537C7}.sw-inperson-1{background:#0F8A5F}.sw-inperson-2{background:#7A3FD1}.sw-inperson-3{background:#0B1B4D}.sw-online-0{background:#C2410C}.sw-online-1{background:#C2255C}.sw-online-2{background:#9A6700}.sw-online-3{background:#0E7C86}</style>
 </head>
 <body id="top" class="wpage">
