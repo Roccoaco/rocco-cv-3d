@@ -47,12 +47,14 @@ export const workshops = [
   },
   {
     id: 'w-turin', slug: 'alternating-attention', model: 'deck', short: 'Alternating Attention', city: 'chieri', count: 48, sortDate: '2026-05-08',
+    scene: { file: 'scene-turin.jpg', alt: 'Rocco leaning over a table of teachers working together in a library', caption: 'Working with teachers at the Italian Summit, International School of Turin' },
     title: 'Alternating Attention as a Catalyst for a Creative-Cerebral Educational Perspective',
     venue: 'Italian Summit 2026, International School of Turin', when: '8 May 2026', length: '1 hour', audience: '48 IB teachers',
     text: 'Teachers played through an alternate scenario at the meeting point of creative cognition, play, sense-making and collaboration. Experiential activities used transdisciplinary materials and systemic thinking, and a facilitating card deck trained deliberate attention-shifting and metacognitive awareness for cognitive and temporal flexibility.'
   },
   {
     id: 'w-mita', slug: 'idea-bouncing', model: 'arch', short: 'Idea Bouncing', city: 'milan', count: 14, sortDate: '2026-03-21',
+    scene: { file: 'scene-mita.jpg', alt: 'Rocco presenting in a classroom, the Ideas Bouncing slide on the screen behind him', caption: 'Leading Idea Bouncing at MITA, American School of Milan' },
     title: 'Idea Bouncing: Building the Future through Vibrational LEGO™ciation',
     image: { file: 'idea-bouncing.jpg', alt: 'Slide: Ideas Bouncing, Building the Future through Vibrational LEGOciation. A bridge of brain tissue over the sea between two springs, with floating spheres and the words Perception, Shape and Color', caption: 'Ideas Bouncing, the image behind the workshop' },
     venue: 'MITA 2026, American School of Milan', when: '21 March 2026', length: '1 hour', audience: '14 teachers',
@@ -73,6 +75,7 @@ export const workshops = [
   },
   {
     id: 'w-basel', slug: 'idea-to-creation', model: 'creation', short: 'Idea to Creation', city: 'basel', count: 15, sortDate: '2025-10-24',
+    scene: { file: 'scene-basel.jpg', alt: 'Rocco presenting beside a projected slide in a classroom with bean bags on the floor', caption: 'In the room at the World Languages Conference, International School of Basel' },
     title: 'From Idea to Creation: A Creative-Cerebral Perspective for Language Education',
     image: { file: 'idea-to-creation.jpg', alt: 'Title slide: From Idea to Creation: A Creative-Cerebral Perspective for Human Development, with a brain, over coloured waves', caption: 'Title slide, World Languages Conference Basel 2025, International School of Basel, 24–25 October 2025' },
     venue: '2nd Annual World Languages Conference, International School of Basel', when: '24 October 2025', length: '1 hour 20 minutes', audience: '15 teachers',
@@ -80,6 +83,7 @@ export const workshops = [
   },
   {
     id: 'w-rome', slug: 'thinker', model: 'profile', short: 'Thinker', city: 'rome', count: 70, sortDate: '2025-06-06',
+    scene: { file: 'scene-rome.jpg', alt: 'Rocco speaking at a wooden lectern on stage', caption: 'At the lectern, Italian Summit, Marymount International School Rome' },
     title: 'IB Learner Profile Thinker: Una prospettiva creativo-cerebrale per la didattica dell’italiano e oltre!',
     venue: 'Italian Summit 2025, Marymount International School Rome', when: '6 June 2025', length: '2 hours', audience: '70 IB teachers',
     text: 'The IB Learner Profile attribute Thinker seen through creativity and cognitive neuroscience. Educators reflected on their own teaching approaches and cognitive styles, and explored brain-based learning and strategies that bring creative thinking into the Learner Profile.'
@@ -127,8 +131,8 @@ export const talks = [
     image: { file: 'layers-of-complexity.jpg', alt: 'Title frame of the Layers of Complexity keynote: a glass sphere holding a mountain range, among glass prisms, in black and white', caption: 'Layers of Complexity, Mr Acocella x C.R.E.A.T.E., 6 October 2026' } },
   { city: 'brighton', title: 'Mission Possible: Hub Creation', kind: 'Poster', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
   { city: 'brighton', title: 'Life and its synergistic interplay: a possibility for the network', kind: 'Symposium', conf: 'Waves of Possibilities, 6th International Possibility Studies Conference, University of Sussex', when: 'July 2026' },
-  { city: 'maynooth', title: 'Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy', kind: 'Paper', conf: 'Communities of Possibilities, 5th International Possibility Studies Conference, Maynooth University', when: 'July 2025', slug: 'unlocking-the-power-of-vision', image: { file: 'unlocking-vision.jpg', alt: 'Title slide: Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy, with a lit lantern and a brain, over red and orange waves', caption: 'Title slide, 5th International Possibility Studies Conference, National University of Ireland, Maynooth, 1 July 2025' } },
-  { city: 'cambridge', title: 'The SEC-Cr Dimensional Continuum: A Journey through Energy and Potential', kind: 'Paper', conf: 'Expanding Research on Possibilities, 4th International Possibility Studies Conference, Faculty of Education, University of Cambridge', when: 'July 2024', slug: 'sec-cr-dimensional-continuum', image: { file: 'sec-cr-continuum.jpg', alt: 'Title slide: The SEC-Cr Dimensional Continuum: a Journey through Energy and Potential, over orange, red and blue waves', caption: 'Title slide, 4th International Conference of Possibility Studies, University of Cambridge, July 2024' } },
+  { city: 'maynooth', title: 'Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy', kind: 'Paper', conf: 'Communities of Possibilities, 5th International Possibility Studies Conference, Maynooth University', when: 'July 2025', slug: 'unlocking-the-power-of-vision', scene: { file: 'scene-maynooth.jpg', alt: 'Rocco presenting beside a Thinking Modes slide with a brain between Divergent and Convergent', caption: 'Presenting at Maynooth University, Possibility Studies Conference' }, image: { file: 'unlocking-vision.jpg', alt: 'Title slide: Unlocking the Power of Vision: The Interplay of Time, Space and Human Energy, with a lit lantern and a brain, over red and orange waves', caption: 'Title slide, 5th International Possibility Studies Conference, National University of Ireland, Maynooth, 1 July 2025' } },
+  { city: 'cambridge', title: 'The SEC-Cr Dimensional Continuum: A Journey through Energy and Potential', kind: 'Paper', conf: 'Expanding Research on Possibilities, 4th International Possibility Studies Conference, Faculty of Education, University of Cambridge', when: 'July 2024', slug: 'sec-cr-dimensional-continuum', scene: { file: 'scene-cambridge.jpg', alt: 'Rocco at a lectern in a lecture room, a slide of orange waves on the screen', caption: 'Presenting at the Faculty of Education, University of Cambridge, Possibility Studies Conference' }, image: { file: 'sec-cr-continuum.jpg', alt: 'Title slide: The SEC-Cr Dimensional Continuum: a Journey through Energy and Potential, over orange, red and blue waves', caption: 'Title slide, 4th International Conference of Possibility Studies, University of Cambridge, July 2024' } },
   { city: 'dublin', title: 'An alternating attention-driven theory of creativity: a sensory-processing approach for Higher Education', kind: 'Paper', conf: 'Cultivating the Possible, 3rd International Possibility Studies Conference', when: 'July 2023' },
   { city: 'brussels', title: 'How Experience, Creativity and Multiple Intelligence influence Language Teaching', kind: 'Online paper', conf: '2nd World Conference on Future of Education', when: 'September 2020' }
 ];
