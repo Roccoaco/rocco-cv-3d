@@ -271,8 +271,13 @@ function startSay() {
   });
   const widest = Math.max(...phrases.map((p) => p.width));
   let W = 1, H = 1;
+  const labelSize = new Map(); let reserved = [];
   function layout() {
-    const r = cv.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
+    const r = cv.getBoundingClientRect();
+    labelSize.clear();
+    reserved = Array.from(box.querySelectorAll('.gx-top h2, .gx-state, .gx-close, .gx-panel')).map((el) => {
+      const q = el.getBoundingClientRect(); return [q.left - r.left, q.top - r.top, q.right - r.left, q.bottom - r.top];
+    }); W = Math.max(1, r.width); H = Math.max(1, r.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H, false);
     cam.left = 0; cam.right = W; cam.top = H / 2; cam.bottom = -H / 2; cam.updateProjectionMatrix();
     const size = Math.min((W - 4) / widest, H * 0.62, 72);
@@ -695,8 +700,13 @@ function startGalaxy() {
     }
     bricks.instanceColor.needsUpdate = true;
   }
+  const labelSize = new Map(); let reserved = [];
   function layout() {
     const r = cv.getBoundingClientRect();
+    labelSize.clear();
+    reserved = Array.from(box.querySelectorAll('.gx-top h2, .gx-state, .gx-close, .gx-panel')).map((el) => {
+      const q = el.getBoundingClientRect(); return [q.left - r.left, q.top - r.top, q.right - r.left, q.bottom - r.top];
+    });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(r.width, r.height, false);
     cam.aspect = r.width / Math.max(1, r.height); cam.updateProjectionMatrix();
     if (!zoomed) zoom = cam.aspect < 1 ? Math.min(70, 26 * 0.8 / cam.aspect) : 26; // narrow screens start further out
@@ -723,6 +733,7 @@ function startGalaxy() {
     convBtn.textContent = goingIn ? 'Diverge' : 'Converge';
     stateEl.textContent = goingIn ? `Converged: ${N} bricks build ${STRUCTURES[structIdx].name}. Press Diverge to scatter them, then Converge again for the next one.` : 'Diverged: the galaxy again. Converge builds the next structure.';
     if (reduce) k = kTo;
+    requestAnimationFrame(layout); // the state line changed length: re-measure what the labels must keep clear of
   }
 
   function frame(time) {
@@ -790,6 +801,7 @@ function startGalaxy() {
     const w = cv.clientWidth, h = cv.clientHeight;
     cam.position.set(0, 0, zoom); cam.lookAt(0, 0, 0);
     group.updateMatrixWorld();
+    const labels = [];
     nodeBtns.forEach((b, i) => {
       const on = set.show[b.getAttribute('data-kind')];
       const p = v3.copy(nodePos[i]).multiplyScalar(spread).lerp(nodeRing[i], ke);
@@ -799,8 +811,23 @@ function startGalaxy() {
       b.hidden = false;
       p.applyMatrix4(group.matrixWorld).project(cam);
       const x = (p.x * 0.5 + 0.5) * w, y = (-p.y * 0.5 + 0.5) * h, behind = p.z > 1;
-      b.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -150%)`;
-      b.classList.toggle('is-far', behind || x < -40 || x > w + 40 || y < -40 || y > h + 40);
+      labels.push({ b, i, x, y, z: p.z, far: behind || x < -40 || x > w + 40 || y < -40 || y > h + 40 });
+    });
+    // labels never pile up: the one in focus first, then the sections, then the nearest; a label that would cover
+    // one already placed (or the title, the buttons) waits as a bare star until there is room. Labels stay on screen.
+    const placed = reserved.slice(), focusEl = document.activeElement;
+    labels.sort((a, b) => (b.b === focusEl) - (a.b === focusEl) || (b.b.getAttribute('data-kind') === 'section') - (a.b.getAttribute('data-kind') === 'section') || a.z - b.z);
+    labels.forEach((l) => {
+      let sz = labelSize.get(l.b);
+      if (!sz) { sz = [l.b.offsetWidth, l.b.offsetHeight]; if (sz[0]) labelSize.set(l.b, sz); }
+      const lx = Math.max(sz[0] / 2 + 6, Math.min(w - sz[0] / 2 - 6, l.x)), top = l.y - sz[1] * 1.5;
+      const pad = l.b.classList.contains('is-crowded') ? 10 : 4; // a little hysteresis, so labels do not flicker
+      const r = [lx - sz[0] / 2 - pad, top - pad, lx + sz[0] / 2 + pad, top + sz[1] + pad];
+      const clash = !l.far && l.b !== focusEl && placed.some((q) => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1]);
+      if (!l.far && !clash) placed.push(r);
+      l.b.style.transform = `translate(${Math.round(lx)}px, ${Math.round(l.y)}px) translate(-50%, -150%)`;
+      l.b.classList.toggle('is-far', l.far);
+      l.b.classList.toggle('is-crowded', clash);
     });
     stars.instanceMatrix.needsUpdate = true;
     renderer.render(scene, cam);
@@ -823,6 +850,7 @@ function startGalaxy() {
   hueEls.forEach((b) => b.addEventListener('click', () => { set.hue = b.getAttribute('data-hue'); syncPanel(); save(); if (renderer) paintBricks(); }));
   document.getElementById('gx-reset').addEventListener('click', () => { set = JSON.parse(JSON.stringify(DEF)); syncPanel(); save(); if (renderer) paintBricks(); });
   convBtn.addEventListener('click', () => { if (renderer) converge(); });
+  document.getElementById('gx-adjust').addEventListener('toggle', () => { if (renderer && open) layout(); });
 
   // opening and closing
   let lastFocus = null;

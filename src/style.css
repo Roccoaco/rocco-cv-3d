@@ -636,6 +636,8 @@ html.tl-locked{overflow:hidden}
 .gx-node.gx-talk{color:#C9D4FF}
 .gx-node:hover,.gx-node:focus-visible{background:var(--field);color:#FFFFFF;z-index:2}
 .gx-node.is-far{opacity:.25}
+.gx-node.is-crowded{opacity:0;pointer-events:none}
+.gx-node.is-crowded:focus-visible{opacity:1}
 .gx-node[hidden]{display:none}
 .gx-panel{position:absolute;left:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:calc(100% - 32px)}
 .gx-converge{min-height:52px;padding:0 24px;border:0;background:var(--accent);color:var(--on-accent);font-family:var(--f-display);font-weight:800;font-size:var(--s-body);cursor:pointer;transition:transform .18s var(--ease)}
