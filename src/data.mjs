@@ -141,6 +141,7 @@ export const conferences = [
   { city: 'brighton', title: 'Waves of Possibilities, 6th International Possibility Studies Conference', place: 'University of Sussex', when: '29 Jun – 2 Jul 2026', href: 'https://www.possibilitystudies.net/event/6th-international-conference-of-possibility-studies/' },
   { city: 'chieri', title: 'Italian Summit 2026', place: 'International School of Turin', when: 'May 2026' },
   { city: 'milan', title: 'MITA 2026, Milan International Teacher Association', place: 'American School of Milan', when: '21 Mar 2026' },
+  { city: 'online', title: '5th Virtual Conference of the Possibility Studies Network', place: '', when: '19 Jan 2026', workshop: 'productive-friction', href: 'https://www.possibilitystudies.net/event/5th-virtual-conference-of-possibility-studies/' },
   { city: 'basel', title: '2nd World Languages Conference', place: 'International School of Basel', when: '23–24 Oct 2025', href: 'https://sites.google.com/aisb.hu/world-language-job-alike/basel-conference' },
   { city: 'milan', title: 'Learning Festival', attended: true, place: 'Museo Nazionale della Scienza e della Tecnologia Leonardo da Vinci', when: '10–11 Oct 2025' },
   { city: 'maynooth', title: 'Communities of Possibilities, 5th International Possibility Studies Conference', place: '', when: '30 Jun – 4 Jul 2025', href: 'https://www.possibilitystudies.net/event/5th-international-conference-of-possibility-studies/' },

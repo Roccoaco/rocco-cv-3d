@@ -244,7 +244,7 @@ const confFilter = `
 const confRows = D.conferences.map((t) => `
           <li class="row row-tight conf-row" tabindex="0" data-city="${t.city}" data-conf="${confMode(t)}">
             <div class="row-top"><span class="row-title"><span class="conf-dot is-${confMode(t)}" aria-hidden="true"></span>${t.href ? `<a class="conf-link" href="${esc(t.href)}" target="_blank" rel="noopener noreferrer">${esc(t.title)}<span class="conf-arrow" aria-hidden="true">↗</span><span class="sr-only"> (conference website, opens in a new tab)</span></a>` : esc(t.title)}<span class="sr-only"> (${t.attended ? 'attended' : 'presented'})</span></span><span class="row-when">${esc(t.when)}</span></div>
-            <p class="row-sub">${t.place ? esc(t.place) + ', ' : ''}${esc(place(t.city))}</p>
+            <p class="row-sub">${t.place ? esc(t.place) + ', ' : ''}${esc(place(t.city))}${t.workshop ? (() => { const w = D.workshops.find((x) => x.slug === t.workshop); return w ? `. Workshop: <a class="conf-ws" href="${pageOf(w)}">${esc(w.short)}</a>` : ''; })() : ''}</p>
           </li>`).join('');
 
 const byCountry = countries.map((co) => {
@@ -537,7 +537,7 @@ ${nav('index.html')}
     <dl class="w-facts">
       <div><dt>When</dt><dd>${esc(w.when)}</dd></div>
       <div><dt>Where</dt><dd>${esc(place(w.city))}</dd></div>
-      <div><dt>Hosted by</dt><dd>${esc(w.venue)}</dd></div>${w.hub ? `
+      <div><dt>Hosted by</dt><dd>${(() => { const c = D.conferences.find((x) => x.workshop === w.slug && x.href); return c ? `<a class="conf-link" href="${esc(c.href)}" target="_blank" rel="noopener noreferrer">${esc(w.venue)}<span class="conf-arrow" aria-hidden="true">↗</span><span class="sr-only"> (conference website, opens in a new tab)</span></a>` : esc(w.venue); })()}</dd></div>${w.hub ? `
       <div><dt>Hub</dt><dd>${esc(hubFact(w.hub))}</dd></div>` : ''}${w.cohost ? `
       <div><dt>Co-host</dt><dd>${esc(w.cohost)}</dd></div>` : ''}${w.copresenter ? `
       <div><dt>Presented with</dt><dd>${esc(w.copresenter)}</dd></div>` : ''}

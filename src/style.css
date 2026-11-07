@@ -709,3 +709,6 @@ html.tl-locked{overflow:hidden}
 .row-title .conf-link:hover,.row-title .conf-link:focus-visible{color:var(--c-conf)}
 .conf-arrow{display:inline-block;margin-left:.25em;font-size:.85em;transition:transform .2s var(--ease)}
 .conf-link:hover .conf-arrow{transform:translate(2px,-2px)}
+.row-sub .conf-ws{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.row-sub .conf-ws:hover{color:var(--c-conf)}
+dd .conf-link{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--c-conf)}
