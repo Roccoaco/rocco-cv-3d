@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-xtmuKPd+Btk36LR0biit+7rdlYttt3PtdrfMlGEaQ4Q='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'sha256-JFytjtsOrk/AojBfb1liwDGppzzUgEbF6ESb1XMEcdw='; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Human Rights &amp; the Brain, a workshop by Rocco Acocella</title>
@@ -804,6 +804,12 @@ html.tl-locked{overflow:hidden}
 .ps.is-cycling .ps-w{opacity:0;visibility:hidden;transition:opacity 1.1s var(--ease),visibility 0s 1.1s}
 .ps.is-cycling .ps-w.is-on{opacity:1;visibility:visible;transition:opacity 1.1s var(--ease),visibility 0s}
 .ps.is-cycling .ps-w{-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent} /* taste-skill-ignore: the colour-wheel gradient on one word is the feature */
+
+/* a conference with its own website: the title links out */
+.conf-link{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--c-conf)}
+.conf-link:hover,.conf-link:focus-visible{color:var(--c-conf)}
+.conf-arrow{display:inline-block;margin-left:.25em;font-size:.85em;transition:transform .2s var(--ease)}
+.conf-link:hover .conf-arrow{transform:translate(2px,-2px)}
 .sw-inperson-0{background:#1537C7}.sw-inperson-1{background:#0F8A5F}.sw-inperson-2{background:#7A3FD1}.sw-inperson-3{background:#0B1B4D}.sw-online-0{background:#C2410C}.sw-online-1{background:#C2255C}.sw-online-2{background:#9A6700}.sw-online-3{background:#0E7C86}</style>
 </head>
 <body id="top" class="wpage">

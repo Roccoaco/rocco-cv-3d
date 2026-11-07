@@ -243,7 +243,7 @@ const confFilter = `
       <p class="cf-status sr-only" aria-live="polite"></p>`;
 const confRows = D.conferences.map((t) => `
           <li class="row row-tight conf-row" tabindex="0" data-city="${t.city}" data-conf="${confMode(t)}">
-            <div class="row-top"><span class="row-title"><span class="conf-dot is-${confMode(t)}" aria-hidden="true"></span>${esc(t.title)}<span class="sr-only"> (${t.attended ? 'attended' : 'presented'})</span></span><span class="row-when">${esc(t.when)}</span></div>
+            <div class="row-top"><span class="row-title"><span class="conf-dot is-${confMode(t)}" aria-hidden="true"></span>${t.href ? `<a class="conf-link" href="${esc(t.href)}" target="_blank" rel="noopener noreferrer">${esc(t.title)}<span class="conf-arrow" aria-hidden="true">↗</span><span class="sr-only"> (conference website, opens in a new tab)</span></a>` : esc(t.title)}<span class="sr-only"> (${t.attended ? 'attended' : 'presented'})</span></span><span class="row-when">${esc(t.when)}</span></div>
             <p class="row-sub">${t.place ? esc(t.place) + ', ' : ''}${esc(place(t.city))}</p>
           </li>`).join('');
 

@@ -149,7 +149,7 @@ export const conferences = [
   { city: 'cambridge', title: 'Expanding Research on Possibilities, 4th International Possibility Studies Conference', place: '', when: '8–12 Jul 2024' },
   { city: 'milan', title: 'MITA 2024, Milan International Teacher Association', attended: true, place: '', when: '22 Mar 2024' },
   { city: 'dublin', title: 'Cultivating the Possible, 3rd International Possibility Studies Conference', place: '', when: '17–21 Jul 2023' },
-  { city: 'brussels', title: '2nd World Conference on Future of Education', place: '', when: '11–13 Sep 2020' },
+  { city: 'brussels', title: '2nd World Conference on Future of Education', place: '', when: '11–13 Sep 2020', href: 'https://www.wcfeducation.org/second-round-history/' },
   { city: 'sharm', title: '3rd World Youth Forum (WYF 2019)', attended: true, place: '', when: '11–18 Dec 2019' }
 ];
 
